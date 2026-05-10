@@ -1,5 +1,5 @@
 class ApiConfigUsers {
-  static String baseUrl = "http://127.0.0.1:8000";
+  static String baseUrl = "http://10.0.2.2:8000";
   static String prefix = 'usuarios';
   //baseUrl = "http://192.168.1.68:8000" cuando use telefono
   // static String baseUrl = 'http://10.0.2.2:8000'; CUANDO USE EMULADOR
@@ -11,7 +11,7 @@ class ApiConfigUsers {
 }
 
 class ApiConfigCasas {
-   static String baseUrl = "http://127.0.0.1:8000";
+   static String baseUrl = "http://10.0.2.2:8000";
   static String prefix = 'casas';
   //baseUrl = "http://192.168.1.68:8000" cuando use telefono
   // static String baseUrl = 'http://10.0.2.2:8000'; CUANDO USE EMULADOR
