@@ -7,6 +7,70 @@ class RepoCasa:
     def conectarDB(self):
         return DataBaseConexion.obtenerConexion()
     
+    def existeCasa(self,id):
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor()
+        sql = '''
+            SELECT 1 FROM Casas Where id = %s;
+        '''
+        cursor.execute(sql,(id,))
+        casa = cursor.fetchone()
+        conx.close()
+        cursor.close()
+        return casa
+    
+    def casaMismaDireccion(self,calle,num,id_region):
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor()
+        sql = '''
+           SELECT 1 FROM Casas WHERE
+           %s = calle && 
+           %s= num_interior && 
+           %s = id_region
+           LIMIT 1;
+        '''
+        cursor.execute(sql,(calle,num,id_region))
+        casa = cursor.fetchone()
+        conx.close()
+        cursor.close()
+        return casa 
+        
+    
+    def obtenerCasa(self,id):
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor()
+        sql = '''
+            SELECT 
+            c.id,
+            c.titulo,
+            c.cupo,
+            c.tipo,
+            c.imagen,
+            c.cuartos,
+            c.calle,
+            c.num_interior,
+            c.precio,
+            c.id_Region,
+            u.nombres,
+            u.apellidos,
+            u.fecha_registro,
+            u.curp
+            FROM Casas AS c JOIN Usuarios as u ON c.id_propietario = u.curp
+            WHERE %s = c.id;
+        '''
+        try:
+            cursor.execute(sql,(id,))
+            casa = cursor.fetchone()
+            conx.close()
+            cursor.close()
+            return casa
+        except Exception as e:
+            print(F"ERROR {e}")
+            
+            
+        
+        
+    
     def crearCasa(self,casa:Casa):
         conx : mysql.connector.MySQLConnection = self.conectarDB()
         cursor = conx.cursor()

@@ -6,4 +6,4 @@ from excepciones.usuarios.exepciones_usuario import *
 router = APIRouter()
 repo = RepoCasa()
 service = CasaService(repo)
-service.obtenerCasas()
+service.obtenerCasa(1)

@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      // ignore: use_build_context_synchronously
       final providerCasa = context.read<ProviderCasas>();
       if (!providerCasa.casasCargadosPrimera) {
         providerCasa.obtenerCasas();
@@ -38,111 +39,113 @@ class _HomeScreenState extends State<HomeScreen> {
     final providerCasa = context.watch<ProviderCasas>();
 
     return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 40),
-            child: Form(
-              key: _formKey,
-              child: _BarraBusqueda(
-                onPress: () {
-                  if (_formKey.currentState!.validate()) {
-                    providerCasa.obtenerCasas(filtro: controllerCodigoP.value.text,tipoFiltro: 'codigo_postal');
-                  }
-                },
-                controller: controllerCodigoP,
-                validacion: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ingrese un codigo posta valido';
-                  }
-                  return null;
-                },
-              ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: Form(
+            key: _formKey,
+            child: _BarraBusqueda(
+              onPress: () {
+                if (_formKey.currentState!.validate()) {
+                  providerCasa.obtenerCasas(
+                    filtro: controllerCodigoP.value.text,
+                    tipoFiltro: 'codigo_postal',
+                  );
+                }
+              },
+              controller: controllerCodigoP,
+              validacion: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Ingrese un codigo posta valido';
+                }
+                return null;
+              },
             ),
           ),
-          Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 40),
-                child: Row(
-                  children: [
-                    _BarraFiltros(
-                      filtrosMenu: [
-                        Filtro(
-                          titulo: 'Tipo de casa',
-                          opciones: ['Una planta', 'Dos plantas', 'Otro tipo'],
+        ),
+        Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: Row(
+                children: [
+                  _BarraFiltros(
+                    filtrosMenu: [
+                      Filtro(
+                        titulo: 'Tipo de casa',
+                        opciones: ['Una planta', 'Dos plantas', 'Otro tipo'],
+                      ),
+                      Filtro(
+                        titulo: 'Cantidad de cuartos',
+                        opciones: ['1', '2', '3', '+4'],
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      providerCasa.obtenerCasas();
+                      providerCasa.filtroActivo = false;
+                    },
+                    child: AnimatedOpacity(
+                      duration: Duration(microseconds: 300),
+                      opacity: (providerCasa.filtroActivo) ? 1 : 0,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: (!providerCasa.filtroActivo) ? 0 : 10,
+                          vertical: 15,
                         ),
-                        Filtro(
-                          titulo: 'Cantidad de cuartos',
-                          opciones: ['1', '2', '3', '+4'],
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 5,
                         ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        providerCasa.obtenerCasas();
-                        providerCasa.filtroActivo = false;
-                      },
-                      child: AnimatedOpacity(
-                        duration: Duration(microseconds: 300),
-                        opacity: (providerCasa.filtroActivo) ? 1 : 0,
-                        child: Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: (!providerCasa.filtroActivo) ? 0 : 10,
-                            vertical: 15,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: BoxBorder.all(
+                            color: Colors.grey.shade400,
+                            strokeAlign: 4,
+                            width: 1.5,
                           ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: BoxBorder.all(
-                              color: Colors.grey.shade400,
-                              strokeAlign: 4,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            'Limpiar',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w600,
-                            ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'Limpiar',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ),
+                  ),
 
-                    // _BarraFiltros(),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 50),
-                      child: Text('${providerCasa.casas.length} resulados'),
-                    ),
-                  ],
-                ),
+                  // _BarraFiltros(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 50),
+                    child: Text('${providerCasa.casas.length} resulados'),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 55),
-                child: Image.asset(
-                  'assets/images/mapa/mapa_ejemplo.png',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: providerCasa.casas.length,
-              itemBuilder: (context, index) {
-                Casa casa = providerCasa.casas[index];
-                return Center(child: CardCasa(casa: casa));
-              },
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 55),
+              child: Image.asset(
+                'assets/images/mapa/mapa_ejemplo.png',
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: providerCasa.casas.length,
+            itemBuilder: (context, index) {
+              Casa casa = providerCasa.casas[index];
+              return Center(child: CardCasa(casa: casa));
+            },
           ),
-        ],
-      
+        ),
+      ],
     );
   }
 }
@@ -251,6 +254,7 @@ class FiltroBusqueda extends StatelessWidget {
                           context.read<ProviderCasas>().obtenerCasas(
                             filtro: e.trim(),
                           );
+                          print(filtro.titulo);
                         },
                       );
                     }).toList(),
@@ -343,6 +347,7 @@ class CardCasa extends StatelessWidget {
           SizedBox(height: 10),
           Center(
             child: BtnFormulario(
+              height: MediaQuery.of(context).size.height * .05,
               text: 'Seleccionar',
               func: () => (),
               width: 160,

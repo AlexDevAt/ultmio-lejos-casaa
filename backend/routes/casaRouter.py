@@ -11,6 +11,17 @@ service = CasaService(repo)
 def obtenerCasas():
     return service.obtenerCasas()
 
+@router.get("/{id}",response_model=CasaOut,status_code=200)
+def obtenerCasa(id):
+    try:
+        return service.obtenerCasa(id)
+    except Exception as e:
+        raise HTTPException(
+            status_code=401,
+            detail=str(e)
+        )
+        
+
 @router.get("/{filtro}/{tipoFiltro}",response_model=list[CasaOut],status_code=200)
 def obtenerCasas(filtro,tipoFiltro):
     return service.obtenerCasas(filtro,tipoFiltro)

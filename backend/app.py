@@ -4,6 +4,7 @@ from routes import usuarioRouter
 from routes import casaRouter
 app = FastAPI()
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

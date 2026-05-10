@@ -19,9 +19,7 @@ class MainShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenAct = GoRouterState.of(context).uri.toString();
     final index = _obtenerIndiceAct(screenAct);
-    print(index);
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text('Lejos de casa (MODO ADMIN)'))),
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

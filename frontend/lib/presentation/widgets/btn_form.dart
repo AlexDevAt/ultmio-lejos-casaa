@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BtnFormulario extends StatelessWidget {
-  const BtnFormulario({super.key, required this.text, required this.func, required this.width,  this.height = 0});
+  const BtnFormulario({super.key, required this.text, required this.func, required this.width,  required this.height });
 
   final String text;
   final VoidCallback func;
@@ -12,6 +12,7 @@ class BtnFormulario extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
+      height: height,
       decoration: BoxDecoration(),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(

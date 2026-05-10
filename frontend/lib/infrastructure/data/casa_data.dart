@@ -19,7 +19,6 @@ class CasaData {
     }
   }
   
-
   Future<List<CasaModel>> obtenerCasas({String? filtro,String? tipoFiltro}) async {
     try {
       if(filtro!=null){
