@@ -11,6 +11,7 @@ final appRouter = GoRouter(
     ShellRoute(
       builder: (context, state, child) => MainShell(child: child),
       routes: [
+
         // GoRoute(
         //   path: '/usuarios',
         //   name: AllUsersScreen.name,
@@ -26,6 +27,11 @@ final appRouter = GoRouter(
         //     ),
         //   ],
         // ),
+        GoRoute(
+          path: '/perfilUsuario' ,
+          name: PerfilUsuario.name,
+          builder: (context, state) => const PerfilUsuario(),
+        ),
         GoRoute(
           path: '/' ,
           builder: (context, state) => const HomeScreen(),
@@ -46,9 +52,9 @@ final appRouter = GoRouter(
           builder: (context, state) => const ReservasScreen(),
         ),
          GoRoute(
-          path: '/perfil',
-          name: PerfilScreen.name,
-          builder: (context, state) => const PerfilScreen(),
+          path: '/cuenta',
+          name: CuentaScreen.name,
+          builder: (context, state) => const CuentaScreen(),
         ),
         GoRoute(
           path: '/crearCasa',

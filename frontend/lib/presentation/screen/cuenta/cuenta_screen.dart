@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lejos_de_casa_front/helpers/menu_perfil/menu_perfil.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/icono_custom.dart';
 
-class PerfilScreen extends StatelessWidget {
-  const PerfilScreen({super.key});
-    static String name = 'perfil_screen';
-
+class CuentaScreen extends StatelessWidget {
+  const CuentaScreen({super.key});
+  static String name = 'cuenta_screen';
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,10 @@ class PerfilScreen extends StatelessWidget {
             Align(
               alignment: AlignmentGeometry.topLeft,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
                 child: Text(
                   'GENERAL',
                   style: TextStyle(
@@ -68,10 +71,11 @@ class _BoxMenu extends StatelessWidget {
         child: Column(
           children: [
             ...menuGeneral.map(
-              (e) => _CardOpcion(
-                title: e.title,
-                icon: e.icon,
-                subtitle: e.subtitle,
+              (opt) => _CardOpcion(
+                url: opt.url,
+                title: opt.title,
+                icon: opt.icon,
+                subtitle: opt.subtitle,
               ),
             ),
           ],
@@ -85,24 +89,35 @@ class _CardOpcion extends StatelessWidget {
   final String title;
   final Icon icon;
   final String subtitle;
+  final String url;
   const _CardOpcion({
     required this.title,
     required this.icon,
-    required this.subtitle,
+    required this.subtitle, required this.url,
   });
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
-          leading: IconoOpcion(icon: icon,color:Color(0xFFDCEBFF), sizeBorder: 15, height: 52, width: 52,),
-          title: Text(title,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
+          onTap: () => context.push(url),
+          leading: IconoOpcion(
+            icon: icon,
+            color: Color(0xFFDCEBFF),
+            sizeBorder: 15,
+            height: 52,
+            width: 52,
+          ),
+          title: Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+          ),
           subtitle: Text(subtitle),
           trailing: Icon(Icons.arrow_forward_ios_sharp),
         ),
-         SizedBox(height: 10,),
-        Divider(thickness: 1,color: Colors.black26,),
-        SizedBox(height: 10,),
+        SizedBox(height: 10),
+        Divider(thickness: 1, color: Colors.black26),
+        SizedBox(height: 10),
       ],
     );
   }
@@ -151,4 +166,3 @@ class _CardOpcion extends StatelessWidget {
 //     );
 //   }
 // }
-

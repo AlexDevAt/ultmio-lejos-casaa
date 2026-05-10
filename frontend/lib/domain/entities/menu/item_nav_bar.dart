@@ -17,5 +17,5 @@ const menuNavBar = <ItemNavBar>[
   ItemNavBar(title: 'Casas', link: '/casas', iconData: Icons.home_outlined),
   ItemNavBar(title: 'Busqueda', link: '/busqueda', iconData: Icons.search_outlined),
   ItemNavBar(title:'Reservas', link: '/reservas', iconData: Icons.confirmation_num_outlined),
-  ItemNavBar(title: 'Perfil', link: '/perfil', iconData: Icons.person_outlined),
+  ItemNavBar(title: 'Cuenta', link: '/cuenta', iconData: Icons.person_outlined),
 ];

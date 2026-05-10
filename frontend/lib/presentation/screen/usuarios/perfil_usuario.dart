@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:lejos_de_casa_front/presentation/widgets/icono_custom.dart';
+import 'package:lejos_de_casa_front/helpers/formatos/form_usuarios.dart';
+import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
+import 'package:provider/provider.dart';
 
 class PerfilUsuario extends StatelessWidget {
   const PerfilUsuario({super.key});
+  static String name = 'perfil_usuario';
 
   @override
   Widget build(BuildContext context) {
@@ -12,22 +16,77 @@ class PerfilUsuario extends StatelessWidget {
         centerTitle: true,
         title: Text('Perfil', style: TextStyle(fontWeight: FontWeight.w600)),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(child: _FotoPerfil()),
-            SizedBox(height: 15),
-            _CambiarFoto(),
-            SizedBox(height: 20),
+      body: SingleChildScrollView(child: _ViewPerfilUsuario()),
+    );
+  }
+}
 
-            _InfPersonal(),
-            SizedBox(height: 20),
+class _ViewPerfilUsuario extends StatefulWidget {
+  @override
+  State<_ViewPerfilUsuario> createState() => _ViewPerfilUsuarioState();
+}
 
-            _Direccion(),
-            SizedBox(height: 20),
-            _Rol(),
-          ],
-        ),
+class _ViewPerfilUsuarioState extends State<_ViewPerfilUsuario> {
+  late TextEditingController _coreoCrtl;
+  late TextEditingController _numeroCrtl;
+  late TextEditingController _rolCrtl;
+
+  @override
+  void initState() {
+    //TODO ESTO ES UNA PRUBEA  CAMBIAR LOS DATOS SEGUN LA DATA QUE LLEGUE
+    super.initState();
+    _coreoCrtl = TextEditingController(text: 'fer6464man@gmail.com');
+    _numeroCrtl = TextEditingController(text: '4493856622');
+    _rolCrtl = TextEditingController(text: 'Comprador');
+  }
+
+  @override
+  void dispose() {
+    _numeroCrtl.dispose();
+    _coreoCrtl.dispose();
+    _rolCrtl.dispose();
+    super.dispose();
+  }
+
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    final provUsuario = context.watch<ProviderUsuarios>();
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          Center(child: _FotoPerfil()),
+          SizedBox(height: 15),
+          _CambiarFoto(),
+          SizedBox(height: 20),
+          _InfPersonal(controllerEmail: _coreoCrtl, controllerTel: _numeroCrtl),
+          SizedBox(height: 20),
+          _Direccion(),
+          SizedBox(height: 20),
+          _Rol(),
+          SizedBox(height: 20),
+          BtnFormulario(
+            text: 'Guardar cambios',
+            func: () {
+              if (_formKey.currentState!.validate()) {
+                try {
+                  final data = <String, dynamic>{
+                    "correo": _coreoCrtl.value.text.trim(),
+                    "telefono": _numeroCrtl.value.text.trim(),
+                  };
+                  provUsuario.actualizarUsuario('MATA920404MPLJKL04', data);
+                } catch (e) {}
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Guardado con exito')),
+                );
+              }
+            },
+            width: 200,
+            height: 50,
+          ),
+        ],
       ),
     );
   }
@@ -40,6 +99,8 @@ class _CardOpcion extends StatelessWidget {
   final bool grid;
   final bool editable;
   final bool useIcon;
+  final TextEditingController? controller;
+  final FormFieldValidator<String>? validator;
   const _CardOpcion({
     this.grid = false,
     this.useIcon = true,
@@ -47,16 +108,21 @@ class _CardOpcion extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.subtitle,
+    this.validator,
+    this.controller,
   });
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       width: grid ? 2 : null,
-      child: TextField(
+      child: TextFormField(
+        controller: editable ? controller : null,
+        validator: editable ? validator : null,
+        ignorePointers: !editable,
         readOnly: !editable,
         decoration: InputDecoration(
-          suffixIcon: ((editable || grid)  && useIcon)
+          suffixIcon: ((editable || grid) && useIcon)
               ? Icon(Icons.edit_outlined)
               : null,
           prefixIconConstraints: BoxConstraints(minWidth: grid ? 20 : 40),
@@ -141,7 +207,7 @@ class _Direccion extends StatelessWidget {
               Expanded(
                 child: _CardOpcion(
                   title: 'Num interior',
-            useIcon: false,
+                  useIcon: false,
                   grid: true,
                   icon: Icon(Icons.home_outlined),
                   subtitle: 'Calle palma',
@@ -151,7 +217,7 @@ class _Direccion extends StatelessWidget {
               Expanded(
                 child: _CardOpcion(
                   title: 'Colonia',
-            useIcon: false,
+                  useIcon: false,
                   grid: true,
                   icon: Icon(Icons.home_outlined),
                   subtitle: 'Aguascalientes',
@@ -164,7 +230,7 @@ class _Direccion extends StatelessWidget {
               Expanded(
                 child: _CardOpcion(
                   title: 'Municipio',
-            useIcon: false,
+                  useIcon: false,
                   grid: true,
                   icon: Icon(Icons.home_outlined),
                   subtitle: 'Calle palma',
@@ -174,7 +240,7 @@ class _Direccion extends StatelessWidget {
               Expanded(
                 child: _CardOpcion(
                   title: 'CP',
-            useIcon: false,
+                  useIcon: false,
                   grid: true,
                   icon: Icon(Icons.home_outlined),
                   subtitle: 'Calle palma',
@@ -205,8 +271,48 @@ class _Rol extends StatelessWidget {
         color: Colors.white,
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(children: [Icon(Icons.work_outline_outlined)]),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.work_outline_outlined,
+                  color: Color(0xFF1B84B3),
+                  size: 28,
+                ),
+                SizedBox(width: 5),
+                Center(
+                  child: Text(
+                    'Tipo de usuario ',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFD9F1F7),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 8,
+                    ),
+                    child: Text(
+                      'Comprador',
+                      style: TextStyle(
+                        color: Color(0xFF1B84B3),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _CambiaRol(),
         ],
       ),
     );
@@ -214,6 +320,13 @@ class _Rol extends StatelessWidget {
 }
 
 class _InfPersonal extends StatelessWidget {
+  final TextEditingController controllerEmail;
+  final TextEditingController controllerTel;
+
+  const _InfPersonal({
+    required this.controllerEmail,
+    required this.controllerTel,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -255,7 +368,6 @@ class _InfPersonal extends StatelessWidget {
             title: 'Nombres',
             icon: Icon(Icons.person_2_outlined),
             subtitle: 'Alexis Mauricio',
-            
           ),
           _CardOpcion(
             title: 'Apellido materno',
@@ -276,11 +388,25 @@ class _InfPersonal extends StatelessWidget {
             title: 'Correo',
             icon: Icon(Icons.email_outlined),
             editable: true,
+            controller: controllerEmail,
+            validator: (value) {
+              if (!FormUsuarios.validarEmail(value!)) {
+                return 'Ingrese un email valido';
+              }
+              return null;
+            },
             subtitle: 'fer7447@gmail.com',
           ),
           _CardOpcion(
             title: 'Telefono',
+            controller: controllerTel,
             editable: true,
+            validator: (value) {
+              if (!FormUsuarios.validarTelefon(value!)) {
+                return 'Ingrese un telefono valido';
+              }
+              return null;
+            },
             icon: Icon(Icons.phone_iphone_outlined),
             subtitle: '123123132',
           ),
@@ -328,6 +454,60 @@ class _CambiarFoto extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
       ), //TODO funcion foto
+    );
+  }
+}
+
+class _CambiaRol extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Color(0xFFF5F6F8),
+        ),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.info_outline, color: Color(0xFF06164D)),
+                SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Quieres volverte vendedor?',
+                      style: TextStyle(
+                        color: Color(0xFF06164D),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      'Cambia tu rol en cualquier momento',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ],
+                ),
+                SizedBox(width: 10),
+              ],
+            ),
+            SizedBox(height: 10),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: Color(0xFF06164D)),
+              onPressed: () => (),
+              child: Text(
+                'Cambia de rol',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

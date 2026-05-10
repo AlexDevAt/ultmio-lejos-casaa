@@ -1,4 +1,4 @@
-export 'package:lejos_de_casa_front/presentation/screen/menu/perfil_screen.dart';
+export 'package:lejos_de_casa_front/presentation/screen/cuenta/cuenta_screen.dart';
 export 'screen/busqueda/busqueda_screen.dart';
 export 'screen/casas/casas_screen.dart';
 export 'screen/casas/crear_casa_screen.dart';
