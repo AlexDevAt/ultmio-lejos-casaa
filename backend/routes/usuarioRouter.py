@@ -28,6 +28,10 @@ def borrarUsuario(curp: str):
             status_code=400,
             detail=str(e)
         )
+        
+@router.post("auth/login",status_code=200)
+def login(email,password):
+    pass
 
 @router.get("/{curp}",response_model=UsuarioOut,status_code=200)
 def obtenerUsuario(curp: str):

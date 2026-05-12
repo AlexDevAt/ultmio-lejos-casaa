@@ -6,4 +6,5 @@ abstract class UsuarioRepository {
   Future<Usuario> actualizarUsuario(String curp, Map<String, dynamic> data);
   Future<void> borrarUsuario(String curp);
   Future<Usuario> crearUsuario(Usuario usuario);
+  Future<String> login(String email, String pass);
 }

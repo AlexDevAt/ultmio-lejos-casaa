@@ -33,7 +33,7 @@ class UsuarioRepositoryImpl implements UsuarioRepository {
       codigoPostal: usuario.codigoPostal,
       municipio: usuario.municipio,
       ciudad: usuario.ciudad,
-      contrasenia: usuario.contrasenia
+      contrasenia: usuario.contrasenia,
     );
     final res = await dataSource.crearUsuario(model.toJson());
     return model.toEntity();
@@ -51,5 +51,10 @@ class UsuarioRepositoryImpl implements UsuarioRepository {
   @override
   Future<void> borrarUsuario(String curp) async {
     await dataSource.borrarUsuario(curp);
+  }
+
+  @override
+  Future<String> login(String email, String pass) {
+    return dataSource.login(email, pass);
   }
 }

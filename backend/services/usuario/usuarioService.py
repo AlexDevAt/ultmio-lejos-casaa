@@ -19,6 +19,11 @@ class UsuarioService:
     def obtenerUsuarios(self):
         return self.repo.obtenerUsuarios()
     
+    def iniciarSesion(self,email:str,password:str):
+        if(self.repo.correoExistente(email)):
+            passEnc = HashPass.generarHash(password)
+            
+    
     
     def obtenerUsuario(self,curp:str):
         if(not self._existeUsuario(curp)):

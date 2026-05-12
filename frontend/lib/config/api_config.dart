@@ -8,6 +8,7 @@ class ApiConfigUsers {
   static String obtenerUsuarios() => '$baseUrl/$prefix';
   static String actualizarUsuario(String curp) => "$baseUrl/$prefix/$curp";
   static String crearUsuario() => "$baseUrl/$prefix/register";
+  static String iniciarSesion() => "$baseUrl/auth/login";
 }
 
 class ApiConfigCasas {

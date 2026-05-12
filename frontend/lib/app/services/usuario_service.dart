@@ -10,6 +10,7 @@ class UsuarioService {
     return await repo.obtenerUsuario(curp);
   }
 
+
   Future<List<Usuario>> obtenerUsuarios() async {
     final users = await repo.obtenerUsuarios();
     if (users.isNotEmpty) return users;

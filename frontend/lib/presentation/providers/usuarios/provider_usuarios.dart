@@ -6,11 +6,16 @@ class ProviderUsuarios extends ChangeNotifier {
   UsuarioService usuarioService;
   ProviderUsuarios(this.usuarioService);
 
+  String token = '';
   bool isLoading = false;
   bool usuariosCargadosPrimera = false;
 
   String? error;
   List<Usuario> usuarios = [];
+
+  // Future<void> login(String email, String password) {
+    
+  // }
 
   void _cargarUsuarios(List users) {
     for (var user in users) {
@@ -65,6 +70,5 @@ class ProviderUsuarios extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
-    
   }
 }

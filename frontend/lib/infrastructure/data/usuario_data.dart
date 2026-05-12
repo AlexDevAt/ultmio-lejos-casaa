@@ -8,6 +8,12 @@ class UsuarioData {
 
   UsuarioData(DioClient cliente) : dio = cliente.dio;
 
+  Future<String> login(String email, String pass) async {
+    final data = <String, dynamic>{'correo': email, 'hash_pass': pass};
+    final res = await dio.post(ApiConfigUsers.iniciarSesion(), data: data);
+    return res.data;
+  }
+
   Future<UsuarioModel> obtenerUsuario(String curp) async {
     try {
       final res = await dio.get(ApiConfigUsers.obtenerUsuario(curp));

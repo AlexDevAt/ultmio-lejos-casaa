@@ -39,6 +39,18 @@ class RepoUsuario:
         cursor.close()
         return existe is not None
     
+    def obtenerPassPorEmail(self,correo) -> bool:
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor()
+        sql =  '''
+            SELECT hash_pass FROM Usuarios WHERE correo =%s LIMIT1;
+        '''
+        cursor.execute(sql,(correo,))
+        existe = cursor.fetchone()
+        cursor.close()
+        return existe is not None
+        
+    
     def correoExistente(self, correo: str) -> bool:
         conx : mysql.connector.MySQLConnection = self.conectarDB()
         cursor = conx.cursor()
