@@ -54,7 +54,8 @@ class UsuarioRepositoryImpl implements UsuarioRepository {
   }
 
   @override
-  Future<String> login(String email, String pass) {
-    return dataSource.login(email, pass);
+  Future<Usuario> obtenerUsuarioActual(String token) async {
+    final model = await dataSource.obtenerUsuarioActual(token);
+    return model.toEntity();
   }
 }

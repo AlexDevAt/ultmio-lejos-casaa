@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lejos_de_casa_front/helpers/formatos/form_usuarios.dart';
+import 'package:lejos_de_casa_front/presentation/providers/auth/provider_auth.dart';
+import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
+import 'package:provider/provider.dart';
 
 class IniciarSesion extends StatefulWidget {
   const IniciarSesion({super.key});
@@ -10,11 +13,28 @@ class IniciarSesion extends StatefulWidget {
 }
 
 class _IniciarSesionState extends State<IniciarSesion> {
+  late TextEditingController _correoCtrl;
+  late TextEditingController _passCtrl;
+  @override
+  void initState() {
+    super.initState();
+    _correoCtrl = TextEditingController();
+    _passCtrl = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _correoCtrl.dispose();
+    _passCtrl.dispose();
+    super.dispose();
+  }
+
   bool correoCorrecto = false;
   bool continuar = false;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final providerAuth = context.watch<ProviderAuth>();
     final TextStyle textIniciaSesion = const TextStyle(
       inherit: false,
       color: Colors.black,
@@ -25,90 +45,99 @@ class _IniciarSesionState extends State<IniciarSesion> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: AlignmentGeometry.topStart,
-              end: AlignmentGeometry.bottomCenter,
-              colors: [Color(0xFFFFFFFF), Color(0x99999999)],
-              stops: [.30, .90],
-            ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: AlignmentGeometry.topStart,
+            end: AlignmentGeometry.bottomCenter,
+            colors: [Color(0xFFFFFFFF), Color(0x99999999)],
+            stops: [.30, .90],
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 40),
-                    child: _LogoImagen(),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 40),
+                  child: _LogoImagen(),
+                ),
+      
+                Center(
+                  child: Title(
+                    color: Colors.black,
+                    child: Text('Inicia sesion', style: textIniciaSesion),
                   ),
-        
-                  Center(
-                    child: Title(
-                      color: Colors.black,
-                      child: Text('Inicia sesion', style: textIniciaSesion),
-                    ),
-                  ),
-                  _TextoInfoPadingTop(
-                    edgeInsetsGeometry: EdgeInsetsGeometry.only(bottom: 30),
-                    top: 30,
-                    label:
-                        'Ingresa tu correo electronico para iniciar sesion en la aplicacion',
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        _CampoTexto(
+                ),
+                _TextoInfoPadingTop(
+                  edgeInsetsGeometry: EdgeInsetsGeometry.only(bottom: 30),
+                  top: 30,
+                  label:
+                      'Ingresa tu correo electronico para iniciar sesion en la aplicacion',
+                ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      _CampoTexto(
+                        controller: _correoCtrl,
+                        validacion: (value) {
+                          if (!FormUsuarios.validarEmail(value!)) {
+                            return 'Correo invalido';
+                          }
+                          correoCorrecto = true;
+                          return null;
+                        },
+                        labelText: 'correoelectrónico@dominio.com',
+                      ),
+                      AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        height: (correoCorrecto & continuar) ? 67 : 0,
+                        child: _CampoTexto(
+                          controller: _passCtrl,
                           validacion: (value) {
-                            if (!FormUsuarios.validarEmail(value!)) {
-                              return 'Correo invalido';
+                            if (FormUsuarios.contraseniaVacia(value!)) {
+                              return 'Ingrese una contrasenia';
                             }
                             return null;
-                          },
-                          labelText: 'correoelectrónico@dominio.com',
+                          }, //TODO Poner validaciones desde el backend
+                          labelText: 'Tu password',
                         ),
-                        AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
-                          height: (correoCorrecto & continuar) ? 67 : 0,
-                          child: _CampoTexto(
-                            validacion: (value) {},//TODO Poner validaciones desde el backend
-                            labelText: 'Tu password',
-                          ),
-                        ),
-                        BtnFormulario(
-                          height: MediaQuery.of(context).size.height * .06,
-                          width: double.infinity,
-                          text: 'Continuar',
-                          func: () => (setState(() {
-                            continuar = true;
-                            if (_formKey.currentState!.validate()) {
-                              setState((){
-                              });
-                            }
-                          })),
-                        ),
-                      ],
-                    ),
+                      ),
+                      BtnFormulario(
+                        height: MediaQuery.of(context).size.height * .06,
+                        width: double.infinity,
+                        text: 'Continuar',
+                        func: () => (setState(() {
+                          continuar = true;
+                          if (_formKey.currentState!.validate()) {              
+                            providerAuth.login(
+                              _correoCtrl.value.text,
+                              _passCtrl.value.text,
+                              context.read<ProviderUsuarios>()
+                            );
+                          }
+                        })),
+                      ),
+                    ],
                   ),
-                  _Division(),
-                  _LabelCampoForm(
-                    textIniciaSesion: textIniciaSesion,
-                    label: 'Eres nuevo? Registrate aqui !',
-                  ),
-                  BtnFormulario(
-                     height: MediaQuery.of(context).size.height * .06,
-                    width: double.infinity,
-                    text: 'Registrarse',
-                    func: () => (),
-                  ),
-                  _TerminosCondiciones(),
-                ],
-              ),
+                ),
+                _Division(),
+                _LabelCampoForm(
+                  textIniciaSesion: textIniciaSesion,
+                  label: 'Eres nuevo? Registrate aqui !',
+                ),
+                BtnFormulario(
+                  height: MediaQuery.of(context).size.height * .06,
+                  width: double.infinity,
+                  text: 'Registrarse',
+                  func: () => (),
+                ),
+                _TerminosCondiciones(),
+              ],
             ),
           ),
         ),
@@ -138,7 +167,11 @@ class _TerminosCondiciones extends StatelessWidget {
 }
 
 class _TextoInfoPadingTop extends StatelessWidget {
-  const _TextoInfoPadingTop({required this.top, required this.label, required this.edgeInsetsGeometry});
+  const _TextoInfoPadingTop({
+    required this.top,
+    required this.label,
+    required this.edgeInsetsGeometry,
+  });
 
   final double top;
   final EdgeInsetsGeometry edgeInsetsGeometry;
@@ -171,11 +204,7 @@ class _LabelCampoForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
-      child: Text(
-        label,
-        textAlign:textAlign,
-        style: textIniciaSesion,
-      ),
+      child: Text(label, textAlign: textAlign, style: textIniciaSesion),
     );
   }
 }
@@ -193,7 +222,7 @@ class _LogoImagen extends StatelessWidget {
 class _CampoTexto extends StatelessWidget {
   const _CampoTexto({
     required this.validacion,
-    this.controller, //TODO enviar validacion al backend
+    required this.controller,
     required this.labelText,
   });
   final TextEditingController? controller;
@@ -206,6 +235,7 @@ class _CampoTexto extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 20),
 
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           isDense: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),

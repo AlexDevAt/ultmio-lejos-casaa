@@ -10,6 +10,12 @@ class UsuarioService {
     return await repo.obtenerUsuario(curp);
   }
 
+  Future<Usuario> obtenerUsuarioActual(String token) async {
+    return await repo.obtenerUsuarioActual(token);
+  }
+
+
+
 
   Future<List<Usuario>> obtenerUsuarios() async {
     final users = await repo.obtenerUsuarios();

@@ -5,10 +5,22 @@ class ApiConfigUsers {
   // static String baseUrl = 'http://10.0.2.2:8000'; CUANDO USE EMULADOR
 
   static String obtenerUsuario(String curp) => '$baseUrl/$prefix/$curp';
+  static String obtenerUsuarioActual() => '$baseUrl/$prefix/me';
   static String obtenerUsuarios() => '$baseUrl/$prefix';
   static String actualizarUsuario(String curp) => "$baseUrl/$prefix/$curp";
   static String crearUsuario() => "$baseUrl/$prefix/register";
-  static String iniciarSesion() => "$baseUrl/auth/login";
+}
+
+class ApiConfigAuth {
+  static String baseUrl = "http://10.0.2.2:8000";
+  static String prefix = 'auth';
+  static String iniciarSesion() => "$baseUrl/$prefix/login";
+}
+
+class ApiConfigReservas {
+  static String baseUrl = "http://10.0.2.2:8000";
+  static String prefix = 'reservas';
+   static String obtenerReservas(String curp) => '$baseUrl/$prefix/$curp';
 }
 
 class ApiConfigCasas {

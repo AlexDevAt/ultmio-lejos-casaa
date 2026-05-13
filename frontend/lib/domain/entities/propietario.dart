@@ -1,8 +1,8 @@
 class Propietario {
   final String nombres;
-  final String curp;
+  final String? curp;
   final String apellidos;
-  final DateTime fechaRegistro;
+  final DateTime? fechaRegistro;
 
   Propietario({
     required this.nombres,

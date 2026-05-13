@@ -8,15 +8,22 @@ class UsuarioData {
 
   UsuarioData(DioClient cliente) : dio = cliente.dio;
 
-  Future<String> login(String email, String pass) async {
-    final data = <String, dynamic>{'correo': email, 'hash_pass': pass};
-    final res = await dio.post(ApiConfigUsers.iniciarSesion(), data: data);
-    return res.data;
-  }
-
   Future<UsuarioModel> obtenerUsuario(String curp) async {
     try {
       final res = await dio.get(ApiConfigUsers.obtenerUsuario(curp));
+      final data = res.data;
+      return UsuarioModel.fromJson(data);
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['detail'] ?? 'Usuario no encontrado');
+    }
+  }
+
+  Future<UsuarioModel> obtenerUsuarioActual(String token) async {
+    try {
+      final res = await dio.get(
+        ApiConfigUsers.obtenerUsuarioActual(),
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
       final data = res.data;
       return UsuarioModel.fromJson(data);
     } on DioException catch (e) {

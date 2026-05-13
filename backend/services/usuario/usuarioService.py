@@ -62,7 +62,7 @@ class UsuarioService:
             dto.codigo_postal,
             dto.ciudad,
            HashPass.generarHash(dto.contrasenia),
-            dto.municipio
+            dto.municipio,
         )
         usuario = self.repo.crearUsuario(usuario)
         return usuario

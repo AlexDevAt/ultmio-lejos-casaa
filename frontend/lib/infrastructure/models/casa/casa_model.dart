@@ -37,7 +37,7 @@ class CasaModel {
     calle: json["calle"],
     numInterior: json["num_interior"],
     precio: (json["precio"] as num).toDouble(),
-    idRegion: json["idRegion"],
+    idRegion: '',
    propietario: json["propietario"] != null
     ? PropietarioModel.fromJson(json["propietario"])
     : null
@@ -52,7 +52,7 @@ class CasaModel {
     "calle": calle,
     "num_interior": numInterior,
     "precio": precio,
-    "idRegion": idRegion,
+    "idRegion": '',
     "propietario": propietario!.toJson(),
     'id_propietario': propietario!.curp
   };

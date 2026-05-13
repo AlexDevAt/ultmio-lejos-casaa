@@ -6,16 +6,21 @@ class ProviderUsuarios extends ChangeNotifier {
   UsuarioService usuarioService;
   ProviderUsuarios(this.usuarioService);
 
-  String token = '';
   bool isLoading = false;
   bool usuariosCargadosPrimera = false;
+  Usuario? usuarioActual;
 
   String? error;
   List<Usuario> usuarios = [];
 
   // Future<void> login(String email, String password) {
-    
+
   // }
+
+  Future<void> cargarUsuarioActual(String token) async {
+    usuarioActual = await usuarioService.obtenerUsuarioActual(token);
+    notifyListeners();  
+  }
 
   void _cargarUsuarios(List users) {
     for (var user in users) {
@@ -45,7 +50,6 @@ class ProviderUsuarios extends ChangeNotifier {
 
       final indice = usuarios.indexWhere((u) => u.curp == curp);
       if (indice != -1) {
-        // reemplaza el objeto viejo por el nuevo
         usuarios[indice] = usuarioUpdate;
       }
       notifyListeners();

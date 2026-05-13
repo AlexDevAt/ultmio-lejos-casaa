@@ -11,7 +11,7 @@ class UsuarioCreate(BaseModel):
     rol: Roles
     contrasenia: str
     calle : str
-    fecha_registro: str
+    fecha_registro: datetime.datetime
     num_interior: int
     codigo_postal: str = Field( pattern=r'^[0-9]{5}$')
     ciudad : str
@@ -32,7 +32,7 @@ class UsuarioOut(BaseModel):
     municipio: str
 
 class PropietarioCasaBasico(BaseModel):
-    curp : str
-    nombres:  str = Field(min_length=2, max_length=255)
+    curp : str 
+    nombres:  str = Field(min_length=2, max_length=255) 
     apellidos : str = Field(min_length=2, max_length=255)
-    fecha_registro : datetime.datetime
+    fecha_registro : datetime.datetime 

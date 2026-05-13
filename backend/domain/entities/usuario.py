@@ -3,19 +3,19 @@ from helpers.usuarios.usuariosRoles import Roles
 
 class Usuario:
     def __init__(self,
-    curp : str,
-    nombres: str,
-    apellidos : str,
-    correo : str,
-    telefono : str,
-    rol: Roles,
-    fecha_registro : datetime,
-    calle : str,
-    num_interior: int,
-    codigo_postal: str,
-    ciudad : str,
-    contrasenia: str,
-    municipio: str):
+    curp : str= None,
+    nombres: str= None,
+    apellidos : str= None,
+    correo : str= None,
+    telefono : str= None,
+    rol: Roles= None,
+    fecha_registro : datetime= None,
+    calle : str= None,
+    num_interior: int= None,
+    codigo_postal: str= None,
+    ciudad : str= None,
+    contrasenia: str= None,
+    municipio: str= None):
         self.curp = curp
         self.nombres = nombres
         self.apellidos = apellidos

@@ -20,7 +20,7 @@ final menuGeneral = <MenuPerfil>[
     subtitle: 'Actualiza tu informacion personal',
   ),
   MenuPerfil(
-    url: '/',
+    url: '/reservas',
     title: 'Reservas',
     icon: Icon(Icons.home_outlined, color: colorIcono),
     subtitle: 'Tus reservas',

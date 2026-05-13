@@ -3,8 +3,8 @@ import 'package:lejos_de_casa_front/domain/entities/propietario.dart';
 class PropietarioModel {
   String nombres;
   String apellidos;
-  String curp;
-  DateTime fechaRegistro;
+  String? curp;
+  DateTime? fechaRegistro;
 
   PropietarioModel({
     required this.nombres,
@@ -27,13 +27,15 @@ class PropietarioModel {
         nombres: json["nombres"],
         curp: json['curp'],
         apellidos: json["apellidos"],
-        fechaRegistro: DateTime.parse(json["fecha_registro"]),
+        fechaRegistro: json["fecha_registro"] != null
+    ? DateTime.parse(json["fecha_registro"])
+    : null,
       );
 
   Map<String, dynamic> toJson() => {
     "nombres": nombres,
     "apellidos": apellidos,
-    "fecha_registro": fechaRegistro.toIso8601String(),
+    "fecha_registro": fechaRegistro!.toIso8601String(),
   };
 
   Propietario toEntity() => Propietario(

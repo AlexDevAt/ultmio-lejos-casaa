@@ -8,6 +8,10 @@ class FormUsuarios {
     return true;
   }
 
+  static bool contraseniaVacia(String texto) {
+    return texto.isEmpty;
+  }
+
   static bool validarEmail(String email) {
     if (email == null || email.trim().isEmpty) {
       return false;

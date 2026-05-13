@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 import 'api_config.dart';
 class DioClient {
-
   final Dio dio;
-
   DioClient()
       : dio = Dio(
           BaseOptions(

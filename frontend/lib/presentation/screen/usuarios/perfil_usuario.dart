@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lejos_de_casa_front/domain/entities/usuario.dart';
 import 'package:lejos_de_casa_front/helpers/formatos/form_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
@@ -33,11 +34,16 @@ class _ViewPerfilUsuarioState extends State<_ViewPerfilUsuario> {
 
   @override
   void initState() {
-    //TODO ESTO ES UNA PRUBEA  CAMBIAR LOS DATOS SEGUN LA DATA QUE LLEGUE
+    final provUsuario = context.read<ProviderUsuarios>();
+   
     super.initState();
-    _coreoCrtl = TextEditingController(text: 'fer6464man@gmail.com');
-    _numeroCrtl = TextEditingController(text: '4493856622');
-    _rolCrtl = TextEditingController(text: 'Comprador');
+    _coreoCrtl = TextEditingController(text: provUsuario.usuarioActual!.correo);
+    _numeroCrtl = TextEditingController(
+      text: provUsuario.usuarioActual!.telefono,
+    );
+    _rolCrtl = TextEditingController(
+      text: provUsuario.usuarioActual!.rol.toString(),
+    );
   }
 
   @override
@@ -60,9 +66,9 @@ class _ViewPerfilUsuarioState extends State<_ViewPerfilUsuario> {
           SizedBox(height: 15),
           _CambiarFoto(),
           SizedBox(height: 20),
-          _InfPersonal(controllerEmail: _coreoCrtl, controllerTel: _numeroCrtl),
+          _InfPersonal(controllerEmail: _coreoCrtl, controllerTel: _numeroCrtl, usuario: provUsuario.usuarioActual!,),
           SizedBox(height: 20),
-          _Direccion(),
+          _Direccion(usuario: provUsuario.usuarioActual!),
           SizedBox(height: 20),
           _Rol(),
           SizedBox(height: 20),
@@ -75,7 +81,10 @@ class _ViewPerfilUsuarioState extends State<_ViewPerfilUsuario> {
                     "correo": _coreoCrtl.value.text.trim(),
                     "telefono": _numeroCrtl.value.text.trim(),
                   };
-                  provUsuario.actualizarUsuario('MATA920404MPLJKL04', data);
+                  provUsuario.actualizarUsuario(
+                    provUsuario.usuarioActual!.curp,
+                    data,
+                  );
                 } catch (e) {}
 
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -153,6 +162,9 @@ class _CardOpcion extends StatelessWidget {
 }
 
 class _Direccion extends StatelessWidget {
+  final Usuario usuario;
+
+  const _Direccion({super.key, required this.usuario});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -199,7 +211,7 @@ class _Direccion extends StatelessWidget {
             title: 'Calle',
             useIcon: false,
             icon: Icon(Icons.home_outlined),
-            subtitle: 'Calle palma',
+            subtitle: usuario.calle,
             editable: true,
           ),
           Row(
@@ -210,7 +222,7 @@ class _Direccion extends StatelessWidget {
                   useIcon: false,
                   grid: true,
                   icon: Icon(Icons.home_outlined),
-                  subtitle: 'Calle palma',
+                  subtitle: usuario.numeroInterior.toString(),
                 ),
               ),
 
@@ -220,7 +232,7 @@ class _Direccion extends StatelessWidget {
                   useIcon: false,
                   grid: true,
                   icon: Icon(Icons.home_outlined),
-                  subtitle: 'Aguascalientes',
+                  subtitle: usuario.ciudad,
                 ),
               ),
             ],
@@ -233,7 +245,7 @@ class _Direccion extends StatelessWidget {
                   useIcon: false,
                   grid: true,
                   icon: Icon(Icons.home_outlined),
-                  subtitle: 'Calle palma',
+                  subtitle: usuario.municipio,
                 ),
               ),
 
@@ -243,7 +255,7 @@ class _Direccion extends StatelessWidget {
                   useIcon: false,
                   grid: true,
                   icon: Icon(Icons.home_outlined),
-                  subtitle: 'Calle palma',
+                  subtitle: usuario.codigoPostal,
                 ),
               ),
             ],
@@ -320,12 +332,13 @@ class _Rol extends StatelessWidget {
 }
 
 class _InfPersonal extends StatelessWidget {
+  final Usuario usuario;
   final TextEditingController controllerEmail;
   final TextEditingController controllerTel;
 
   const _InfPersonal({
     required this.controllerEmail,
-    required this.controllerTel,
+    required this.controllerTel, required this.usuario,
   });
   @override
   Widget build(BuildContext context) {
@@ -367,22 +380,22 @@ class _InfPersonal extends StatelessWidget {
           _CardOpcion(
             title: 'Nombres',
             icon: Icon(Icons.person_2_outlined),
-            subtitle: 'Alexis Mauricio',
+            subtitle: usuario.nombres,
           ),
           _CardOpcion(
             title: 'Apellido materno',
             icon: Icon(Icons.person_2_outlined),
-            subtitle: 'Gonzalez',
+            subtitle: usuario.apellidos,
           ),
           _CardOpcion(
             title: 'Apellido paterno',
             icon: Icon(Icons.person_2_outlined),
-            subtitle: 'Cruz',
+            subtitle: usuario.apellidos,
           ),
           _CardOpcion(
             title: 'CURP',
             icon: Icon(Icons.credit_card_outlined),
-            subtitle: 'kjhfhdsjh28k',
+            subtitle: usuario.curp,
           ),
           _CardOpcion(
             title: 'Correo',
@@ -395,7 +408,7 @@ class _InfPersonal extends StatelessWidget {
               }
               return null;
             },
-            subtitle: 'fer7447@gmail.com',
+            subtitle:controllerEmail.value.text,
           ),
           _CardOpcion(
             title: 'Telefono',
@@ -408,7 +421,7 @@ class _InfPersonal extends StatelessWidget {
               return null;
             },
             icon: Icon(Icons.phone_iphone_outlined),
-            subtitle: '123123132',
+            subtitle: controllerTel.value.text,
           ),
         ],
       ),

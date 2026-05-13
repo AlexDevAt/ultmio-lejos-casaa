@@ -3,17 +3,17 @@ from helpers.casas.casaTipo import TipoCasa
 class Casa:
     def __init__(
         self,
-        id,
-        titulo,
-        cupo,
-        tipo,
-        imagen,
-        cuartos,
-        calle,
-        num_interior,
-        precio,
-        idRegion,
-        id_propietario
+        id = None,
+        titulo= None,
+        cupo= None,
+        tipo= None,
+        imagen= None,
+        cuartos= None,
+        calle= None,
+        num_interior= None,
+        precio= None,
+        idRegion= None,
+        id_propietario= None
     ):
         self.id = id
         self.titulo = titulo
