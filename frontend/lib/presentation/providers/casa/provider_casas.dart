@@ -25,15 +25,22 @@ class ProviderCasas extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> obtenerCasas({String? filtro,String? tipoFiltro}) async {
+  Future<void> obtenerCasas({String? filtro, String? tipoFiltro}) async {
     casas.clear();
     try {
       if (filtro != null) {
+        if (filtro == '+4') {
+          filtro = '4';
+        }
+
         filtroActivo = true;
       }
 
       isLoading = true;
-      final List casasDB = await casaService.obtenerCasas(filtro: filtro,tipoFiltro: tipoFiltro);
+      final List casasDB = await casaService.obtenerCasas(
+        filtro: filtro,
+        tipoFiltro: tipoFiltro,
+      );
       _cargarCasas(casasDB);
       casasCargadosPrimera = true;
       notifyListeners();
@@ -44,11 +51,10 @@ class ProviderCasas extends ChangeNotifier {
       notifyListeners();
     }
   }
-   Future<void> crearCasa(Casa casa) async {
+
+  Future<void> crearCasa(Casa casa) async {
     final Casa casaNew = await casaService.crearCasas(casa);
     casas.add(casaNew);
     notifyListeners();
   }
-
-
 }

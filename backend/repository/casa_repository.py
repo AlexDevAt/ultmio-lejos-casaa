@@ -106,7 +106,7 @@ class RepoCasa:
     
     def obtenerCasasPorTipoCodigoPostal(self,filtro:str):
         conx : mysql.connector.MySQLConnection = self.conectarDB()
-        cursor = conx.cursor()
+        cursor = conx.cursor(dictionary=True)
         sql = """
             SELECT 
             c.id,
@@ -118,7 +118,9 @@ class RepoCasa:
             c.calle,
             c.num_interior,
             c.precio,
-            c.id_Region,
+            r.codigo_postal,
+            r.estado,
+            r.municipio,
             u.nombres,
             u.apellidos,
             u.fecha_registro,
@@ -126,7 +128,7 @@ class RepoCasa:
             FROM Casas AS c
             JOIN Usuarios AS u 
             ON u.curp = c.id_propietario
-            JOIN Regiones as r 
+            Join Regiones AS r
             ON c.id_region = r.codigo_postal
             WHERE %s = c.id_region;
         """
@@ -138,7 +140,7 @@ class RepoCasa:
     
     def obtenerCasasPorTipo(self,filtro:str):
         conx : mysql.connector.MySQLConnection = self.conectarDB()
-        cursor = conx.cursor()
+        cursor = conx.cursor(dictionary=True)
         sql = """
             SELECT 
             c.id,
@@ -150,7 +152,9 @@ class RepoCasa:
             c.calle,
             c.num_interior,
             c.precio,
-            c.id_Region,
+            r.codigo_postal,
+            r.estado,
+            r.municipio,
             u.nombres,
             u.apellidos,
             u.fecha_registro,
@@ -158,6 +162,8 @@ class RepoCasa:
             FROM Casas AS c
             JOIN Usuarios AS u 
             ON u.curp = c.id_propietario
+            Join Regiones AS r
+            ON c.id_region = r.codigo_postal
             Where %s = c.tipo;
         """
         cursor.execute(sql,(filtro,))
@@ -166,9 +172,14 @@ class RepoCasa:
         cursor.close()
         return casas
     
-    def obtenerCasas(self):
+    def obtenerCasasPorCuartos(self,filtro:str):
+        
+        simbolo = "="
+        if(filtro == '4'):
+            simbolo = ">="
+        
         conx : mysql.connector.MySQLConnection = self.conectarDB()
-        cursor = conx.cursor()
+        cursor = conx.cursor(dictionary=True)
         sql = """
             SELECT 
             c.id,
@@ -180,14 +191,52 @@ class RepoCasa:
             c.calle,
             c.num_interior,
             c.precio,
-            c.id_Region,
+            r.codigo_postal,
+            r.estado,
+            r.municipio,
             u.nombres,
             u.apellidos,
             u.fecha_registro,
             u.curp
             FROM Casas AS c
             JOIN Usuarios AS u 
-            ON u.curp = c.id_propietario;
+            ON u.curp = c.id_propietario
+            Join Regiones AS r
+            ON c.id_region = r.codigo_postal
+            Where c.cuartos 
+        """+f"{simbolo}"+" %s"
+        cursor.execute(sql,(filtro,))
+        casas = cursor.fetchall()
+        conx.close()
+        cursor.close()
+        return casas
+    
+    def obtenerCasas(self):
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor(dictionary=True)
+        sql = """
+            SELECT 
+            c.id,
+            c.titulo,
+            c.cupo,
+            c.tipo,
+            c.imagen,
+            c.cuartos,
+            c.calle,
+            c.num_interior,
+            c.precio,
+            r.codigo_postal,
+            r.estado,
+            r.municipio,
+            u.nombres,
+            u.apellidos,
+            u.fecha_registro,
+            u.curp
+            FROM Casas AS c
+            JOIN Usuarios AS u 
+            ON u.curp = c.id_propietario
+            Join Regiones AS r
+            ON c.id_region = r.codigo_postal;
         """
         cursor.execute(sql)
         casas = cursor.fetchall()

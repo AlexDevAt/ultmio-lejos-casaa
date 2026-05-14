@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:lejos_de_casa_front/config/api_config.dart';
 import 'package:lejos_de_casa_front/config/dio_cliente.dart';
-import 'package:lejos_de_casa_front/domain/entities/casa.dart';
 import 'package:lejos_de_casa_front/infrastructure/models/casa/casa_model.dart';
 
 class CasaData {
@@ -19,7 +18,7 @@ class CasaData {
     }
   }
   
-  Future<List<CasaModel>> obtenerCasas({String? filtro,String? tipoFiltro}) async {
+  Future<List<CasaModel>> obtenerCasas({String? filtro,String? tipoFiltro})async{
     try {
       if(filtro!=null){
         final res = await dio.get(ApiConfigCasas.obtenerCasasFiltro(filtro: filtro,tipoFiltro: tipoFiltro));
@@ -29,10 +28,7 @@ class CasaData {
         final res = await dio.get(ApiConfigCasas.obtenerCasas());
         final List data = res.data;
         return data.map((casa) => CasaModel.fromJson(casa)).toList();
-
       }
-
-
     } on DioException catch (e) {
       throw Exception(
         e.response?.data['detail'] ?? 'No se encontraron usuarios',

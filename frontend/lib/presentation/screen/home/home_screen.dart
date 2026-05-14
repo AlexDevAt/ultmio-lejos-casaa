@@ -155,7 +155,6 @@ class _BarraBusqueda extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onPress;
   const _BarraBusqueda({
-    super.key,
     required this.validacion,
     required this.controller,
     required this.onPress,
@@ -250,11 +249,13 @@ class FiltroBusqueda extends StatelessWidget {
                       return FilterChip(
                         label: Text(e),
                         onSelected: (value) {
+                           print(e);
                           Navigator.pop(context);
                           context.read<ProviderCasas>().obtenerCasas(
                             filtro: e.trim(),
+                            tipoFiltro: filtro.titulo.toLowerCase()
                           );
-                          print(filtro.titulo);
+                         
                         },
                       );
                     }).toList(),

@@ -26,7 +26,7 @@ class CasaOut(BaseModel):
     calle: str
     num_interior : int
     precio: float
-    idRegion : str
+    region : RegionoOUT
     propietario: PropietarioCasaBasico
     
 class CasaOutFull(BaseModel):

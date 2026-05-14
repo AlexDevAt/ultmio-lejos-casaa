@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lejos_de_casa_front/domain/entities/casa.dart';
 import 'package:lejos_de_casa_front/domain/entities/propietario.dart';
+import 'package:lejos_de_casa_front/domain/entities/region.dart';
 import 'package:lejos_de_casa_front/infrastructure/models/casa/casa_model.dart';
 import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,9 @@ class _FormularioCasaState extends State<FormularioCasa> {
   final cuartosController = TextEditingController();
   final calleController = TextEditingController();
   final numInteriorController = TextEditingController();
-  final regionController = TextEditingController();
+  final codigoPostalController = TextEditingController();
+  final estadoController = TextEditingController();
+  final municipioController = TextEditingController();
   final precioController = TextEditingController();
 
   @override
@@ -54,7 +57,7 @@ class _FormularioCasaState extends State<FormularioCasa> {
     cuartosController.dispose();
     calleController.dispose();
     numInteriorController.dispose();
-    regionController.dispose();
+    codigoPostalController.dispose();
     precioController.dispose();
     super.dispose();
   }
@@ -147,10 +150,22 @@ class _FormularioCasaState extends State<FormularioCasa> {
             validacion: (value) => validarEntero(value, 'el numero interior'),
           ),
           _CampoTexto(
-            controller: regionController,
+            controller: codigoPostalController,
             campo: 'Codigo postal',
             prefixIcon: Icons.location_on,
             validacion: (value) => validarTexto(value, 'el codigo postal'),
+          ),
+          _CampoTexto(
+            controller: codigoPostalController,
+            campo: 'Estado',
+            prefixIcon: Icons.location_on,
+            validacion: (value) => validarTexto(value, 'Estado '),
+          ),
+          _CampoTexto(
+            controller: codigoPostalController,
+            campo: 'Estado',
+            prefixIcon: Icons.location_on,
+            validacion: (value) => validarTexto(value, 'Municipio'),
           ),
           _CampoTexto(
             controller: precioController,
@@ -164,6 +179,12 @@ class _FormularioCasaState extends State<FormularioCasa> {
             onPressed: () {
               if (!_formKey.currentState!.validate()) return;
 
+              final region = Region(
+                codigoPos: int.parse(codigoPostalController.text),
+                estado: estadoController.text,
+                municipio: municipioController.text,
+              );
+
               final casa = Casa(
                 id: 0,
                 titulo: tituloController.text.trim(),
@@ -174,7 +195,7 @@ class _FormularioCasaState extends State<FormularioCasa> {
                 calle: calleController.text.trim(),
                 numInterior: int.parse(numInteriorController.text.trim()),
                 precio: double.parse(precioController.text.trim()),
-                idRegion: regionController.text.trim(),
+                region: region,
                 propietario: Propietario(
                   curp: 'GAMM850202MDFDEF02',
                   nombres: '',
@@ -183,9 +204,9 @@ class _FormularioCasaState extends State<FormularioCasa> {
                 ),
               );
               providerCasa.crearCasa(casa);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Casa registrada')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Casa registrada')));
             },
             child: const Text('Registrar'),
           ),

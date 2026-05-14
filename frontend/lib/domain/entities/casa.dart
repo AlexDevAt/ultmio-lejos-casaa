@@ -1,4 +1,5 @@
 import 'package:lejos_de_casa_front/domain/entities/propietario.dart';
+import 'package:lejos_de_casa_front/domain/entities/region.dart';
 
 enum TipoCasa { unaPlanta, dosPlantas, otroTipo }
 
@@ -14,7 +15,7 @@ class Casa {
   final String calle;
   final int numInterior;
   final double precio;
-  final String idRegion;
+  final Region region;
   final Propietario propietario;
 
   Casa({
@@ -26,9 +27,8 @@ class Casa {
     required this.calle,
     required this.numInterior,
     required this.precio,
-    required this.idRegion,
+    required this.region,
     required this.propietario, required this.titulo,
   });
 }
 
-//TODO: CAMBIAR EL ID D REGION POR LOS DATOS DE LA REGION DESDE EL BACK

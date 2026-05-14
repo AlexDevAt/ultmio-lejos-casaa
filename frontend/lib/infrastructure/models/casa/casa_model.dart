@@ -1,4 +1,6 @@
 import 'package:lejos_de_casa_front/domain/entities/casa.dart';
+import 'package:lejos_de_casa_front/domain/entities/region.dart';
+import 'package:lejos_de_casa_front/infrastructure/models/region/region_model.dart';
 import 'package:lejos_de_casa_front/infrastructure/models/usuario/propietario_model.dart';
 
 class CasaModel {
@@ -11,7 +13,7 @@ class CasaModel {
   final String calle;
   final int numInterior;
   final double precio;
-  final String idRegion;
+  final RegionModel? region;
   final PropietarioModel? propietario;
 
   CasaModel({
@@ -23,7 +25,7 @@ class CasaModel {
     required this.calle,
     required this.numInterior,
     required this.precio,
-    required this.idRegion,
+    required this.region,
     required this.propietario, required this.titulo,
   });
 
@@ -37,7 +39,9 @@ class CasaModel {
     calle: json["calle"],
     numInterior: json["num_interior"],
     precio: (json["precio"] as num).toDouble(),
-    idRegion: '',
+    region: json['region'] != null 
+    ? RegionModel.toJson(json['region'])
+    :null,
    propietario: json["propietario"] != null
     ? PropietarioModel.fromJson(json["propietario"])
     : null
@@ -67,7 +71,7 @@ class CasaModel {
     calle: calle,
     numInterior: numInterior,
     precio: precio,
-    idRegion: idRegion,
+    region: region!.toEntity(),
     propietario: propietario!.toEntity(),
   );
 }

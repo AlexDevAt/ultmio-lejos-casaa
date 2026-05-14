@@ -3,6 +3,7 @@ import 'package:lejos_de_casa_front/domain/entities/usuario.dart';
 import 'package:lejos_de_casa_front/domain/repositories/casa_repository.dart';
 import 'package:lejos_de_casa_front/infrastructure/data/casa_data.dart';
 import 'package:lejos_de_casa_front/infrastructure/models/casa/casa_model.dart';
+import 'package:lejos_de_casa_front/infrastructure/models/region/region_model.dart';
 import 'package:lejos_de_casa_front/infrastructure/models/usuario/propietario_model.dart';
 
 class CasaRepositoryImpl implements CasaRepository {
@@ -30,6 +31,12 @@ class CasaRepositoryImpl implements CasaRepository {
       fechaRegistro: casa.propietario.fechaRegistro,
     );
 
+    final regionModel = RegionModel(
+      codigoPos: casa.region.codigoPos,
+      estado: casa.region.estado,
+      municipio: casa.region.municipio,
+    );
+
     final model = CasaModel(
       id: casa.id,
       cupo: casa.cupo,
@@ -39,11 +46,9 @@ class CasaRepositoryImpl implements CasaRepository {
       calle: casa.calle,
       numInterior: casa.numInterior,
       precio: casa.precio,
-      idRegion: casa.idRegion,
+      region: regionModel,
       propietario: modelPropietario,
       titulo: casa.titulo,
-      
-
     );
 
     final res = await dataSource.crearCasa(model.toJson());

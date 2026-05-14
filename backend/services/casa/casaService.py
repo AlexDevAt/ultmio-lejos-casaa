@@ -4,6 +4,7 @@ from schemas.casa.Casa_DTO import CasaOut
 from helpers.casas.casaTipo import TipoCasa
 from domain.entities.casa import Casa
 from excepciones.casas.excepciones_casa import *
+from schemas.region.regionDTO import RegionoOUT
 
 
 class CasaService:
@@ -68,32 +69,37 @@ class CasaService:
         if filtro is not None:
             if tipoFiltro is not None and tipoFiltro == 'codigo_postal':
                 casas = self.repo.obtenerCasasPorTipoCodigoPostal(filtro)
-            else:
+            elif  tipoFiltro is not None and tipoFiltro == 'cantidad de cuartos':
+                casas = self.repo.obtenerCasasPorCuartos(filtro)
+            elif  tipoFiltro is not None and tipoFiltro == 'tipo de casa':
                 casas = self.repo.obtenerCasasPorTipo(filtro)
         else:
             casas = self.repo.obtenerCasas()
-
         data = []
-
         for casa in casas:
             propietario = PropietarioCasaBasico(
-                nombres=casa[10],
-                apellidos=casa[11],
-                fecha_registro=casa[12],
-                curp=casa[13]
+                nombres=casa['nombres'],
+                apellidos=casa['apellidos'],
+                fecha_registro=casa['fecha_registro'],
+                curp=casa['curp']
             )
+            
+            region = RegionoOUT(
+                codigo_postal=casa['codigo_postal'],
+                estado=casa['estado'],
+                municipio=casa['municipio'])
 
             casaOut = CasaOut(
-                id=casa[0],
-                titulo=casa[1],
-                cupo=casa[2],
-                tipo=TipoCasa.convertirTipoCasa(casa[3]),
-                imagen=casa[4],
-                cuartos=casa[5],
-                calle=casa[6],
-                num_interior=casa[7],
-                precio=float(casa[8]),
-                idRegion=casa[9],
+                id=casa['id'],
+                titulo=casa['titulo'],
+                cupo=int(casa['cupo']),
+                tipo=TipoCasa.convertirTipoCasa(casa['tipo']),
+                imagen=casa['imagen'],
+                cuartos=casa['cuartos'],
+                calle=casa['calle'],
+                num_interior=casa['num_interior'],
+                precio=float(casa['precio']),
+                region=region,
                 propietario=propietario
             )
 
