@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lejos_de_casa_front/domain/entities/casa.dart';
 import 'package:lejos_de_casa_front/domain/entities/filtro.dart';
 import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
+import 'package:lejos_de_casa_front/presentation/screen/casas/info_casa.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/puntuacino.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -339,15 +342,7 @@ class CardCasa extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.star, color: Colors.amber),
-                        Icon(Icons.star, color: Colors.amber),
-                        Icon(Icons.star, color: Colors.amber),
-                        Icon(Icons.star, color: Colors.amber),
-                        Icon(Icons.star, color: Colors.grey.shade400),
-                      ],
-                    ),
+                    Puntuacion()
                   ],
                 ),
               ),
@@ -369,7 +364,10 @@ class CardCasa extends StatelessWidget {
             child: BtnFormulario(
               height: MediaQuery.of(context).size.height * .05,
               text: 'Seleccionar',
-              func: () => (),
+              func: () {
+                context.push('/infoCasa',extra: casa);
+                
+                },
               width: 160,
             ),
           ),

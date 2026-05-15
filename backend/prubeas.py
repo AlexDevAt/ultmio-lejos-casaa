@@ -16,6 +16,9 @@ from fastapi import APIRouter, HTTPException,Depends
 from schemas.reservas.reservaDTO import *
 from repository.reservas_repository import ReservarioRepository
 from services.reservas.reservas_service import ReservasService
+from repository.resenia_repository import ReseniaRepository
+from services.resenia.reseniaServicio import ReseniaService
+from schemas.resenia.reseniaDTO import ReseniaOut
 # router = APIRouter()
 # repo = AuthRepository()
 # service = AuthService(repo)
@@ -64,7 +67,11 @@ from services.reservas.reservas_service import ReservasService
 # correc = HashPass.verificarHash('alexis',passf)
 # print(correc)
 
-router = APIRouter()
-repo = ReservarioRepository()
-service = ReservasService(repo)
-service.obtenerReservas('GAMM850202MDFDEF02')
+# router = APIRouter()
+# repo = ReservarioRepository()
+# service = ReservasService(repo)
+# service.obtenerReservas('GAMM850202MDFDEF02')
+
+repo = ReseniaRepository()
+service = ReseniaService(repo)
+re = service.obtenerResenias(1)

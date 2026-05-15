@@ -17,6 +17,13 @@ class ApiConfigAuth {
   static String iniciarSesion() => "$baseUrl/$prefix/login";
 }
 
+class apiConfigResenia {
+  static String baseUrl = "http://10.0.2.2:8000";
+  static String prefix = 'resenias';
+  static String obtenerReseniasCasa(dynamic id) => "$baseUrl/$prefix/$id";
+}
+
+
 class ApiConfigReservas {
   static String baseUrl = "http://10.0.2.2:8000";
   static String prefix = 'reservas';

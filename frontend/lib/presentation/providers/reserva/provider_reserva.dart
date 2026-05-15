@@ -13,7 +13,6 @@ class ProviderReserva extends ChangeNotifier {
   Future<void> obtenerReservasUsuario(String curp) async {
     isLoading = true;
     try {
-      isLoading = false;
       final List reservasDB = await reservasService.obtenerReservasUsuario(
         curp,
       );

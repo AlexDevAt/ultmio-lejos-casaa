@@ -4,6 +4,7 @@ from routes import usuarioRouter
 from routes import casaRouter
 from routes import authRouter
 from routes import reservasRouter
+from routes import reseniaRouter
 app = FastAPI()
 
 
@@ -27,6 +28,12 @@ app.include_router(
     reservasRouter.router,
     prefix="/reservas",
     tags=['reservas']
+)
+
+app.include_router(
+    reseniaRouter.router,
+    prefix="/resenias",
+    tags=['resenias']
 )
 
 

@@ -3,6 +3,7 @@ import 'package:lejos_de_casa_front/domain/entities/usuario.dart';
 import 'package:lejos_de_casa_front/helpers/formatos/form_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/foto_perfil.dart';
 import 'package:provider/provider.dart';
 
 class PerfilUsuario extends StatelessWidget {
@@ -62,7 +63,7 @@ class _ViewPerfilUsuarioState extends State<_ViewPerfilUsuario> {
       key: _formKey,
       child: Column(
         children: [
-          Center(child: _FotoPerfil()),
+          Center(child: FotoPerfil(color:Colors.amber,)),
           SizedBox(height: 15),
           _CambiarFoto(),
           SizedBox(height: 20),
@@ -101,7 +102,7 @@ class _ViewPerfilUsuarioState extends State<_ViewPerfilUsuario> {
   }
 }
 
-class _CardOpcion extends StatelessWidget {
+class CardOpcion extends StatelessWidget {
   final String title;
   final Icon icon;
   final String subtitle;
@@ -110,7 +111,7 @@ class _CardOpcion extends StatelessWidget {
   final bool useIcon;
   final TextEditingController? controller;
   final FormFieldValidator<String>? validator;
-  const _CardOpcion({
+  const CardOpcion({super.key, 
     this.grid = false,
     this.useIcon = true,
     this.editable = false,
@@ -207,7 +208,7 @@ class _Direccion extends StatelessWidget {
               ],
             ),
           ),
-          _CardOpcion(
+          CardOpcion(
             title: 'Calle',
             useIcon: false,
             icon: Icon(Icons.home_outlined),
@@ -217,7 +218,7 @@ class _Direccion extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _CardOpcion(
+                child: CardOpcion(
                   title: 'Num interior',
                   useIcon: false,
                   grid: true,
@@ -227,7 +228,7 @@ class _Direccion extends StatelessWidget {
               ),
 
               Expanded(
-                child: _CardOpcion(
+                child: CardOpcion(
                   title: 'Colonia',
                   useIcon: false,
                   grid: true,
@@ -240,7 +241,7 @@ class _Direccion extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _CardOpcion(
+                child: CardOpcion(
                   title: 'Municipio',
                   useIcon: false,
                   grid: true,
@@ -250,7 +251,7 @@ class _Direccion extends StatelessWidget {
               ),
 
               Expanded(
-                child: _CardOpcion(
+                child: CardOpcion(
                   title: 'CP',
                   useIcon: false,
                   grid: true,
@@ -377,27 +378,27 @@ class _InfPersonal extends StatelessWidget {
               ],
             ),
           ),
-          _CardOpcion(
+          CardOpcion(
             title: 'Nombres',
             icon: Icon(Icons.person_2_outlined),
             subtitle: usuario.nombres,
           ),
-          _CardOpcion(
+          CardOpcion(
             title: 'Apellido materno',
             icon: Icon(Icons.person_2_outlined),
             subtitle: usuario.apellidos,
           ),
-          _CardOpcion(
+          CardOpcion(
             title: 'Apellido paterno',
             icon: Icon(Icons.person_2_outlined),
             subtitle: usuario.apellidos,
           ),
-          _CardOpcion(
+          CardOpcion(
             title: 'CURP',
             icon: Icon(Icons.credit_card_outlined),
             subtitle: usuario.curp,
           ),
-          _CardOpcion(
+          CardOpcion(
             title: 'Correo',
             icon: Icon(Icons.email_outlined),
             editable: true,
@@ -410,7 +411,7 @@ class _InfPersonal extends StatelessWidget {
             },
             subtitle:controllerEmail.value.text,
           ),
-          _CardOpcion(
+          CardOpcion(
             title: 'Telefono',
             controller: controllerTel,
             editable: true,
@@ -429,20 +430,7 @@ class _InfPersonal extends StatelessWidget {
   }
 }
 
-class _FotoPerfil extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      width: 120,
-      decoration: BoxDecoration(
-        color: Colors.amber,
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: ClipRRect(child: Icon(Icons.person, size: 100)),
-    );
-  }
-}
+
 
 class _CambiarFoto extends StatelessWidget {
   @override

@@ -17,6 +17,11 @@ class UsuarioCreate(BaseModel):
     ciudad : str
     municipio: str
     
+class UsuarioCalificador(BaseModel):
+    nombres:  str = Field(min_length=2, max_length=255)
+    apellidos : str = Field(min_length=2, max_length=255)    
+    
+    
 class UsuarioOut(BaseModel):
     curp: str 
     nombres:  str = Field(min_length=2, max_length=255)
