@@ -56,88 +56,90 @@ class _IniciarSesionState extends State<IniciarSesion> {
             stops: [.30, .90],
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 40),
-                  child: _LogoImagen(),
-                ),
-      
-                Center(
-                  child: Title(
-                    color: Colors.black,
-                    child: Text('Inicia sesion', style: textIniciaSesion),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 40),
+                    child: _LogoImagen(),
                   ),
-                ),
-                _TextoInfoPadingTop(
-                  edgeInsetsGeometry: EdgeInsetsGeometry.only(bottom: 30),
-                  top: 30,
-                  label:
-                      'Ingresa tu correo electronico para iniciar sesion en la aplicacion',
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      _CampoTexto(
-                        controller: _correoCtrl,
-                        validacion: (value) {
-                          if (!FormUsuarios.validarEmail(value!)) {
-                            return 'Correo invalido';
-                          }
-                          correoCorrecto = true;
-                          return null;
-                        },
-                        labelText: 'correoelectrónico@dominio.com',
-                      ),
-                      AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        height: (correoCorrecto & continuar) ? 67 : 0,
-                        child: _CampoTexto(
-                          controller: _passCtrl,
+                
+                  Center(
+                    child: Title(
+                      color: Colors.black,
+                      child: Text('Inicia sesion', style: textIniciaSesion),
+                    ),
+                  ),
+                  _TextoInfoPadingTop(
+                    edgeInsetsGeometry: EdgeInsetsGeometry.only(bottom: 30),
+                    top: 30,
+                    label:
+                        'Ingresa tu correo electronico para iniciar sesion en la aplicacion',
+                  ),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _CampoTexto(
+                          controller: _correoCtrl,
                           validacion: (value) {
-                            if (FormUsuarios.contraseniaVacia(value!)) {
-                              return 'Ingrese una contrasenia';
+                            if (!FormUsuarios.validarEmail(value!)) {
+                              return 'Correo invalido';
                             }
+                            correoCorrecto = true;
                             return null;
-                          }, //TODO Poner validaciones desde el backend
-                          labelText: 'Tu password',
+                          },
+                          labelText: 'correoelectrónico@dominio.com',
                         ),
-                      ),
-                      BtnFormulario(
-                        height: MediaQuery.of(context).size.height * .06,
-                        width: double.infinity,
-                        text: 'Continuar',
-                        func: () => (setState(() {
-                          continuar = true;
-                          if (_formKey.currentState!.validate()) {              
-                            providerAuth.login(
-                              _correoCtrl.value.text,
-                              _passCtrl.value.text,
-                              context.read<ProviderUsuarios>()
-                            );
-                          }
-                        })),
-                      ),
-                    ],
+                        AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          height: (correoCorrecto & continuar) ? 67 : 0,
+                          child: _CampoTexto(
+                            controller: _passCtrl,
+                            validacion: (value) {
+                              if (FormUsuarios.contraseniaVacia(value!)) {
+                                return 'Ingrese una contrasenia';
+                              }
+                              return null;
+                            }, //TODO Poner validaciones desde el backend
+                            labelText: 'Tu password',
+                          ),
+                        ),
+                        BtnFormulario(
+                          height: MediaQuery.of(context).size.height * .06,
+                          width: double.infinity,
+                          text: 'Continuar',
+                          func: () => (setState(() {
+                            continuar = true;
+                            if (_formKey.currentState!.validate()) {              
+                              providerAuth.login(
+                                _correoCtrl.value.text,
+                                _passCtrl.value.text,
+                                context.read<ProviderUsuarios>()
+                              );
+                            }
+                          })),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                _Division(),
-                _LabelCampoForm(
-                  textIniciaSesion: textIniciaSesion,
-                  label: 'Eres nuevo? Registrate aqui !',
-                ),
-                BtnFormulario(
-                  height: MediaQuery.of(context).size.height * .06,
-                  width: double.infinity,
-                  text: 'Registrarse',
-                  func: () => (),
-                ),
-                _TerminosCondiciones(),
-              ],
+                  _Division(),
+                  _LabelCampoForm(
+                    textIniciaSesion: textIniciaSesion,
+                    label: 'Eres nuevo? Registrate aqui !',
+                  ),
+                  BtnFormulario(
+                    height: MediaQuery.of(context).size.height * .06,
+                    width: double.infinity,
+                    text: 'Registrarse',
+                    func: () => (),
+                  ),
+                  _TerminosCondiciones(),
+                ],
+              ),
             ),
           ),
         ),

@@ -24,20 +24,15 @@ class _ReservasScreenState extends State<ReservasScreen> {
     Future.microtask(() {
       final provUsuario = context.read<ProviderUsuarios>();
       final providerReserva = context.read<ProviderReserva>();
-
       final usuario = provUsuario.usuarioActual;
-
       if (usuario == null || usuario.curp == null) return;
-
       providerReserva.obtenerReservasUsuario(usuario.curp!);
     });
   }
-
   @override
   void dispose() {
     // final providerReserva = context.watch<ProviderReserva>();
     // providerReserva.limpiarReservas();
-
     super.dispose();
   }
 
@@ -56,7 +51,7 @@ class _ReservasScreenState extends State<ReservasScreen> {
           ],
         ),
       ),
-      body: _ReservaView(),
+      body:  _ReservaView(),
     );
   }
 }
@@ -78,12 +73,12 @@ class _ReservaView extends StatelessWidget {
           child: Text('Reservas recientes: ', style: TextStyle(fontSize: 20)),
         ),
         Expanded(
-          child: ListView.builder(
+          child: !providerReserva.isLoading ? ListView.builder(
             itemCount: providerReserva.reservas.length,
             itemBuilder: (context, index) {
-              return _PreviewReserva(reserva: providerReserva.reservas[index]);
+              return  _PreviewReserva(reserva: providerReserva.reservas[index]);
             },
-          ),
+          ) : Center(child: CircularProgressIndicator(strokeWidth: 2,),),
         ),
       ],
     );
@@ -102,14 +97,14 @@ class _BuscarReservas extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.horizontal(),
-              border: Border.all(width: 1.5),
+              border: Border.all(width: 1,color: Colors.black45),
             ),
             child: Row(
               children: [
                 Icon(Icons.search_outlined),
                 Text('Busca tus reservas aqui'),
                 Spacer(),
-                Container(width: 2, height: 60, color: Colors.black),
+                Container(width: 2, height: 60, color: Colors.black45),
                 SizedBox(width: 20),
                 Expanded(child: Text('Filtar', style: TextStyle(fontSize: 20))),
                 Icon(Icons.arrow_forward_ios_outlined),
@@ -143,112 +138,116 @@ class _PreviewReserva extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _imagen(imageUrl: reserva.casa.imagen),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50),
-              child: Container(
-                height: 100,
-                width: .6,
-                color: const Color.fromARGB(255, 134, 134, 134),
+        child: IntrinsicHeight(
+          child: Stack(
+            children: [
+              Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _imagen(imageUrl: reserva.casa.imagen),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Container(width: 1, color: Colors.grey.shade300),
               ),
-            ),
-            SizedBox(width: 2),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 5,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        IconoOpcion(
-                          icon: Icon(Icons.calendar_month_outlined, size: 20),
-                          color: Color(0xFFDCEBFF),
-                          sizeBorder: 7,
-                          height: 27,
-                          width: 27,
-                        ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            'ID Reserva : ${reserva.id}',
-                            style: TextStyle(fontWeight: FontWeight.w700),
+              SizedBox(width: 2),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 5,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          IconoOpcion(
+                            icon: Icon(Icons.calendar_month_outlined, size: 20),
+                            color: Color(0xFFDCEBFF),
+                            sizeBorder: 7,
+                            height: 27,
+                            width: 27,
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 5),
-
-                    Row(
-                      children: [
-                        SizedBox(width: 2),
-                        Icon(Icons.calendar_today_outlined, size: 15),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            'Fechan inicio: : ${FormatDate.formatDate(reserva.fechaInicio)}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
+                          SizedBox(width: 5),
+                          Expanded(
+                            child: Text(
+                              'ID Reserva : ${reserva.id}',
+                              style: TextStyle(fontWeight: FontWeight.w700),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 5),
-
-                    Row(
-                      children: [
-                        SizedBox(width: 2),
-                        Icon(Icons.calendar_today_outlined, size: 15),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            'Fechan fin: : ${FormatDate.formatDate(reserva.fechaFin)}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
+                        ],
+                      ),
+                      SizedBox(height: 10),
+          
+                      Row(
+                        children: [
+                          SizedBox(width: 2),
+                          Icon(Icons.calendar_today_outlined, size: 15),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              'Fechan inicio: : ${FormatDate.formatDate(reserva.fechaInicio)}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black54,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 5),
-
-                    Row(
-                      children: [
-                        SizedBox(width: 2),
-                        Icon(Icons.watch_later_outlined, size: 15),
-                        SizedBox(width: 10),
-                        Text(
-                          'Estado: : ',
-                          style: TextStyle(fontSize: 12, color: Colors.black54),
-                        ),
-                        Text(
-                          'Reservado',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: reserva.estado == 'Activo'
-                                ? Colors.green
-                                : Colors.black54,
+                        ],
+                      ),
+                      SizedBox(height: 15),
+          
+                      Row(
+                        children: [
+                          SizedBox(width: 2),
+                          Icon(Icons.calendar_today_outlined, size: 15),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              'Fechan fin: : ${FormatDate.formatDate(reserva.fechaFin)}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black54,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Row(children: [Spacer(), _buttonDetalles()]),
-                  ],
+                        ],
+                      ),
+                      SizedBox(height: 15),
+          
+                      Row(
+                        children: [
+                          SizedBox(width: 2),
+                          Icon(Icons.watch_later_outlined, size: 15),
+                          SizedBox(width: 10),
+                          Text(
+                            'Estado: : ',
+                            style: TextStyle(fontSize: 12, color: Colors.black54),
+                          ),
+                          Text(
+                            'Reservado',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: reserva.estado == 'Activo'
+                                  ? Colors.green
+                                  : Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
+          Positioned(
+            bottom: 10,
+            right: 1,
+            child: _buttonDetalles())
+            ],
+          ),
         ),
       ),
     );

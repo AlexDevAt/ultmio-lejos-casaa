@@ -7,8 +7,7 @@ class ProviderCasas extends ChangeNotifier {
   CasaService casaService;
   ProviderCasas(this.casaService);
 
-  bool isLoading = false;
-  bool casasCargadosPrimera = false;
+  bool isLoading = true;
   bool filtroActivo = false;
 
   String? error;
@@ -21,34 +20,31 @@ class ProviderCasas extends ChangeNotifier {
   }
 
   Future<void> eliminarFiltro() async {
-    casasCargadosPrimera = false;
+    isLoading = false;
     notifyListeners();
   }
 
   Future<void> obtenerCasas({String? filtro, String? tipoFiltro}) async {
+    isLoading = true;
     casas.clear();
     try {
       if (filtro != null) {
         if (filtro == '+4') {
           filtro = '4';
         }
-
         filtroActivo = true;
       }
-
-      isLoading = true;
       final List casasDB = await casaService.obtenerCasas(
         filtro: filtro,
         tipoFiltro: tipoFiltro,
       );
       _cargarCasas(casasDB);
-      casasCargadosPrimera = true;
+      isLoading = false;
       notifyListeners();
     } catch (e) {
       error = e.toString();
     } finally {
       isLoading = false;
-      notifyListeners();
     }
   }
 

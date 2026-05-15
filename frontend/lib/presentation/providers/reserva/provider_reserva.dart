@@ -6,13 +6,14 @@ class ProviderReserva extends ChangeNotifier {
   ReservasService reservasService;
   ProviderReserva(this.reservasService);
 
-  bool isLoading = false;
+  bool isLoading = true;
   String? error;
   List<Reserva> reservas = [];
 
   Future<void> obtenerReservasUsuario(String curp) async {
+    isLoading = true;
     try {
-      isLoading = true;
+      isLoading = false;
       final List reservasDB = await reservasService.obtenerReservasUsuario(
         curp,
       );
@@ -23,6 +24,7 @@ class ProviderReserva extends ChangeNotifier {
       error = e.toString();
     } finally {
       isLoading = false;
+      await Future.delayed(Duration(seconds: 2));
       notifyListeners();
     }
   }

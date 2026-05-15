@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.microtask(() {
       // ignore: use_build_context_synchronously
       final providerCasa = context.read<ProviderCasas>();
-      if (!providerCasa.casasCargadosPrimera) {
+      if (providerCasa.isLoading) {
         providerCasa.obtenerCasas();
       }
     });
@@ -38,6 +38,26 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final providerCasa = context.watch<ProviderCasas>();
 
+    return !providerCasa.isLoading 
+    ? _HomeScreen(formKey: _formKey, providerCasa: providerCasa, controllerCodigoP: controllerCodigoP) 
+    :Center(child: CircularProgressIndicator(strokeWidth: 2,)) ;
+  }
+}
+
+class _HomeScreen extends StatelessWidget {
+  const _HomeScreen({
+    super.key,
+    required GlobalKey<FormState> formKey,
+    required this.providerCasa,
+    required this.controllerCodigoP,
+  }) : _formKey = formKey;
+
+  final GlobalKey<FormState> _formKey;
+  final ProviderCasas providerCasa;
+  final TextEditingController controllerCodigoP;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
@@ -117,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-
+    
                   // _BarraFiltros(),
                   Padding(
                     padding: const EdgeInsets.only(left: 50),
@@ -137,13 +157,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         Expanded(
-          child: ListView.builder(
+          child: !providerCasa.isLoading ? ListView.builder(
             itemCount: providerCasa.casas.length,
             itemBuilder: (context, index) {
               Casa casa = providerCasa.casas[index];
               return Center(child: CardCasa(casa: casa));
             },
-          ),
+          ) : Center(child: CircularProgressIndicator()),
         ),
       ],
     );
