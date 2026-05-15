@@ -249,7 +249,6 @@ class FiltroBusqueda extends StatelessWidget {
                       return FilterChip(
                         label: Text(e),
                         onSelected: (value) {
-                           print(e);
                           Navigator.pop(context);
                           context.read<ProviderCasas>().obtenerCasas(
                             filtro: e.trim(),

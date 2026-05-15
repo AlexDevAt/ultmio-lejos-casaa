@@ -123,15 +123,14 @@ class _BuscarReservas extends StatelessWidget {
 }
 
 class _PreviewReserva extends StatelessWidget {
-  const _PreviewReserva({super.key, required this.reserva});
+  const _PreviewReserva({required this.reserva});
   final Reserva reserva;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 18),
       child: Container(
-        height: 150,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -139,149 +138,149 @@ class _PreviewReserva extends StatelessWidget {
             BoxShadow(
               color: Colors.black45.withValues(),
               blurRadius: 5,
-              spreadRadius: .3,
+              spreadRadius: 1,
               offset: Offset(0, 4),
             ),
           ],
         ),
-        child: Stack(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _imagen(imageUrl: reserva.casa.imagen,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  child: Container(
-                    height: 100,
-                    width: .6,
-                    color: const Color.fromARGB(255, 134, 134, 134),
-                  ),
+            _imagen(imageUrl: reserva.casa.imagen),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 50),
+              child: Container(
+                height: 100,
+                width: .6,
+                color: const Color.fromARGB(255, 134, 134, 134),
+              ),
+            ),
+            SizedBox(width: 2),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 5,
                 ),
-                SizedBox(width: 2),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 5,
-                    ),
-                    child: Column(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            IconoOpcion(
-                              icon: Icon(
-                                Icons.calendar_month_outlined,
-                                size: 20,
-                              ),
-                              color: Color(0xFFDCEBFF),
-                              sizeBorder: 7,
-                              height: 27,
-                              width: 27,
-                            ),
-                            SizedBox(width: 5),
-                            Text(
-                              'ID Reserva : ${reserva.id}',
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                          ],
+                        IconoOpcion(
+                          icon: Icon(Icons.calendar_month_outlined, size: 20),
+                          color: Color(0xFFDCEBFF),
+                          sizeBorder: 7,
+                          height: 27,
+                          width: 27,
                         ),
-                        SizedBox(height: 5),
-
-                        Row(
-                          children: [
-                            SizedBox(width: 2),
-                            Icon(Icons.calendar_today_outlined, size: 15),
-                            SizedBox(width: 10),
-                            Text(
-                              'Fechan inicio: : ${FormatDate.formatDate(reserva.fechaInicio)}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5),
-
-                        Row(
-                          children: [
-                            SizedBox(width: 2),
-                            Icon(Icons.calendar_today_outlined, size: 15),
-                            SizedBox(width: 10),
-                            Text(
-                              'Fechan fin: : ${FormatDate.formatDate(reserva.fechaFin)}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5),
-
-                        Row(
-                          children: [
-                            SizedBox(width: 2),
-                            Icon(Icons.watch_later_outlined, size: 15),
-                            SizedBox(width: 10),
-                            Text(
-                              'Estado: : ',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black54,
-                              ),
-                            ),
-                            Text(
-                              'Reservado',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: reserva.estado == 'Activo'
-                                    ? Colors.green
-                                    : Colors.black54,
-                              ),
-                            ),
-                          ],
+                        SizedBox(width: 5),
+                        Expanded(
+                          child: Text(
+                            'ID Reserva : ${reserva.id}',
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              bottom: 4,
-              right: 6,
-              child: TextButton(
-                // label: Text('Ver mas', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
-                onPressed: () => (),
-                style: TextButton.styleFrom(
-                  minimumSize: Size(0, 0),
-                  padding: EdgeInsets.symmetric(horizontal: 11, vertical: 8),
+                    SizedBox(height: 5),
 
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(9),
-                  ),
-                  backgroundColor: Color(0xFF0b1636),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Ver mas',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      children: [
+                        SizedBox(width: 2),
+                        Icon(Icons.calendar_today_outlined, size: 15),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Fechan inicio: : ${FormatDate.formatDate(reserva.fechaInicio)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    SizedBox(height: 5),
+
+                    Row(
+                      children: [
+                        SizedBox(width: 2),
+                        Icon(Icons.calendar_today_outlined, size: 15),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Fechan fin: : ${FormatDate.formatDate(reserva.fechaFin)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
+
+                    Row(
+                      children: [
+                        SizedBox(width: 2),
+                        Icon(Icons.watch_later_outlined, size: 15),
+                        SizedBox(width: 10),
+                        Text(
+                          'Estado: : ',
+                          style: TextStyle(fontSize: 12, color: Colors.black54),
+                        ),
+                        Text(
+                          'Reservado',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: reserva.estado == 'Activo'
+                                ? Colors.green
+                                : Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(children: [Spacer(), _buttonDetalles()]),
                   ],
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _buttonDetalles extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: TextButton.icon(
+        // label: Text('Ver mas', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+        onPressed: () => (),
+        style: TextButton.styleFrom(
+          minimumSize: Size(0, 0),
+      
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(9),
+          ),
+          backgroundColor: Color(0xFF0b1636),
+        ),
+        label: Text(
+          'Detalles',
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        iconAlignment: IconAlignment.end,
+        icon: Icon(Icons.arrow_right_outlined, size: 18, color: Colors.white),
       ),
     );
   }
@@ -294,12 +293,12 @@ class _imagen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
       child: ClipRRect(
         borderRadius: BorderRadiusGeometry.circular(10),
         child: Image.asset(
           fit: BoxFit.cover,
-          height: 100,
+          height: 140,
           width: 170,
 
           'assets/images/casas/$imageUrl',

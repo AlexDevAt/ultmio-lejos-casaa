@@ -71,7 +71,7 @@ class UsuarioData {
 
   Future<List<UsuarioModel>> obtenerUsuarios() async {
     try {
-      print(ApiConfigUsers.obtenerUsuarios());
+
       final res = await dio.get(ApiConfigUsers.obtenerUsuarios());
       final List data = res.data;
       return data.map((user) => UsuarioModel.fromJson(user)).toList();
