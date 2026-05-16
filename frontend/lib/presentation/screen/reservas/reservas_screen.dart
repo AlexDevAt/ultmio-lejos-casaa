@@ -220,13 +220,18 @@ class _PreviewReserva extends StatelessWidget {
                               ),
                             ],
                           ),
+                          Row(
+                            children: [
+                              Expanded(child: _buttonDetalles())
+                            ],
+                          )
+                          
                         ],
                       ),
                     ),
                   ),
                 ],
               ),
-              Positioned(bottom: 10, right: 1, child: _buttonDetalles()),
             ],
           ),
         ),
@@ -259,8 +264,7 @@ class _buttonDetalles extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconAlignment: IconAlignment.end,
-        icon: Icon(Icons.arrow_right_outlined, size: 18, color: Colors.white),
+
       ),
     );
   }
