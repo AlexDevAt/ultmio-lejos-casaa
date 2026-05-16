@@ -1,311 +1,233 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lejos_de_casa_front/domain/entities/casa.dart';
-import 'package:lejos_de_casa_front/domain/entities/filtro.dart';
+import 'package:lejos_de_casa_front/domain/entities/usuario.dart';
 import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
-import 'package:lejos_de_casa_front/presentation/screen/casas/info_casa.dart';
-import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
-import 'package:lejos_de_casa_front/presentation/widgets/puntuacino.dart';
+import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/barrra_busqueda.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/imagen_casa.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   static String name = 'home_screen';
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    final ProviderUsuarios usuarioActual = context.watch<ProviderUsuarios>();
+    final ProviderCasas providerCasas = context.watch<ProviderCasas>();
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            pinned: false,
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'LEJOS DE CASA',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF144956),
+                  ),
+                ),
+                Text(
+                  'Aplicacion de renta de casas',
+                  style: TextStyle(
+                    wordSpacing: -1,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF144956),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          SliverToBoxAdapter(
+            child: _homeView(
+              usuario: usuarioActual.usuarioActual!,
+              casaProvider: providerCasas,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final controllerCodigoP = TextEditingController();
-  @override
-  void dispose() {
-    controllerCodigoP.dispose();
-    super.dispose();
-  }
+class _homeView extends StatelessWidget {
+  final Usuario usuario;
+  final ProviderCasas casaProvider;
 
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      // ignore: use_build_context_synchronously
-      final providerCasa = context.read<ProviderCasas>();
-      if (providerCasa.isLoading) {
-        providerCasa.obtenerCasas();
-      }
-    });
-  }
+  const _homeView({required this.usuario, required this.casaProvider});
 
   @override
   Widget build(BuildContext context) {
-    final providerCasa = context.watch<ProviderCasas>();
-
-    return !providerCasa.isLoading 
-    ? _HomeScreen(formKey: _formKey, providerCasa: providerCasa, controllerCodigoP: controllerCodigoP) 
-    :Center(child: CircularProgressIndicator(strokeWidth: 2,)) ;
-  }
-}
-
-class _HomeScreen extends StatelessWidget {
-  const _HomeScreen({
-    super.key,
-    required GlobalKey<FormState> formKey,
-    required this.providerCasa,
-    required this.controllerCodigoP,
-  }) : _formKey = formKey;
-
-  final GlobalKey<FormState> _formKey;
-  final ProviderCasas providerCasa;
-  final TextEditingController controllerCodigoP;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: Form(
-            key: _formKey,
-            child: _BarraBusqueda(
-              onPress: () {
-                if (_formKey.currentState!.validate()) {
-                  providerCasa.obtenerCasas(
-                    filtro: controllerCodigoP.value.text,
-                    tipoFiltro: 'codigo_postal',
-                  );
-                }
-              },
-              controller: controllerCodigoP,
-              validacion: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Ingrese un codigo posta valido';
-                }
-                return null;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                '👋 Hola ${usuario.nombres}!',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.4),
+              ),
+              Spacer(),
+              IconButton(
+                onPressed: () => (),
+                icon: Icon(Icons.notifications_outlined, size: 30),
+              ),
+              IconButton(
+                onPressed: () => (),
+                icon: Icon(Icons.person_outline_outlined, size: 30),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Text(
+            '📍${usuario.ciudad}, ${usuario.municipio}.',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+          ),
+          SizedBox(height: 13),
+          BarraBusqueda(
+            validacion: (value) => '',
+            controller: TextEditingController(),
+            onPress: () => (),
+            text: 'Busca por univerdidad, ciudad o colonia',
+            colorBackGround: Color(0xFFF5EFF7),
+            padingHor: 0,
+            colorBorder: Colors.black,
+            borderSize: 30,
+            prefixIcon: true,
+            iconSize: 30,
+          ),
+          SizedBox(height: 20),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                CardFiltro(textoSup: 'Cerca de', textoinF: 'Universidades🎓'),
+                SizedBox(width: 8),
+                CardFiltro(
+                  textoSup: 'Economicas',
+                  textoinF: '(Mejor precio)🔖',
+                ),
+                SizedBox(width: 8),
+                CardFiltro(textoSup: 'Mejor', textoinF: 'Calificadas ⭐'),
+                SizedBox(width: 8),
+                CardFiltro(textoSup: 'Casas', textoinF: 'Completas 🏠'),
+              ],
+            ),
+          ),
+          TipoDeCasasVerMas(tipo: 'Lo mas popular', func: () => ()),
+          SizedBox(
+            height: 240,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: false,
+              itemCount: casaProvider.casasHome1.length,
+              itemBuilder: (context, index) {
+                return Row(children: [CardCasa(casa: casaProvider.casasHome1[index],), SizedBox(width: 12)]);
               },
             ),
           ),
-        ),
-        Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 40),
-              child: Row(
-                children: [
-                  _BarraFiltros(
-                    filtrosMenu: [
-                      Filtro(
-                        titulo: 'Tipo de casa',
-                        opciones: ['Una planta', 'Dos plantas', 'Otro tipo'],
-                      ),
-                      Filtro(
-                        titulo: 'Cantidad de cuartos',
-                        opciones: ['1', '2', '3', '+4'],
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      providerCasa.obtenerCasas();
-                      providerCasa.filtroActivo = false;
-                    },
-                    child: AnimatedOpacity(
-                      duration: Duration(microseconds: 300),
-                      opacity: (providerCasa.filtroActivo) ? 1 : 0,
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: (!providerCasa.filtroActivo) ? 0 : 10,
-                          vertical: 15,
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: BoxBorder.all(
-                            color: Colors.grey.shade400,
-                            strokeAlign: 4,
-                            width: 1.5,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'Limpiar',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-    
-                  // _BarraFiltros(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50),
-                    child: Text('${providerCasa.casas.length} resulados'),
-                  ),
-                ],
-              ),
+          SizedBox(height: 20),
+          TipoDeCasasVerMas(tipo: 'Recien agregadas', func: () => ()),
+          SizedBox(
+            height: 240,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: false,
+              itemCount: casaProvider.casasHome2.length,
+              itemBuilder: (context, index) {
+                return Row(children: [CardCasa(casa: casaProvider.casasHome2[index],), SizedBox(width: 12)]);
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 55),
-              child: Image.asset(
-                'assets/images/mapa/mapa_ejemplo.png',
-                fit: BoxFit.cover,
-                width: double.infinity,
-              ),
+          ),
+          SizedBox(height: 20),
+          TipoDeCasasVerMas(tipo: 'Explora cerca de ti', func: () => ()),
+          Padding(
+            padding: const EdgeInsets.only(top: 55),
+            child: Image.asset(
+              'assets/images/mapa/mapa_ejemplo.png',
+              fit: BoxFit.cover,
+              width: double.infinity,
             ),
-          ],
-        ),
-        Expanded(
-          child: !providerCasa.isLoading ? ListView.builder(
-            itemCount: providerCasa.casas.length,
-            itemBuilder: (context, index) {
-              Casa casa = providerCasa.casas[index];
-              return Center(child: CardCasa(casa: casa));
-            },
-          ) : Center(child: CircularProgressIndicator()),
+          ),
+          SizedBox(height: 50),
+        ],
+      ),
+    );
+  }
+}
+
+class TipoDeCasasVerMas extends StatelessWidget {
+  const TipoDeCasasVerMas({super.key, required this.tipo, required this.func});
+
+  final String tipo;
+  final VoidCallback func;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(tipo, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
+        Spacer(),
+        TextButton(
+          onPressed: func,
+          child: Text(
+            'Ver mas > ',
+            style: TextStyle(fontSize: 15, color: Color(0xFF0088FF)),
+          ),
         ),
       ],
     );
   }
 }
 
-class _BarraBusqueda extends StatelessWidget {
-  final FormFieldValidator<String> validacion;
-  final TextEditingController controller;
-  final VoidCallback onPress;
-  const _BarraBusqueda({
-    required this.validacion,
-    required this.controller,
-    required this.onPress,
-  });
+class CardFiltro extends StatelessWidget {
+  const CardFiltro({super.key, required this.textoSup, required this.textoinF});
+  final String textoSup;
+  final String textoinF;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: TextFormField(
-        controller: controller,
-        validator: validacion,
-        decoration: InputDecoration(
-          suffixIcon: IconButton(onPressed: onPress, icon: Icon(Icons.search)),
-          filled: true,
-          hintText: 'Ingresa un codigo postal',
-          fillColor: Colors.grey.shade300,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.transparent),
+    return GestureDetector(
+      child: Container(
+        height: 70,
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40),
+          border: Border.all(color: Colors.grey.shade600),
+        ),
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                textoSup,
+                style: TextStyle(
+                  color: Color(0xFF49454F),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Text(
+                textoinF,
+                style: TextStyle(
+                  color: Color(0xFF49454F),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _BarraFiltros extends StatelessWidget {
-  final List<Filtro> filtrosMenu;
-
-  const _BarraFiltros({required this.filtrosMenu});
-
-  @override
-  Widget build(BuildContext context) {
-    return MenuAnchor(
-      style: MenuStyle(alignment: AlignmentGeometry.bottomStart),
-      builder: (context, controller, child) {
-        return GestureDetector(
-          onTap: () => controller.open(),
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              border: BoxBorder.all(
-                color: Colors.grey.shade400,
-                strokeAlign: 4,
-                width: 1.5,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              'Filtrar',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        );
-      },
-      menuChildren: filtrosMenu.map((e) {
-        return FiltroBusqueda(filtro: e, contextOrig: context);
-      }).toList(),
-    );
-  }
-}
-
-class FiltroBusqueda extends StatelessWidget {
-  const FiltroBusqueda({
-    super.key,
-    required this.filtro,
-    required this.contextOrig,
-  });
-  final BuildContext contextOrig;
-
-  final Filtro filtro;
-
-  @override
-  Widget build(BuildContext context) {
-    return MenuItemButton(
-      onPressed: () {
-        showDialog<String>(
-          context: contextOrig,
-          builder: (context) {
-            return AlertDialog(
-              title: Center(child: Text(filtro.titulo)),
-              actions: [
-                Center(
-                  child: Column(
-                    children: filtro.opciones.map((e) {
-                      return FilterChip(
-                        label: Text(e),
-                        onSelected: (value) {
-                          Navigator.pop(context);
-                          context.read<ProviderCasas>().obtenerCasas(
-                            filtro: e.trim(),
-                            tipoFiltro: filtro.titulo.toLowerCase()
-                          );
-                         
-                        },
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: Text(filtro.titulo),
-    );
-  }
-}
-
-class _ImagenCasa extends StatelessWidget {
-  const _ImagenCasa({super.key, required this.imageUrl});
-  final imageUrl;
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 25),
-      child: Container(
-        width: size.width * .85,
-        height: size.height * .20,
-        child: ClipRRect(child: Image.asset('assets/images/casas/$imageUrl')),
       ),
     );
   }
@@ -317,62 +239,152 @@ class CardCasa extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Container(
-      width: size.width * .85,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _ImagenCasa(imageUrl: casa.imagen),
-
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      height: 230,
+      width: 250,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade400,
+            blurRadius: 2,
+            spreadRadius: 2,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      casa.titulo,
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Puntuacion()
-                  ],
-                ),
-              ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '\$${casa.precio}',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
+                  _ImageForCardCasa(
+                    maxHeight: constraints.maxHeight,
+                    maxWidth: constraints.maxWidth,
                   ),
-                  Text('Mensual'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.star, color: Colors.amber, size: 18),
+                        Icon(Icons.star, color: Colors.amber, size: 18),
+                        Icon(Icons.star, color: Colors.amber, size: 18),
+                        Icon(Icons.star, color: Colors.amber, size: 18),
+                        Icon(Icons.star, color: Colors.grey.shade400, size: 18),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            overflow: TextOverflow.ellipsis,
+                            '${casa.region!.estado},${casa.region!.municipio}',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(text: 'Precio: '),
+                          TextSpan(
+                            text: '\$${casa.precio}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          TextSpan(text: '/m'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 15,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.wifi_outlined),
+                        Icon(Icons.water_drop_outlined),
+                        Icon(Icons.electric_bolt_outlined),
+                        Icon(Icons.shield_moon_outlined),
+                      ],
+                    ),
+                  ),
                 ],
               ),
+              Positioned(bottom: 0, right: 0, child: _buttonDetalles()),
             ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ImageForCardCasa extends StatelessWidget {
+  const _ImageForCardCasa({
+    super.key,
+    required this.maxWidth,
+    required this.maxHeight,
+  });
+  final double maxWidth;
+  final double maxHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadiusGeometry.directional(
+        topStart: Radius.circular(30),
+        topEnd: Radius.circular(30),
+      ),
+      child: Image.asset(
+        width: maxWidth,
+        fit: BoxFit.cover,
+        height: maxHeight * .60,
+        'assets/images/casas/img1.jpg',
+      ),
+    );
+  }
+}
+
+class _buttonDetalles extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: TextButton(
+        // label: Text('Ver mas', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+        onPressed: () => (),
+        style: TextButton.styleFrom(
+          minimumSize: Size(0, 0),
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(9),
           ),
-          SizedBox(height: 10),
-          Center(child: Text(casa.calle)),
-          SizedBox(height: 10),
-          Center(
-            child: BtnFormulario(
-              height: MediaQuery.of(context).size.height * .05,
-              text: 'Seleccionar',
-              func: () {
-                context.push('/infoCasa',extra: casa);
-                
-                },
-              width: 160,
+          backgroundColor: Color(0xFF0b1636),
+        ),
+
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'Detalles',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 25),
-        ],
+        ),
       ),
     );
   }

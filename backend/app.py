@@ -5,6 +5,7 @@ from routes import casaRouter
 from routes import authRouter
 from routes import reservasRouter
 from routes import reseniaRouter
+from routes import webSocketPrueba
 app = FastAPI()
 
 
@@ -35,6 +36,13 @@ app.include_router(
     prefix="/resenias",
     tags=['resenias']
 )
+
+app.include_router(
+    webSocketPrueba.router,
+    prefix="/wb",
+    tags=['wb']
+)
+
 
 
 app.include_router(

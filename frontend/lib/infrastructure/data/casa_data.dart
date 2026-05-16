@@ -17,14 +17,28 @@ class CasaData {
       );
     }
   }
-  
-  Future<List<CasaModel>> obtenerCasas({String? filtro,String? tipoFiltro})async{
+
+  Future<List<CasaModel>> obtenerCasas({
+    String? filtro,
+    String? tipoFiltro,
+    bool? filtroActivo,
+    int? limit,
+  }) async {
     try {
-      if(filtro!=null){
-        final res = await dio.get(ApiConfigCasas.obtenerCasasFiltro(filtro: filtro,tipoFiltro: tipoFiltro));
+      if (filtroActivo != null) {
+        final res = await dio.post(
+          ApiConfigCasas.obtenerCasasFiltro(),
+          data: {
+            "filtro_activado": filtroActivo,
+            "tipo_filtro": tipoFiltro,
+            "filtro": filtro,
+            "limit": limit,
+            "limiteActivo": true,
+          },
+        );
         final List data = res.data;
         return data.map((casa) => CasaModel.fromJson(casa)).toList();
-      }else{
+      } else {
         final res = await dio.get(ApiConfigCasas.obtenerCasas());
         final List data = res.data;
         return data.map((casa) => CasaModel.fromJson(casa)).toList();

@@ -1,3 +1,7 @@
+import 'package:lejos_de_casa_front/domain/entities/casa.dart';
+import 'package:lejos_de_casa_front/domain/entities/resenia.dart';
+import 'package:lejos_de_casa_front/domain/entities/reserva.dart';
+
 enum Roles { vendedor, comprador, ambos }
 
 class Usuario {
@@ -14,8 +18,16 @@ class Usuario {
   final String municipio;
   final String ciudad;
   final String contrasenia;
+  final double? calificacionPromedio;
+  final int? totalResenias;
+  final List<Casa>? casasVenta;
+  final List<Reserva>? reservas;
 
   Usuario({
+    this.calificacionPromedio,
+    this.totalResenias,
+    this.reservas,
+    this.casasVenta,
     required this.curp,
     required this.nombres,
     required this.apellidos,
@@ -27,6 +39,7 @@ class Usuario {
     required this.numeroInterior,
     required this.codigoPostal,
     required this.municipio,
-    required this.ciudad, required this.contrasenia,
+    required this.ciudad,
+    required this.contrasenia,
   });
 }

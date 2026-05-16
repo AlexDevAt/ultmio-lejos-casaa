@@ -7,17 +7,17 @@ class MainShell extends StatelessWidget {
   final Widget child;
 
   int _obtenerIndiceAct(String screen) {
-    if (screen.startsWith('/usuarios')) return 0;
-    if (screen.startsWith('/casas')) return 1;
-    if (screen.startsWith('/busqueda')) return 2;
+    if (screen.startsWith('/busquedaScreen')) return 1;
+    if (screen.startsWith('/home')) return 2;
     if (screen.startsWith('/reservas')) return 3;
-    if (screen.startsWith('/perfil')) return 4;
+    if (screen.startsWith('/cuenta')) return 4;
     return 0;
   }
 
   @override
   Widget build(BuildContext context) {
     final screenAct = GoRouterState.of(context).uri.toString();
+    print(screenAct);
     final index = _obtenerIndiceAct(screenAct);
     return Scaffold(
       body: child,
@@ -28,17 +28,14 @@ class MainShell extends StatelessWidget {
         currentIndex: index,
         onTap: (value) {
           switch (value) {
-            case 0:
-              context.go('/usuarios');
-              break;
             case 1:
-              context.go('/home');
+              context.go('/busquedaScreen');
               break;
             case 2:
-              context.go('/crearCasa');
+              context.go('/home');
               break;
             case 3:
-              context.go('/crearCasa');
+              context.go('/reservas');
               break;
             case 4:
               context.go('/cuenta');

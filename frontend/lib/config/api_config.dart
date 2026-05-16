@@ -27,7 +27,8 @@ class apiConfigResenia {
 class ApiConfigReservas {
   static String baseUrl = "http://10.0.2.2:8000";
   static String prefix = 'reservas';
-   static String obtenerReservas(String curp) => '$baseUrl/$prefix/$curp';
+  static String obtenerReservas(String curp) => '$baseUrl/$prefix/$curp';
+  static String crearReserva(int idCasa,String curp) => '$baseUrl/$prefix/crear';
 }
 
 class ApiConfigCasas {
@@ -38,7 +39,7 @@ class ApiConfigCasas {
 
   static String obtenerCasa(int id) => '$baseUrl/$prefix/$id';
   static String obtenerCasas({String? filtro}) => '$baseUrl/$prefix/';
-  static String obtenerCasasFiltro({String? filtro,String? tipoFiltro}) => '$baseUrl/$prefix/$filtro/$tipoFiltro';
+  static String obtenerCasasFiltro({String? filtro,String? tipoFiltro}) => '$baseUrl/$prefix/';
   static String actualizarCasa(int id) => "$baseUrl/$prefix/$id";
   static String crearCasa() => "$baseUrl/$prefix/register";
 

@@ -13,6 +13,8 @@ class CasaModel {
   final String calle;
   final int numInterior;
   final double precio;
+  final String idRegion;
+  final String idPropietario;
   final RegionModel? region;
   final PropietarioModel? propietario;
 
@@ -25,13 +27,16 @@ class CasaModel {
     required this.calle,
     required this.numInterior,
     required this.precio,
-    required this.region,
-    required this.propietario, required this.titulo,
+     this.region,
+     this.propietario,
+    required this.titulo,
+    required this.idRegion,
+    required this.idPropietario,
   });
 
   factory CasaModel.fromJson(Map<String, dynamic> json) => CasaModel(
     id: json["id"] == null ? 0 : int.parse(json["id"].toString()),
-    titulo:json['titulo'],
+    titulo: json['titulo'],
     cupo: json["cupo"],
     tipo: json["tipo"],
     imagen: json["imagen"],
@@ -39,16 +44,16 @@ class CasaModel {
     calle: json["calle"],
     numInterior: json["num_interior"],
     precio: (json["precio"] as num).toDouble(),
-    region: json['region'] != null 
-    ? RegionModel.toJson(json['region'])
-    :null,
-   propietario: json["propietario"] != null
-    ? PropietarioModel.fromJson(json["propietario"])
-    : null
+    region: json['region'] != null ? RegionModel.toJson(json['region']) : null,
+    propietario: json["propietario"] != null
+        ? PropietarioModel.fromJson(json["propietario"])
+        : null,
+    idPropietario: json['id_propietario'],
+    idRegion: json['id_region'],
   );
   Map<String, dynamic> toJson() => {
     "id": id,
-    "titulo":titulo,
+    "titulo": titulo,
     "cupo": cupo,
     "tipo": tipo,
     "imagen": imagen,
@@ -58,7 +63,7 @@ class CasaModel {
     "precio": precio,
     "idRegion": '',
     "propietario": propietario!.toJson(),
-    'id_propietario': propietario!.curp
+    'id_propietario': propietario!.curp,
   };
 
   Casa toEntity() => Casa(
@@ -73,10 +78,12 @@ class CasaModel {
     precio: precio,
     region: region!.toEntity(),
     propietario: propietario!.toEntity(),
+    idRegion: idRegion,
+    idPropietario: idPropietario,
   );
 }
 
- TipoCasa tipoCasaFromString(String tipo) {
+TipoCasa tipoCasaFromString(String tipo) {
   switch (tipo.toLowerCase()) {
     case 'unaplanta':
     case 'una_planta':

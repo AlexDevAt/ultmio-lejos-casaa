@@ -7,6 +7,8 @@ class ReservaModel {
   DateTime fechaInicio;
   DateTime fechaFin;
   String estado;
+  final String idComprador;
+  final int idCasa;
   CasaModel? casa;
   CompradorModel? comprador;
   ReservaModel({
@@ -14,12 +16,12 @@ class ReservaModel {
     required this.fechaInicio,
     required this.fechaFin,
     required this.estado,
-    required this.casa,
-    required this.comprador,
+    this.casa,
+    this.comprador, required this.idComprador, required this.idCasa,
   });
 
-  factory ReservaModel.fromJson(Map<String, dynamic> json) => ReservaModel(
-    id: json['id'],
+  factory ReservaModel.fromJson(Map<String, dynamic> json,{String curpActual = '',int idCasaActual = -1}) => ReservaModel(
+    id: json['id_reserva'] ,
     fechaInicio: DateTime.parse(json['fecha_inicio']),
     fechaFin: DateTime.parse(json['fecha_inicio']),
     estado: json['estado'],
@@ -29,6 +31,8 @@ class ReservaModel {
     comprador: json['comprador'] != null
     ? CompradorModel.fromJson(json['comprador'])
     :null,
+     idComprador: json['idComprador'], 
+     idCasa: json['idCasa'] ,
   );
 
   Reserva toEntity() => Reserva(
@@ -36,7 +40,7 @@ class ReservaModel {
   fechaInicio: fechaInicio,
   fechaFin: fechaFin,
   estado: estado,
-  casa: casa!.toEntity(),
-  comprador: comprador!.toEntity(),
+  casa: casa?.toEntity(),
+  comprador: comprador?.toEntity(), idCasa: idCasa, idComprador: idComprador,
 );
 }

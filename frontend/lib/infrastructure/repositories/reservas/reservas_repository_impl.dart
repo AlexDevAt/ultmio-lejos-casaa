@@ -11,4 +11,10 @@ class ReservasRepositoryImpl extends ReservasRepository {
     final models = await dataSource.obtenerReservasUsuario(curp);
     return models.map((reserva) => reserva.toEntity()).toList();
   }
+
+  @override
+  Future<Reserva> crearReserva(int idCasa, String idComprador) async {
+    final model = await dataSource.reservarCasa(idCasa, idComprador);
+    return model.toEntity();
+  }
 }

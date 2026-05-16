@@ -31,3 +31,7 @@ class ReseniaService:
             )
             reseniasMapeadas.append(reniaObj)
         return reseniasMapeadas
+
+    def obtenerReseniaResumen(self,curp : str):
+        return self.repo.obtenerReseniaResumen(curp)
+        

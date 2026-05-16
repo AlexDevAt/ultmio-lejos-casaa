@@ -5,9 +5,18 @@ class Reserva {
   final int id;
   final DateTime fechaInicio;
   final DateTime fechaFin;
+  final int idCasa;
+  final String idComprador;
   final String estado;
-  final Casa casa;
-  final Comprador comprador;
+  final Casa? casa;
+  final Comprador? comprador;
 
-  Reserva({required this.id, required this.fechaInicio, required this.fechaFin, required this.estado, required this.casa, required this.comprador});
+  Reserva({
+    required this.id,
+    required this.fechaInicio,
+    required this.fechaFin,
+    required this.estado,
+    this.casa,
+    this.comprador, required this.idCasa, required this.idComprador,
+  });
 }

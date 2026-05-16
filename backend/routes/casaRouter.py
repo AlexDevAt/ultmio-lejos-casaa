@@ -22,9 +22,18 @@ def obtenerCasa(id):
         )
         
 
-@router.get("/{filtro}/{tipoFiltro}",response_model=list[CasaOut],status_code=200)
-def obtenerCasas(filtro,tipoFiltro):
-    return service.obtenerCasas(filtro,tipoFiltro)
+@router.post("/",response_model=list[CasaOut],status_code=200)
+def obtenerCasas(body :CasaFiltro):
+    return service.obtenerCasas(
+        filtroActivo=body.filtro_activado,
+        filtro=body.filtro,
+        tipoFiltro=body.tipo_filtro,
+        limit=body.limit,
+        limitActivo=body.limiteActivo
+        )
+@router.get("/",response_model=list[CasaOut],status_code=200)
+def obtenerCasas():
+    return service.obtenerCasas()
 
 @router.post("/register", response_model=CrearCasaDTO, status_code=201)
 def crearCasa(body: CrearCasaDTO):

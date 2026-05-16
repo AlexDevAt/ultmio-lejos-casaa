@@ -7,34 +7,9 @@ import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/icono_custom.dart';
 import 'package:provider/provider.dart';
 
-class ReservasScreen extends StatefulWidget {
+class ReservasScreen extends StatelessWidget {
   const ReservasScreen({super.key});
   static String name = 'reservas_screen';
-
-  @override
-  State<ReservasScreen> createState() => _ReservasScreenState();
-}
-
-class _ReservasScreenState extends State<ReservasScreen> {
-  @override
-  @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() {
-      final provUsuario = context.read<ProviderUsuarios>();
-      final providerReserva = context.read<ProviderReserva>();
-      final usuario = provUsuario.usuarioActual;
-      if (usuario == null || usuario.curp == null) return;
-      providerReserva.obtenerReservasUsuario(usuario.curp!);
-    });
-  }
-  @override
-  void dispose() {
-    // final providerReserva = context.watch<ProviderReserva>();
-    // providerReserva.limpiarReservas();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +26,12 @@ class _ReservasScreenState extends State<ReservasScreen> {
           ],
         ),
       ),
-      body:  _ReservaView(),
+      body: _ReservaView(),
     );
   }
 }
 
 class _ReservaView extends StatelessWidget {
-  const _ReservaView({super.key});
-
   @override
   Widget build(BuildContext context) {
     final providerReserva = context.watch<ProviderReserva>();
@@ -73,12 +46,18 @@ class _ReservaView extends StatelessWidget {
           child: Text('Reservas recientes: ', style: TextStyle(fontSize: 20)),
         ),
         Expanded(
-          child: !providerReserva.isLoading ? ListView.builder(
-            itemCount: providerReserva.reservas.length,
-            itemBuilder: (context, index) {
-              return  _PreviewReserva(reserva: providerReserva.reservas[index]);
-            },
-          ) : Center(child: CircularProgressIndicator(strokeWidth: 2,),),
+          child:
+              (!providerReserva.isLoading ||
+                  providerReserva.reservas.isNotEmpty)
+              ? ListView.builder(
+                  itemCount: providerReserva.reservas.length,
+                  itemBuilder: (context, index) {
+                    return _PreviewReserva(
+                      reserva: providerReserva.reservas[index],
+                    );
+                  },
+                )
+              : Center(child: CircularProgressIndicator(strokeWidth: 2)),
         ),
       ],
     );
@@ -86,7 +65,6 @@ class _ReservaView extends StatelessWidget {
 }
 
 class _BuscarReservas extends StatelessWidget {
-  const _BuscarReservas({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +75,7 @@ class _BuscarReservas extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.horizontal(),
-              border: Border.all(width: 1,color: Colors.black45),
+              border: Border.all(width: 1, color: Colors.black45),
             ),
             child: Row(
               children: [
@@ -142,110 +120,113 @@ class _PreviewReserva extends StatelessWidget {
           child: Stack(
             children: [
               Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _imagen(imageUrl: reserva.casa.imagen),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: Container(width: 1, color: Colors.grey.shade300),
-              ),
-              SizedBox(width: 2),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 5,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _imagen(imageUrl: reserva.casa!.imagen),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Container(width: 1, color: Colors.grey.shade300),
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: [
-                          IconoOpcion(
-                            icon: Icon(Icons.calendar_month_outlined, size: 20),
-                            color: Color(0xFFDCEBFF),
-                            sizeBorder: 7,
-                            height: 27,
-                            width: 27,
-                          ),
-                          SizedBox(width: 5),
-                          Expanded(
-                            child: Text(
-                              'ID Reserva : ${reserva.id}',
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
+                  SizedBox(width: 2),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 5,
                       ),
-                      SizedBox(height: 10),
-          
-                      Row(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(width: 2),
-                          Icon(Icons.calendar_today_outlined, size: 15),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'Fechan inicio: : ${FormatDate.formatDate(reserva.fechaInicio)}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black54,
+                          Row(
+                            children: [
+                              IconoOpcion(
+                                icon: Icon(
+                                  Icons.calendar_month_outlined,
+                                  size: 20,
+                                ),
+                                color: Color(0xFFDCEBFF),
+                                sizeBorder: 7,
+                                height: 27,
+                                width: 27,
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-          
-                      Row(
-                        children: [
-                          SizedBox(width: 2),
-                          Icon(Icons.calendar_today_outlined, size: 15),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'Fechan fin: : ${FormatDate.formatDate(reserva.fechaFin)}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black54,
+                              SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  'ID Reserva : ${reserva.id}',
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                ),
                               ),
-                            ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+
+                          Row(
+                            children: [
+                              SizedBox(width: 2),
+                              Icon(Icons.calendar_today_outlined, size: 15),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  'Fechan inicio: : ${FormatDate.formatDate(reserva.fechaInicio)}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+
+                          Row(
+                            children: [
+                              SizedBox(width: 2),
+                              Icon(Icons.calendar_today_outlined, size: 15),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  'Fechan fin: : ${FormatDate.formatDate(reserva.fechaFin)}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+
+                          Row(
+                            children: [
+                              SizedBox(width: 2),
+                              Icon(Icons.watch_later_outlined, size: 15),
+                              SizedBox(width: 10),
+                              Text(
+                                'Estado: : ',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              Text(
+                                'Reservado',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: reserva.estado == 'Activo'
+                                      ? Colors.green
+                                      : Colors.black54,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      SizedBox(height: 15),
-          
-                      Row(
-                        children: [
-                          SizedBox(width: 2),
-                          Icon(Icons.watch_later_outlined, size: 15),
-                          SizedBox(width: 10),
-                          Text(
-                            'Estado: : ',
-                            style: TextStyle(fontSize: 12, color: Colors.black54),
-                          ),
-                          Text(
-                            'Reservado',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: reserva.estado == 'Activo'
-                                  ? Colors.green
-                                  : Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-          Positioned(
-            bottom: 10,
-            right: 1,
-            child: _buttonDetalles())
+              Positioned(bottom: 10, right: 1, child: _buttonDetalles()),
             ],
           ),
         ),
@@ -264,7 +245,7 @@ class _buttonDetalles extends StatelessWidget {
         onPressed: () => (),
         style: TextButton.styleFrom(
           minimumSize: Size(0, 0),
-      
+
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadiusGeometry.circular(9),
           ),

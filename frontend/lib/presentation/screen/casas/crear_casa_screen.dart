@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:lejos_de_casa_front/domain/entities/casa.dart';
 import 'package:lejos_de_casa_front/domain/entities/propietario.dart';
 import 'package:lejos_de_casa_front/domain/entities/region.dart';
+import 'package:lejos_de_casa_front/domain/entities/usuario.dart';
 import 'package:lejos_de_casa_front/infrastructure/models/casa/casa_model.dart';
 import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
+import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
 import 'package:provider/provider.dart';
 
 class CrearCasa extends StatelessWidget {
@@ -36,18 +38,35 @@ class FormularioCasa extends StatefulWidget {
 }
 
 class _FormularioCasaState extends State<FormularioCasa> {
-  final _formKey = GlobalKey<FormState>();
+  late final _formKey = GlobalKey<FormState>();
+  late final tituloController;
+  late final tipoController;
+  late final cupoController;
+  late final cuartosController;
+  late final calleController;
+  late final numInteriorController;
+  late final codigoPostalController;
+  late final estadoController;
+  late final municipioController;
+  late final precioController;
+  late final Usuario providerUsuarioActual;
 
-  final tituloController = TextEditingController();
-  final tipoController = TextEditingController();
-  final cupoController = TextEditingController();
-  final cuartosController = TextEditingController();
-  final calleController = TextEditingController();
-  final numInteriorController = TextEditingController();
-  final codigoPostalController = TextEditingController();
-  final estadoController = TextEditingController();
-  final municipioController = TextEditingController();
-  final precioController = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    providerUsuarioActual = context.read<ProviderUsuarios>().usuarioActual!;
+    tituloController = TextEditingController();
+    tipoController = TextEditingController();
+    cupoController = TextEditingController();
+    cuartosController = TextEditingController();
+    calleController = TextEditingController();
+    numInteriorController = TextEditingController();
+    codigoPostalController = TextEditingController();
+    estadoController = TextEditingController();
+    municipioController = TextEditingController();
+    precioController = TextEditingController();
+  }
 
   @override
   void dispose() {
@@ -156,14 +175,14 @@ class _FormularioCasaState extends State<FormularioCasa> {
             validacion: (value) => validarTexto(value, 'el codigo postal'),
           ),
           _CampoTexto(
-            controller: codigoPostalController,
+            controller: estadoController,
             campo: 'Estado',
             prefixIcon: Icons.location_on,
             validacion: (value) => validarTexto(value, 'Estado '),
           ),
           _CampoTexto(
-            controller: codigoPostalController,
-            campo: 'Estado',
+            controller: municipioController,
+            campo: 'Municipio',
             prefixIcon: Icons.location_on,
             validacion: (value) => validarTexto(value, 'Municipio'),
           ),
@@ -178,13 +197,6 @@ class _FormularioCasaState extends State<FormularioCasa> {
           ElevatedButton(
             onPressed: () {
               if (!_formKey.currentState!.validate()) return;
-
-              final region = Region(
-                codigoPos: int.parse(codigoPostalController.text),
-                estado: estadoController.text,
-                municipio: municipioController.text,
-              );
-
               final casa = Casa(
                 id: 0,
                 titulo: tituloController.text.trim(),
@@ -195,13 +207,8 @@ class _FormularioCasaState extends State<FormularioCasa> {
                 calle: calleController.text.trim(),
                 numInterior: int.parse(numInteriorController.text.trim()),
                 precio: double.parse(precioController.text.trim()),
-                region: region,
-                propietario: Propietario(
-                  curp: 'GAMM850202MDFDEF02',
-                  nombres: '',
-                  apellidos: '',
-                  fechaRegistro: DateTime.now(),
-                ),
+                idPropietario: providerUsuarioActual.curp,
+                idRegion:  codigoPostalController.text,
               );
               providerCasa.crearCasa(casa);
               ScaffoldMessenger.of(

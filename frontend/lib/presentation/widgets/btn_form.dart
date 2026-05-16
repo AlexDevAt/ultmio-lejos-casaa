@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 
 class BtnFormulario extends StatelessWidget {
   const BtnFormulario({
+    this.deshabilitar = false,
     super.key,
     required this.text,
     required this.func,
     required this.width,
     required this.height,
-    this.color, this.vertical, this.horizontal,
+    this.color,
+    this.vertical,
+    this.horizontal,
   });
-
+  final bool? deshabilitar ;
   final String text;
   final VoidCallback func;
   final double width;
@@ -29,9 +32,12 @@ class BtnFormulario extends StatelessWidget {
             borderRadius: BorderRadiusGeometry.circular(8),
           ),
         ),
-        onPressed: func,
+        onPressed: deshabilitar! ? null : func,
         child: Padding(
-          padding:  EdgeInsets.symmetric(vertical: vertical ?? 12,horizontal: horizontal ?? 12),
+          padding: EdgeInsets.symmetric(
+            vertical: vertical ?? 12,
+            horizontal: horizontal ?? 12,
+          ),
           child: Text(
             text,
             style: TextStyle(

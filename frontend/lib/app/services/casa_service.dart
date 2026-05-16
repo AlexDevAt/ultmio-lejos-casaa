@@ -5,8 +5,13 @@ class CasaService {
   CasaRepository repo;
   CasaService(this.repo);
 
-  Future<List<Casa>> obtenerCasas({String? filtro, String? tipoFiltro}) async {
+  Future<List<Casa>> obtenerCasas({String? filtro,
+    String? tipoFiltro,
+    bool? filtroActivo,
+    int? limit,}) async {
     final casas = await repo.obtenerCasas(
+      filtroActivo: filtroActivo,
+      limit: limit,
       filtro: filtro,
       tipoFiltro: tipoFiltro,
     );

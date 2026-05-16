@@ -4,6 +4,8 @@ import 'package:lejos_de_casa_front/domain/entities/casa.dart';
 import 'package:lejos_de_casa_front/domain/entities/propietario.dart';
 import 'package:lejos_de_casa_front/helpers/formatos/format_date.dart';
 import 'package:lejos_de_casa_front/presentation/providers/resenia/provider_resenia.dart';
+import 'package:lejos_de_casa_front/presentation/providers/reserva/provider_reserva.dart';
+import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/foto_perfil.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/icono_custom.dart';
@@ -38,6 +40,7 @@ class _InfoCasaState extends State<InfoCasa> {
 
   @override
   Widget build(BuildContext context) {
+    final ProviderReserva providerReserva = context.watch<ProviderReserva>();
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -47,27 +50,42 @@ class _InfoCasaState extends State<InfoCasa> {
           SizedBox(width: 16),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
 
-          children: [
-            _image(),
-            _viewInfo(casa: widget.casa),
+              children: [
+                _image(),
+                _viewInfo(casa: widget.casa, providerReserva: providerReserva),
+              ],
+            ),
+          ),
+          if (providerReserva.creadonReserva) ...[
+            const ModalBarrier(
+              dismissible:
+                  false, // Impide que el usuario lo quite dando clic afuera
+              color: Colors.black45, // El color negro transparente de fondo
+            ),
+            Center(child: CircularProgressIndicator(color: Colors.white)),
           ],
-        ),
+        ],
       ),
     );
   }
 }
 
 class _viewInfo extends StatelessWidget {
-  const _viewInfo({required this.casa});
+  const _viewInfo({required this.casa, required this.providerReserva});
   final Casa casa;
+  final ProviderReserva providerReserva;
 
   @override
   Widget build(BuildContext context) {
+    bool existeReserva = providerReserva.reservaExiste(casa.id);
     final ProviderResenia providerResenia = context.watch<ProviderResenia>();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
@@ -99,19 +117,19 @@ class _viewInfo extends StatelessWidget {
           DetalleDataIconVerticalLabel(
             icon: Icons.map_outlined,
             title: 'Ciudad',
-            data: casa.region.estado,
+            data: casa.region!.estado,
           ),
           SizedBox(height: 30),
           DetalleDataIconVerticalLabel(
             icon: Icons.location_city_outlined,
             title: 'Municipio',
-            data: casa.region.municipio,
+            data: casa.region!.municipio,
           ),
           SizedBox(height: 30),
           DetalleDataIconVerticalLabel(
             icon: Icons.numbers_outlined,
             title: 'Codigo postal',
-            data: casa.region.municipio,
+            data: casa.region!.municipio,
           ),
           SizedBox(height: 30),
           DetalleDataIconVerticalLabel(
@@ -130,13 +148,51 @@ class _viewInfo extends StatelessWidget {
           SizedBox(height: 20),
           _MapaUbi(),
           SizedBox(height: 30),
-          Center(child: PropietarioCasa(propietario: casa.propietario)),
+          Center(child: PropietarioCasa(propietario: casa.propietario!)),
           SizedBox(height: 30),
           Center(
             child: BtnFormulario(
               horizontal: 40,
-              text: 'Solicitar reserva',
-              func: () => (),
+              deshabilitar:
+                  existeReserva ||
+                  providerReserva.estadoReserva == 'Pendiente',
+              text: existeReserva ?'Pendiente' : 'Solicitar reserva',
+              func: () async {
+                await providerReserva.reservarCasa(
+                  casa.id,
+                  context.read<ProviderUsuarios>().usuarioActual!.curp,
+                );
+
+                if (context.mounted) {
+                  if (providerReserva.error == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Reserva creada con exito!',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                        backgroundColor: Colors.green.shade200,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          providerReserva.error!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        backgroundColor: Colors.red.shade400,
+                      ),
+                    );
+                  }
+                }
+              },
               width: 50,
               height: 50,
               color: Color.fromARGB(255, 59, 116, 190),

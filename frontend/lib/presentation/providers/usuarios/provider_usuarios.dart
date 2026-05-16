@@ -8,6 +8,7 @@ class ProviderUsuarios extends ChangeNotifier {
 
   bool isLoading = false;
   bool usuariosCargadosPrimera = false;
+  bool usuarioActualCargado = false;
   Usuario? usuarioActual;
 
   String? error;
@@ -19,7 +20,8 @@ class ProviderUsuarios extends ChangeNotifier {
 
   Future<void> cargarUsuarioActual(String token) async {
     usuarioActual = await usuarioService.obtenerUsuarioActual(token);
-    notifyListeners();  
+    usuarioActualCargado = true;
+    notifyListeners();
   }
 
   void _cargarUsuarios(List users) {

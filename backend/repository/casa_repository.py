@@ -7,6 +7,92 @@ class RepoCasa:
     def conectarDB(self):
         return DataBaseConexion.obtenerConexion()
     
+    def obtenerCasasRecintes(self,limit):
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor(dictionary=True)
+        sql = """
+            SELECT 
+            c.id,
+            c.titulo,
+            c.cupo,
+            c.tipo,
+            c.imagen,
+            c.cuartos,
+            c.calle,
+            c.num_interior,
+            c.precio,
+            c.id_region,
+            c.id_propietario,
+            r.codigo_postal,
+            r.estado,
+            r.municipio,
+            u.nombres,
+            u.apellidos,
+            u.fecha_registro,
+            u.curp
+            FROM Casas AS c
+            JOIN Usuarios AS u 
+            ON u.curp = c.id_propietario
+            Join Regiones AS r
+            ON c.id_region = r.codigo_postal
+            ORDER BY id DESC
+        """
+        if limit > 0:
+            sql  += f'LIMIT {limit};'
+        else:
+            sql+=";"
+        try:
+            cursor.execute(sql)
+            casas = cursor.fetchall()
+            conx.close()
+            cursor.close()
+            return casas
+        except Exception as e:
+            print(F"ERROR {e}")
+    
+    def obtenerCasasPopulares(self,limit):
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor(dictionary=True)
+        sql = """
+            SELECT 
+            c.id,
+            c.titulo,
+            c.cupo,
+            c.tipo,
+            c.imagen,
+            c.cuartos,
+            c.calle,
+            c.num_interior,
+            c.precio,
+            c.id_region,
+            c.id_propietario,
+            r.codigo_postal,
+            r.estado,
+            r.municipio,
+            u.nombres,
+            u.apellidos,
+            u.fecha_registro,
+            u.curp
+            FROM Casas AS c
+            JOIN Usuarios AS u 
+            ON u.curp = c.id_propietario
+            Join Regiones AS r
+            ON c.id_region = r.codigo_postal 
+        """
+        if limit > 0:
+            sql  += f'LIMIT {limit};'
+        else:
+            sql+=";"
+        try:
+            cursor.execute(sql)
+            casas = cursor.fetchall()
+            conx.close()
+            cursor.close()
+            return casas
+        except Exception as e:
+            print(F"ERROR {e}")
+            
+    
     def existeCasa(self,id):
         conx : mysql.connector.MySQLConnection = self.conectarDB()
         cursor = conx.cursor()
@@ -38,9 +124,9 @@ class RepoCasa:
     
     def obtenerCasa(self,id):
         conx : mysql.connector.MySQLConnection = self.conectarDB()
-        cursor = conx.cursor()
+        cursor = conx.cursor(dictionary=True)
         sql = '''
-            SELECT 
+             SELECT 
             c.id,
             c.titulo,
             c.cupo,
@@ -50,13 +136,21 @@ class RepoCasa:
             c.calle,
             c.num_interior,
             c.precio,
-            c.id_Region,
+            c.id_region,
+            c.id_propietario,
+            r.codigo_postal,
+            r.estado,
+            r.municipio,
             u.nombres,
             u.apellidos,
             u.fecha_registro,
             u.curp
-            FROM Casas AS c JOIN Usuarios as u ON c.id_propietario = u.curp
-            WHERE %s = c.id;
+            FROM Casas AS c
+            JOIN Usuarios AS u 
+            ON u.curp = c.id_propietario
+            Join Regiones AS r
+            ON c.id_region = r.codigo_postal
+            WHERE c.id = %s;
         '''
         try:
             cursor.execute(sql,(id,))
@@ -118,6 +212,8 @@ class RepoCasa:
             c.calle,
             c.num_interior,
             c.precio,
+            c.id_region,
+            c.id_propietario,
             r.codigo_postal,
             r.estado,
             r.municipio,
@@ -150,6 +246,8 @@ class RepoCasa:
             c.imagen,
             c.cuartos,
             c.calle,
+            c.id_region,
+            c.id_propietario,
             c.num_interior,
             c.precio,
             r.codigo_postal,
@@ -173,11 +271,9 @@ class RepoCasa:
         return casas
     
     def obtenerCasasPorCuartos(self,filtro:str):
-        
         simbolo = "="
         if(filtro == '4'):
             simbolo = ">="
-        
         conx : mysql.connector.MySQLConnection = self.conectarDB()
         cursor = conx.cursor(dictionary=True)
         sql = """
@@ -191,6 +287,8 @@ class RepoCasa:
             c.calle,
             c.num_interior,
             c.precio,
+            c.id_region,
+            c.id_propietario,
             r.codigo_postal,
             r.estado,
             r.municipio,
@@ -225,6 +323,8 @@ class RepoCasa:
             c.calle,
             c.num_interior,
             c.precio,
+            c.id_region,
+            c.id_propietario,
             r.codigo_postal,
             r.estado,
             r.municipio,
@@ -239,6 +339,35 @@ class RepoCasa:
             ON c.id_region = r.codigo_postal;
         """
         cursor.execute(sql)
+        casas = cursor.fetchall()
+        conx.close()
+        cursor.close()
+        return casas
+    
+    def obtenerCasasCurp(self,curp: str):
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor(dictionary=True)
+        sql = """
+            SELECT 
+            c.id,
+            c.titulo,
+            c.cupo,
+            c.tipo,
+            c.imagen,
+            c.cuartos,
+            c.calle,
+            c.num_interior,
+            c.precio,
+            c.id_region,
+            r.codigo_postal,
+            r.estado,
+            r.municipio,
+            FROM Casas AS c
+            Join Regiones AS r
+            ON c.id_region = r.codigo_postal
+            WHERE c.id_propietario = %s
+        """
+        cursor.execute(sql,(curp,))
         casas = cursor.fetchall()
         conx.close()
         cursor.close()

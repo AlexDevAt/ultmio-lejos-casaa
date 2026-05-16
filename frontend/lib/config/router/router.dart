@@ -3,8 +3,8 @@ import 'package:lejos_de_casa_front/config/di.dart';
 import 'package:lejos_de_casa_front/domain/entities/casa.dart';
 import 'package:lejos_de_casa_front/domain/entities/propietario.dart';
 import 'package:lejos_de_casa_front/presentation/providers/auth/provider_auth.dart';
-import 'package:lejos_de_casa_front/presentation/screen/auth/iniciar_sesion.dart';
 import 'package:lejos_de_casa_front/presentation/screen/casas/info_casa.dart';
+import 'package:lejos_de_casa_front/presentation/screen/home/home_screen.dart';
 import 'package:lejos_de_casa_front/presentation/screen/usuarios/propietario_info.dart';
 import 'package:lejos_de_casa_front/presentation/screen/usuarios/register_usuario.dart';
 import 'package:lejos_de_casa_front/presentation/screens.dart';
@@ -12,17 +12,17 @@ import 'package:lejos_de_casa_front/presentation/widgets/main_shell.dart';
 
 final providerAuthRouter = ProviderAuth(Di.createAuthService());
 final appRouter = GoRouter(
-  // refreshListenable: providerAuthRouter,
-  // redirect: (context, state) {
-  //   if (!providerAuthRouter.logueado) {
-  //     return '/auth';
-  //   }
-  //   if (state.matchedLocation == '/auth') {
-  //     return '/home';
-  //   } else {
-  //     return null;
-  //   }
-  // },
+  refreshListenable: providerAuthRouter,
+  redirect: (context, state) {
+    if (!providerAuthRouter.logueado) {
+      return '/auth';
+    }
+    if (state.matchedLocation == '/auth') {
+      return '/home';
+    } else {
+      return null;
+    }
+  },
   initialLocation: '/home',
 
   // initialLocation: '/register',
@@ -67,6 +67,11 @@ final appRouter = GoRouter(
           builder: (context, state) => const ReservasScreen(),
         ),
         GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
+        GoRoute(
+          path: '/busquedaScreen',
+          name: BusquedaScreen.name,
+          builder: (context, state) => const BusquedaScreen(),
+        ),
         GoRoute(
           path: '/home',
           name: HomeScreen.name,

@@ -3,9 +3,17 @@ from domain.entities.usuario import Usuario
 from excepciones.usuarios.exepciones_usuario import *
 from helpers.usuarios.usuariosRoles import Roles
 from helpers.usuarios.hashear_password  import HashPass
+from repository.usuario_repository import RepoUsuario
+from services.reservas.reservas_service import ReservasService
+from services.resenia.reseniaServicio import ReseniaService
+from services.casa.casaService import CasaService
+from schemas.usuario.usuarioDTO import *
 class UsuarioService:
-    def __init__(self,repo):
-        self.repo = repo
+    def __init__(self,repo,repoReserva,repoCasa,repoResenia):
+        self.repo:RepoUsuario = repo
+        self.repoCasa = repoCasa
+        self.repoReserva = repoReserva
+        self.repoResenia = repoResenia
 
     def _existeUsuario(self,curp : str) -> bool:
         return self.repo.usuarioExiste(curp)
@@ -28,7 +36,40 @@ class UsuarioService:
     def obtenerUsuario(self,curp:str):
         if(not self._existeUsuario(curp)):
             raise UsuarioNoEncontrado(curp)
-        return self.repo.obtenerUsuarioCurp(curp)
+        usuario : Usuario =  self.repo.obtenerUsuarioCurp(curp)
+        reservas = ReservasService(self.repoReserva).obtenerReservas(curp,obtenerPropietario=False)
+        resenias = ReseniaService(self.repoResenia).obtenerReseniaResumen(curp)
+        
+        usuario['totalResenias'] = 0
+        usuario['calificacion_promedio'] = 0.0
+        
+        if resenias:
+            resumen = resenias[0] # Extraemos directo sin iterar un for innecesariamente
+            usuario['totalResenias'] = resumen['total_resenias']
+            usuario['calificacion_promedio'] = resumen['calificacion_promedio']
+        casas = []
+        if usuario['rol'] == 'vendedor':
+            casas = CasaService(self.repoCasa).obtenerCasasCurp(curp)
+        return UsuarioOut(
+            curp = usuario['curp'],
+            apellidos=usuario['apellidos'],
+            calle=usuario['calle'],
+            nombres=usuario['nombres'],
+            ciudad=usuario['ciudad'],
+            codigo_postal=usuario['codigo_postal'],
+            rol=usuario['rol'],
+            num_interior=usuario['num_interior'],
+            correo=usuario['correo'],
+            municipio=usuario['municipio'],
+            telefono=usuario['telefono'],
+            fecha_registro=usuario['fecha_registro'],
+            calificacion_promedio=usuario['calificacion_promedio'],
+            totalResenias=usuario['totalResenias'],
+            casas=casas,
+            reservas=reservas
+            )
+        
+
     
     def actualizarUsuario(self,curp:str,data):
         if(not self._existeUsuario(curp)):

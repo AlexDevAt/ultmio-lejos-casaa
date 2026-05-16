@@ -12,13 +12,40 @@ class ReservasData {
     try {
       final res = await dio.get(ApiConfigReservas.obtenerReservas(curp));
       final List data = res.data;
-      return data.map((reserva) {
-        return ReservaModel.fromJson(reserva);
-      }).toList();
+      return data.map((reserva) =>  ReservaModel.fromJson(reserva)).toList();
     } on DioException catch (e) {
       throw Exception(
         e.response?.data['detail'] ?? 'No se encontraron reservas',
       );
+    }
+  }
+
+  Future<ReservaModel> reservarCasa(int idCasa, String idComprador) async {
+    final Map<String, dynamic> body = {
+      "id_reserva":0,
+      "fecha_inicio": "2026-05-15T21:42:58.770Z",
+      "fecha_fin": "2026-05-15T21:42:58.771Z",
+      "estado": "Activo",
+      "idCasa": idCasa,
+      "idComprador": idComprador,
+    };
+
+    try {
+      final res = await dio.post(
+        ApiConfigReservas.crearReserva(idCasa, idComprador),
+        data: body,
+      );
+      final data = res.data;       
+      return ReservaModel.fromJson(data);
+    } on DioException catch (e) {
+      String mensajeError = 'Error al reserv ar';
+    //   if (e.response != null) {
+    //   // Extraemos el detalle que configuraste en FastAPI: {"detail": "..."}
+    //   mensajeError = e.response?.data['detail'] ?? "Error en el servidor (${e.response?.statusCode})";
+    // } else {
+    //   mensajeError = "No se pudo conectar con el servidor";
+    // }
+    throw (mensajeError);
     }
   }
 }

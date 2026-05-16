@@ -6,6 +6,7 @@ import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.d
 import 'package:lejos_de_casa_front/presentation/providers/resenia/provider_resenia.dart';
 import 'package:lejos_de_casa_front/presentation/providers/reserva/provider_reserva.dart';
 import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
+import 'package:lejos_de_casa_front/presentation/screen/test/test_web_socket.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(const MyApp());
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
 //     return MaterialApp(
 //       debugShowCheckedModeBanner: false,
 //       title: 'Material App',
-//       home: ReservasScreen(),
+//       home: TestWebSocket(),
 //     );
 //   }
 // }

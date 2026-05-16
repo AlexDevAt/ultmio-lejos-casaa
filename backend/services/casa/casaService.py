@@ -1,6 +1,6 @@
 from repository.casa_repository import RepoCasa
-from schemas.usuario.usuarioDTO import PropietarioCasaBasico
-from schemas.casa.Casa_DTO import CasaOut
+from schemas.usuario.usuarioBase import PropietarioCasaBasico
+from schemas.casa.Casa_DTO import *
 from helpers.casas.casaTipo import TipoCasa
 from domain.entities.casa import Casa
 from excepciones.casas.excepciones_casa import *
@@ -45,38 +45,51 @@ class CasaService:
             raise NoExisteCasa()
         casa = self.repo.obtenerCasa(id)
         propietario = PropietarioCasaBasico(
-                nombres=casa[10],
-                apellidos=casa[11],
-                fecha_registro=casa[12],
-                curp=casa[13]
+                nombres=casa['nombres'],
+                apellidos=casa['apellidos'],
+                fecha_registro=casa['fecha_registro'],
+                curp=casa['curp']
             )
+        region = RegionoOUT(
+                codigo_postal=casa['codigo_postal'],
+                estado=casa['estado'],
+                municipio=casa['municipio'])
+
         casaOut = CasaOut(
-                id=casa[0],
-                titulo=casa[1],
-                cupo=casa[2],
-                tipo=TipoCasa.convertirTipoCasa(casa[3]),
-                imagen=casa[4],
-                cuartos=casa[5],
-                calle=casa[6],
-                num_interior=casa[7],
-                precio=float(casa[8]),
-                idRegion=casa[9],
+                id=casa['id'],
+                titulo=casa['titulo'],
+                cupo=int(casa['cupo']),
+                tipo=TipoCasa.convertirTipoCasa(casa['tipo']),
+                imagen=casa['imagen'],
+                cuartos=casa['cuartos'],
+                calle=casa['calle'],
+                num_interior=casa['num_interior'],
+                precio=float(casa['precio']),
+                id_propietario=casa['id_propietario'],
+                id_region=casa['id_region'],
+                region=region,
                 propietario=propietario
             )
         return casaOut
         
-    def obtenerCasas(self, filtro: str = None, tipoFiltro=None) -> list:
-        if filtro is not None:
-            if tipoFiltro is not None and tipoFiltro == 'codigo_postal':
+    def obtenerCasas(self,filtroActivo  : bool = False, filtro: str = None, tipoFiltro=None,limit = int,limitActivo = False) -> list:
+        if filtroActivo :
+            if  tipoFiltro == 'codigo_postal':
                 casas = self.repo.obtenerCasasPorTipoCodigoPostal(filtro)
-            elif  tipoFiltro is not None and tipoFiltro == 'cantidad de cuartos':
+            elif  tipoFiltro == 'cantidad de cuartos':
                 casas = self.repo.obtenerCasasPorCuartos(filtro)
-            elif  tipoFiltro is not None and tipoFiltro == 'tipo de casa':
+            elif  tipoFiltro == 'tipo de casa':
                 casas = self.repo.obtenerCasasPorTipo(filtro)
+            elif  tipoFiltro == 'populares':
+                casas = self.repo.obtenerCasasPopulares(limit)
+            elif tipoFiltro == 'recientes':
+                casas = self.repo.obtenerCasasRecintes(limit)
         else:
             casas = self.repo.obtenerCasas()
         data = []
+       
         for casa in casas:
+            print(casa)
             propietario = PropietarioCasaBasico(
                 nombres=casa['nombres'],
                 apellidos=casa['apellidos'],
@@ -99,10 +112,35 @@ class CasaService:
                 calle=casa['calle'],
                 num_interior=casa['num_interior'],
                 precio=float(casa['precio']),
+                id_propietario=casa['id_propietario'],
+                id_region=casa['id_region'],
                 region=region,
                 propietario=propietario
             )
-
             data.append(casaOut)
-
+        return data
+    
+    def obtenerCasasCurp(self, curp:str) -> list:
+        casas = self.repo.obtenerCasasCurp(curp)
+        data = []
+        for casa in casas:            
+            region = RegionoOUT(
+                codigo_postal=casa['codigo_postal'],
+                estado=casa['estado'],
+                municipio=casa['municipio'])
+            casaOut = CasaOutPropietario(
+                id=casa['id'],
+                titulo=casa['titulo'],
+                cupo=int(casa['cupo']),
+                tipo=TipoCasa.convertirTipoCasa(casa['tipo']),
+                imagen=casa['imagen'],
+                cuartos=casa['cuartos'],
+                calle=casa['calle'],
+                num_interior=casa['num_interior'],
+                precio=float(casa['precio']),
+                id_region=casa['id_region'],
+                region=region,
+            )
+            
+            data.append(casaOut)
         return data

@@ -26,7 +26,10 @@ from schemas.resenia.reseniaDTO import ReseniaOut
 
 # router = APIRouter()
 # repo = RepoUsuario()
-# service = UsuarioService(repo)
+# service = UsuarioService(repo,ReservarioRepository(),RepoCasa(),ReseniaRepository())
+
+# service.obtenerUsuario('GAMM850202MDFDEF02')
+# print()
 # usuario = UsuarioCreate(
 #     curp="RPVS910421NRKJXF99",
 #     nombres="Alexis",
@@ -45,10 +48,10 @@ from schemas.resenia.reseniaDTO import ReseniaOut
 # service.crearUsuario(usuario)
 
 
-# router = APIRouter()
-# repo = RepoCasa()
-# service = CasaService(repo)
-# service.obtenerCasa(1)
+router = APIRouter()
+repo = RepoCasa()
+service = CasaService(repo)
+service.obtenerCasas(True,'','populares',3, limitActivo=True)
 
 # repoUsuario = RepoUsuario()
 # serviceUsuario = UsuarioService(repoUsuario)
@@ -70,8 +73,21 @@ from schemas.resenia.reseniaDTO import ReseniaOut
 # router = APIRouter()
 # repo = ReservarioRepository()
 # service = ReservasService(repo)
+# newReserva = ReservaCrear(
+#     estado='Activo',
+#     id_reserva=0,
+#     fecha_inicio= "2026-05-15T20:03:36.069Z",
+#     fecha_fin="2026-05-15T20:03:36.069Z",
+#     idCasa=1,
+#     idComprador="GAMM850202MDFDEF02"
+# )
+# repoCasa = RepoCasa()
+# service.crearReserva(newReserva,CasaService(repoCasa))
+# print()
+
+
 # service.obtenerReservas('GAMM850202MDFDEF02')
 
-repo = ReseniaRepository()
-service = ReseniaService(repo)
-re = service.obtenerResenias(1)
+# repo = ReseniaRepository()
+# service = ReseniaService(repo)
+# re = service.obtenerResenias(1)

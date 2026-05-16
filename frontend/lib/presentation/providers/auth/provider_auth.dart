@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lejos_de_casa_front/app/services/auth_service.dart';
+import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
+import 'package:lejos_de_casa_front/presentation/providers/reserva/provider_reserva.dart';
 import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
 
 class ProviderAuth extends ChangeNotifier {
@@ -12,10 +14,17 @@ class ProviderAuth extends ChangeNotifier {
     String correo,
     String password,
     ProviderUsuarios usuariosProvider,
+    ProviderReserva providerReserva,
+    ProviderCasas providerCasa,
   ) async {
     token = await authService.login(correo.trim(), password);
     logueado = true;
-    usuariosProvider.cargarUsuarioActual(token!);
+    await usuariosProvider.cargarUsuarioActual(token!);
+    providerReserva.inicializarReservas(
+      usuariosProvider.usuarioActual!.reservas!,
+    );
+    await providerCasa.iniciarCasasHome();
+
     notifyListeners();
   }
 }

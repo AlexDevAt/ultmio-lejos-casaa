@@ -9,4 +9,9 @@ class ReservasService {
     if (curp.isEmpty) throw Exception('Curp invalida');
     return await repo.obtenerReservasUsuario(curp);
   }
+
+  Future<Reserva> crearReserva(int idCasa, String idComprador) async {
+    if (idComprador.isEmpty) throw Exception('Curp invalida');
+    return await repo.crearReserva(idCasa, idComprador);
+  }
 }

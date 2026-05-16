@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lejos_de_casa_front/presentation/screen/home/home_screen.dart';
+import 'package:lejos_de_casa_front/presentation/screen/busqueda/busqueda_screen.dart';
 
 class Filtro {
   final String titulo;

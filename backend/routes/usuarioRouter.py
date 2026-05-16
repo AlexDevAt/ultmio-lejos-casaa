@@ -1,12 +1,15 @@
 from fastapi import APIRouter, HTTPException,Depends
 from schemas.usuario.usuarioDTO import *
 from repository.usuario_repository import RepoUsuario
+from repository.reservas_repository import ReservarioRepository
+from repository.resenia_repository import ReseniaRepository
+from repository.casa_repository import  RepoCasa
 from services.usuario.usuarioService import UsuarioService
 from excepciones.usuarios.exepciones_usuario import *
 from services.auth.auth_jwt import AuthJwt
 router = APIRouter()
 repo = RepoUsuario()
-service = UsuarioService(repo)
+service = UsuarioService(repo,ReservarioRepository(),RepoCasa(),ReseniaRepository())
 
 
 

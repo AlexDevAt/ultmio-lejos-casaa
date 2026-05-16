@@ -15,6 +15,8 @@ class Usuario:
     codigo_postal: str= None,
     ciudad : str= None,
     contrasenia: str= None,
+    calificacionpromedio: float= None,
+    totalResenias: int= None,
     municipio: str= None):
         self.curp = curp
         self.nombres = nombres
@@ -29,3 +31,5 @@ class Usuario:
         self.ciudad = ciudad
         self.municipio = municipio
         self.contrasenia =  contrasenia
+        self.calificacionpromedio = calificacionpromedio
+        self.totalResenias = totalResenias

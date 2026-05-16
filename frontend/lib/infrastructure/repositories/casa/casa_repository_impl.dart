@@ -24,18 +24,6 @@ class CasaRepositoryImpl implements CasaRepository {
 
   @override
   Future<Casa> crearCasa(Casa casa) async {
-    final modelPropietario = PropietarioModel(
-      nombres: casa.propietario.nombres,
-      curp: casa.propietario.curp,
-      apellidos: casa.propietario.apellidos,
-      fechaRegistro: casa.propietario.fechaRegistro,
-    );
-
-    final regionModel = RegionModel(
-      codigoPos: casa.region.codigoPos,
-      estado: casa.region.estado,
-      municipio: casa.region.municipio,
-    );
 
     final model = CasaModel(
       id: casa.id,
@@ -46,8 +34,8 @@ class CasaRepositoryImpl implements CasaRepository {
       calle: casa.calle,
       numInterior: casa.numInterior,
       precio: casa.precio,
-      region: regionModel,
-      propietario: modelPropietario,
+      idRegion: casa.idRegion,
+      idPropietario: casa.idPropietario,
       titulo: casa.titulo,
     );
 
@@ -62,8 +50,13 @@ class CasaRepositoryImpl implements CasaRepository {
   }
 
   @override
-  Future<List<Casa>> obtenerCasas({String? filtro, String? tipoFiltro}) async {
+  Future<List<Casa>> obtenerCasas({String? filtro,
+    String? tipoFiltro,
+    bool? filtroActivo,
+    int? limit,}) async {
     final model = await dataSource.obtenerCasas(
+      filtroActivo: filtroActivo,
+      limit: limit,
       filtro: filtro,
       tipoFiltro: tipoFiltro,
     );

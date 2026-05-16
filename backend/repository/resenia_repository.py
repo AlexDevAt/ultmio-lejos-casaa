@@ -37,5 +37,21 @@ class ReseniaRepository:
         cursor.close
         conx.close()
         return resenias
+
+    def obtenerReseniaResumen(self,curp):
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor(dictionary=True)
+        sql = '''
+        SELECT ROUND(AVG(calificacion),2) AS calificacion_promedio,COUNT(*) AS total_resenias,id_Usuario 
+        FROM reseniasusuario 
+        GROUP BY id_Usuario 
+        HAVING id_usuario = %s;
+        '''
+        cursor.execute(sql,(curp,))
+        resenias = cursor.fetchall()
+        cursor.close
+        conx.close()
+        return resenias
+        
         
         
