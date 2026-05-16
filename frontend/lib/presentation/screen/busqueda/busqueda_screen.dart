@@ -113,14 +113,14 @@ class _HomeScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       providerCasa.obtenerCasas();
-                      providerCasa.filtroActivo = false;
+                      providerCasa.filtroActivoCasas = false;
                     },
                     child: AnimatedOpacity(
                       duration: Duration(microseconds: 300),
-                      opacity: (providerCasa.filtroActivo) ? 1 : 0,
+                      opacity: (providerCasa.filtroActivoCasas) ? 1 : 0,
                       child: Container(
                         margin: EdgeInsets.symmetric(
-                          horizontal: (!providerCasa.filtroActivo) ? 0 : 10,
+                          horizontal: (!providerCasa.filtroActivoCasas) ? 0 : 10,
                           vertical: 15,
                         ),
                         padding: EdgeInsets.symmetric(
@@ -252,6 +252,7 @@ class FiltroBusqueda extends StatelessWidget {
                         onSelected: (value) {
                           Navigator.pop(context);
                           context.read<ProviderCasas>().obtenerCasas(
+                            filtroActivo: true,
                             filtro: e.trim(),
                             tipoFiltro: filtro.titulo.toLowerCase(),
                           );

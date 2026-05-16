@@ -32,7 +32,7 @@ class CasaData {
             "filtro_activado": filtroActivo,
             "tipo_filtro": tipoFiltro,
             "filtro": filtro,
-            "limit": limit,
+            "limit": limit ?? -1,
             "limiteActivo": true,
           },
         );

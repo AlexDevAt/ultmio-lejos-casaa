@@ -8,7 +8,7 @@ class ProviderCasas extends ChangeNotifier {
   ProviderCasas(this.casaService);
 
   bool isLoading = true;
-  bool filtroActivo = false;
+  bool filtroActivoCasas = false;
   bool casasHomeLoading = false;
 
   String? error;
@@ -46,6 +46,7 @@ class ProviderCasas extends ChangeNotifier {
       tipoFiltro: 'recientes',
     );
     casasHome1 = casas1;
+
     casasHome2 = casas2;
     casasHomeLoading = false;
     notifyListeners();
@@ -53,6 +54,7 @@ class ProviderCasas extends ChangeNotifier {
 
   Future<void> eliminarFiltro() async {
     isLoading = false;
+    filtroActivoCasas = false;
     notifyListeners();
   }
 
@@ -69,7 +71,7 @@ class ProviderCasas extends ChangeNotifier {
         if (filtro == '+4') {
           filtro = '4';
         }
-        filtroActivo = true;
+        filtroActivoCasas = true;
       }
       final List casasDB = await casaService.obtenerCasas(
         filtroActivo: filtroActivo,

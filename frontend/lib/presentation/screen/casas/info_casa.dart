@@ -57,7 +57,7 @@ class _InfoCasaState extends State<InfoCasa> {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-                _image(),
+                _image(url: widget.casa.imagen,),
                 _viewInfo(casa: widget.casa, providerReserva: providerReserva),
               ],
             ),
@@ -154,9 +154,8 @@ class _viewInfo extends StatelessWidget {
             child: BtnFormulario(
               horizontal: 40,
               deshabilitar:
-                  existeReserva ||
-                  providerReserva.estadoReserva == 'Pendiente',
-              text: existeReserva ?'Pendiente' : 'Solicitar reserva',
+                  existeReserva || providerReserva.estadoReserva == 'Pendiente',
+              text: existeReserva ? 'Pendiente' : 'Solicitar reserva',
               func: () async {
                 await providerReserva.reservarCasa(
                   casa.id,
@@ -245,7 +244,7 @@ class _PrecioBox extends StatelessWidget {
           children: [
             Text('Precio: ', style: TextStyle(fontSize: 20)),
             Text('\$$precio', style: TextStyle(fontSize: 40)),
-            Text(' mensual ', style: TextStyle(fontSize: 20)),
+            Expanded(child: Text(' mensual ', style: TextStyle(fontSize: 20))),
           ],
         ),
       ),
@@ -308,7 +307,8 @@ class ButtonUbicacion extends StatelessWidget {
 }
 
 class _image extends StatelessWidget {
-  const _image({super.key});
+  const _image({super.key, required this.url});
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -318,7 +318,7 @@ class _image extends StatelessWidget {
         width: double.maxFinite,
         height: size.height * .35,
         fit: BoxFit.cover,
-        'assets/images/casas/img1.jpg',
+        'assets/images/casas/$url',
       ),
     );
   }
