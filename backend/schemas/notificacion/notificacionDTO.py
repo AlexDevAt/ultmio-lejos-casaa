@@ -11,3 +11,14 @@ class NotificacionOUT(BaseModel):
     mensaje: str
     nombre_emisor:str | None = None
     apellidos_emisor: str | None = None
+
+class NotificacionOutForJson(BaseModel):
+    id_notificacion: int
+    id_destinatario: str | None = None
+    id_emisor: str
+    tipo : str
+    fecha_envio : str
+    leido: bool
+    mensaje: str
+    nombre_emisor:str | None = None
+    apellidos_emisor: str | None = None

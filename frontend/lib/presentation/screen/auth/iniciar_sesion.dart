@@ -5,6 +5,7 @@ import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.d
 import 'package:lejos_de_casa_front/presentation/providers/notificacion/provider_notificacion.dart';
 import 'package:lejos_de_casa_front/presentation/providers/reserva/provider_reserva.dart';
 import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
+import 'package:lejos_de_casa_front/presentation/providers/webSocket/provider_web_socket.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
 import 'package:provider/provider.dart';
 
@@ -124,7 +125,8 @@ class _IniciarSesionState extends State<IniciarSesion> {
                                 context.read<ProviderUsuarios>(),
                                 context.read<ProviderReserva>(),
                                 context.read<ProviderCasas>(),
-                                context.read<ProviderNotificacion>()
+                                context.read<ProviderNotificacion>(),
+                                context.read<ProviderWebSocket>()
                               );
                             }
                           })),

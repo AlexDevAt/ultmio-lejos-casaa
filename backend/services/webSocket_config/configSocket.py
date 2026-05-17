@@ -17,6 +17,18 @@ class ConnectionManagerNotif:
         if id in self.conexiones:
             del self.conexiones[id]
             print(f'Usuario {id} desconectado')
+    
+    async def emitirHaciaUsuario(self,idUsuario,evento,data):
+        print(self.conexiones.__str__())
+        print(idUsuario)
+        webSocketUsuario : WebSocket = self.conexiones.get(idUsuario)
+        if webSocketUsuario:
+            print('ENVIANDO')
+            await webSocketUsuario.send_json({
+                "event" : evento,
+                "data":data
+            })
+        
             
     async def broadcast(self, message: str):
         for connection in self.conexiones.values():

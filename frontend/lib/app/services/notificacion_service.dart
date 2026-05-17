@@ -5,8 +5,8 @@ class NotificacionService {
   final NotificacionRepository repo;
   NotificacionService(this.repo);
 
-  Future<List<NotificacionEnty>> obtenerNotificaciones() async {
-    final notis = await repo.obtenerNotificaciones();
+  Future<List<NotificacionEnty>> obtenerNotificaciones(String curp) async {
+    final notis = await repo.obtenerNotificaciones(curp);
     if (notis.isEmpty) return [];
     return notis;
   }

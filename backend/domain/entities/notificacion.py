@@ -3,13 +3,13 @@ from datetime import datetime
 class Notificacion:
     def __init__(
         self,
-        id_notificacion : str,
+        id_notificacion : int,
         id_destinatario: str,
         id_emisor: str,
         tipo: str,
         mensaje:str,
-        fecha_envio: datetime,
-        leido: bool
+        leido: bool = False,
+        fecha_envio: datetime = None
         ):
         self.id_destinatario = id_destinatario
         self.id_notificacion = id_notificacion

@@ -361,7 +361,7 @@ class RepoCasa:
             c.id_region,
             r.codigo_postal,
             r.estado,
-            r.municipio,
+            r.municipio
             FROM Casas AS c
             Join Regiones AS r
             ON c.id_region = r.codigo_postal

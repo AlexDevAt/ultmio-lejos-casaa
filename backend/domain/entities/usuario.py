@@ -15,8 +15,8 @@ class Usuario:
     codigo_postal: str= None,
     ciudad : str= None,
     contrasenia: str= None,
-    calificacionpromedio: float= None,
-    totalResenias: int= None,
+    calificacionpromedio: float= 0,
+    totalResenias: int= 0,
     municipio: str= None):
         self.curp = curp
         self.nombres = nombres

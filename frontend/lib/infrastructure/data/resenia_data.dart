@@ -10,7 +10,7 @@ class ReseniaData {
 
   Future<List<ReseniaModel>> obtenerReseniasCasa(dynamic idCasa) async {
     try {
-      final res = await dio.get(apiConfigResenia.obtenerReseniasCasa(idCasa));
+      final res = await dio.get(ApiConfigResenia.obtenerReseniasCasa(idCasa));
       final List data = res.data;
       return data.map((e) => ReseniaModel.fromJson(e)).toList();
     } on DioException catch (e) {

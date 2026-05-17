@@ -4,6 +4,7 @@ import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.d
 import 'package:lejos_de_casa_front/presentation/providers/notificacion/provider_notificacion.dart';
 import 'package:lejos_de_casa_front/presentation/providers/reserva/provider_reserva.dart';
 import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
+import 'package:lejos_de_casa_front/presentation/providers/webSocket/provider_web_socket.dart';
 
 class ProviderAuth extends ChangeNotifier {
   String? token;
@@ -17,7 +18,8 @@ class ProviderAuth extends ChangeNotifier {
     ProviderUsuarios usuariosProvider,
     ProviderReserva providerReserva,
     ProviderCasas providerCasa,
-    ProviderNotificacion providerNotificacion
+    ProviderNotificacion providerNotificacion,
+    ProviderWebSocket providerWebSocket,
   ) async {
     token = await authService.login(correo.trim(), password);
     logueado = true;
@@ -26,7 +28,10 @@ class ProviderAuth extends ChangeNotifier {
       usuariosProvider.usuarioActual!.reservas!,
     );
     await providerCasa.iniciarCasasHome();
-    await providerNotificacion.obtenerNotificaciones();
+    await providerNotificacion.obtenerNotificaciones(
+      usuariosProvider.usuarioActual!.curp,
+    );
+    await providerWebSocket.conectar(usuariosProvider.usuarioActual!.curp,);
 
     notifyListeners();
   }

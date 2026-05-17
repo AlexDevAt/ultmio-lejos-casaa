@@ -10,7 +10,6 @@ class AuthJwt:
         return token
     @staticmethod
     def validarToken(credenciales: HTTPAuthorizationCredentials = Depends(security_scheme)):
-        print(credenciales)
         token = credenciales.credentials
         payload = jwt.decode(token,SECRETKET,algorithms=['HS256'])
         return payload

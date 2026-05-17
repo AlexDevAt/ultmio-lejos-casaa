@@ -81,15 +81,17 @@ class RepoUsuario:
         conx.close()
         cursor.close()
         return usuario
-        
-        
     
     def crearUsuario(self,usuario: Usuario):
         conx : mysql.connector.MySQLConnection = self.conectarDB()
         cursor = conx.cursor()
-        
+        print(usuario.municipio)
         insert = """
-        INSERT INTO Usuarios(curp, nombres, apellidos,correo,telefono,rol,fecha_registro,calle,num_interior,codigo_postal,ciudad,municipio,contrasenia)
+        INSERT INTO Usuarios(
+            curp, nombres, apellidos,correo,
+            telefono,rol,fecha_registro,
+            calle,num_interior,
+            codigo_postal,ciudad,municipio,contrasenia)
         VALUES(%s,%s,%s,%s,%s,%s,NOW(),%s,%s,%s,%s,%s,%s)
         """
         try:
@@ -108,7 +110,6 @@ class RepoUsuario:
             usuario.contrasenia
             ))
             conx.commit()
-            conx.close()
             return usuario
         except Exception as e:
             conx.rollback()

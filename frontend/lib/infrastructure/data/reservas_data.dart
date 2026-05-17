@@ -22,7 +22,7 @@ class ReservasData {
 
   Future<ReservaModel> reservarCasa(int idCasa, String idComprador) async {
     final Map<String, dynamic> body = {
-      "id_reserva":0,
+      "id_reserva":-1,
       "fecha_inicio": "2026-05-15T21:42:58.770Z",
       "fecha_fin": "2026-05-15T21:42:58.771Z",
       "estado": "Activo",

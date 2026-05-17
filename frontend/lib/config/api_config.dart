@@ -1,5 +1,5 @@
 class ApiConfigUsers {
-  static String baseUrl = "http://10.0.2.2:8000";
+  static String baseUrl = "http://127.0.0.1:8000";
   static String prefix = 'usuarios';
   //baseUrl = "http://192.168.1.68:8000" cuando use telefono
   // static String baseUrl = 'http://10.0.2.2:8000'; CUANDO USE EMULADOR
@@ -12,25 +12,25 @@ class ApiConfigUsers {
 }
 
 class ApiConfigNotificaciones {
-  static String baseUrl = "http://10.0.2.2:8000";
+  static String baseUrl = "http://127.0.0.1:8000";
   static String prefix = 'notificacion';
-  static String obtenerNotificaciones() => '$baseUrl/$prefix';
+  static String obtenerNotificaciones(String curp) => '$baseUrl/$prefix/$curp';
 }
 
 class ApiConfigAuth {
-  static String baseUrl = "http://10.0.2.2:8000";
+  static String baseUrl = "http://127.0.0.1:8000";
   static String prefix = 'auth';
   static String iniciarSesion() => "$baseUrl/$prefix/login";
 }
 
-class apiConfigResenia {
-  static String baseUrl = "http://10.0.2.2:8000";
+class ApiConfigResenia {
+  static String baseUrl = "http://127.0.0.1:8000";
   static String prefix = 'resenias';
   static String obtenerReseniasCasa(dynamic id) => "$baseUrl/$prefix/$id";
 }
 
 class ApiConfigReservas {
-  static String baseUrl = "http://10.0.2.2:8000";
+  static String baseUrl = "http://127.0.0.1:8000";
   static String prefix = 'reservas';
   static String obtenerReservas(String curp) => '$baseUrl/$prefix/$curp';
   static String crearReserva(int idCasa, String curp) =>
@@ -38,7 +38,7 @@ class ApiConfigReservas {
 }
 
 class ApiConfigCasas {
-  static String baseUrl = "http://10.0.2.2:8000";
+  static String baseUrl = "http://127.0.0.1:8000";
   static String prefix = 'casas';
   //baseUrl = "http://192.168.1.68:8000" cuando use telefono
   // static String baseUrl = 'http://10.0.2.2:8000'; CUANDO USE EMULADOR

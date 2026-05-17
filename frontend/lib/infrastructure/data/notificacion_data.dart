@@ -8,10 +8,10 @@ class NotificacionData {
 
   NotificacionData(DioClient diocliente) : dio = diocliente.dio;
 
-  Future<List<NotificacionModel>> obtenerNotificacionesLeidas() async {
+  Future<List<NotificacionModel>> obtenerNotificacionesLeidas(String curp) async {
     try {
       final res = await dio.get(
-        ApiConfigNotificaciones.obtenerNotificaciones(),
+        ApiConfigNotificaciones.obtenerNotificaciones(curp),
       );
       final List data = res.data;
       if (data.isEmpty) return [];

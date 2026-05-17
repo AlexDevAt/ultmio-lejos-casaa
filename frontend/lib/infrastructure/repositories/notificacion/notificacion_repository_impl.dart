@@ -7,8 +7,8 @@ class NotificacionRepositoryImpl extends NotificacionRepository {
   NotificacionRepositoryImpl(this.dataSource);
 
   @override
-  Future<List<NotificacionEnty>> obtenerNotificaciones() async {
-    final models = await dataSource.obtenerNotificacionesLeidas();
+  Future<List<NotificacionEnty>> obtenerNotificaciones(String curp) async {
+    final models = await dataSource.obtenerNotificacionesLeidas(curp);
     return models.map((notiModel) => notiModel.toEntity()).toList();
   }
 }

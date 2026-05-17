@@ -89,7 +89,6 @@ class CasaService:
         data = []
        
         for casa in casas:
-            print(casa)
             propietario = PropietarioCasaBasico(
                 nombres=casa['nombres'],
                 apellidos=casa['apellidos'],

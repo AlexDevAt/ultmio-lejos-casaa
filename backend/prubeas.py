@@ -48,10 +48,10 @@ from schemas.resenia.reseniaDTO import ReseniaOut
 # service.crearUsuario(usuario)
 
 
-router = APIRouter()
-repo = RepoCasa()
-service = CasaService(repo)
-service.obtenerCasas(True,'','populares',3, limitActivo=True)
+# router = APIRouter()
+# repo = RepoCasa()
+# service = CasaService(repo)
+# service.obtenerCasas(True,'','populares',3, limitActivo=True)
 
 # repoUsuario = RepoUsuario()
 # serviceUsuario = UsuarioService(repoUsuario)
@@ -91,3 +91,10 @@ service.obtenerCasas(True,'','populares',3, limitActivo=True)
 # repo = ReseniaRepository()
 # service = ReseniaService(repo)
 # re = service.obtenerResenias(1)
+
+
+from repository.notificacion_repository import NotificacionRepository
+from services.notificacion.notificacionService import NotificacionService
+repo = NotificacionRepository()
+service = NotificacionService(repo)
+service.obtenerNotificacionesNoLeidas()

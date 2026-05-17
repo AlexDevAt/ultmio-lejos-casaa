@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from routes import usuarioRouter
 from routes import casaRouter
 from routes import authRouter
@@ -7,7 +6,10 @@ from routes import reservasRouter
 from routes import reseniaRouter
 from routes import webSocketPrueba
 from routes import notificacionRouter
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
+
+
 
 
 app.add_middleware(

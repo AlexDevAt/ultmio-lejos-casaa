@@ -10,10 +10,10 @@ class ProviderNotificacion extends ChangeNotifier {
   bool isLoading = false;
   List<NotificacionEnty> notificacionesActuales = [];
 
-  Future<void> obtenerNotificaciones() async {
+  Future<void> obtenerNotificaciones(String curp) async {
     try {
       isLoading = true;
-      final notificaciones = await service.obtenerNotificaciones();
+      final notificaciones = await service.obtenerNotificaciones(curp);
       _agregarNotificaciones(notificaciones);
     } catch (e) {
       print(e);

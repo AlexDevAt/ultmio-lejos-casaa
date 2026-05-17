@@ -1,11 +1,8 @@
-
-from repository.resenia_repository import ReseniaRepository
-from services.resenia.reseniaServicio import ReseniaService
 from schemas.resenia.reseniaDTO import ReseniaOut
 from fastapi import APIRouter, HTTPException,Body
+from providers import reseniaService as service
 router = APIRouter()
-repo = ReseniaRepository()
-service = ReseniaService(repo)
+
 
 
 @router.get("/{dato}",response_model=list[ReseniaOut],status_code=200)

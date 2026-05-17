@@ -10,7 +10,6 @@ class ReseniaService:
             id_casa = int(dato)
             resenias =  self.repo.obtenerReseniaCasa(id_casa)
         except (ValueError, TypeError):
-        # Si falla la conversión, asumimos que es CURP (String)
             resenias =  self.repo.obtenerReseniaUsuario(dato)
         if resenias is None:
             return None
