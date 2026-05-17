@@ -12,11 +12,15 @@ import 'package:lejos_de_casa_front/presentation/screen/test/test_web_socket.dar
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
-final channel = IOWebSocketChannel.connect('ws://127.0.0.1:8000/ws/notificacion/GAMM850202MDFDEF02');
+final channel = IOWebSocketChannel.connect(
+  'ws://127.0.0.1:8000/ws/notificacion/GAMM850202MDFDEF02',
+);
+
 class GlobalContext {
-  static final GlobalKey<ScaffoldMessengerState> messengerKey = 
+  static final GlobalKey<ScaffoldMessengerState> messengerKey =
       GlobalKey<ScaffoldMessengerState>();
 }
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -36,11 +40,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ProviderReserva(Di.createReservaService()),
         ),
-        ChangeNotifierProvider(create: (context) => ProviderResenia(Di.createReseniaService()),),
-        ChangeNotifierProvider(create: (context) => ProviderNotificacion(Di.createNotificacionService()),
+        ChangeNotifierProvider(
+          create: (context) => ProviderResenia(Di.createReseniaService()),
         ),
-        ChangeNotifierProvider(create:(_) => ProviderWebSocket(),)
-
+        ChangeNotifierProvider(
+          create: (context) =>
+              ProviderNotificacion(Di.createNotificacionService()),
+        ),
+        ChangeNotifierProxyProvider<ProviderNotificacion, ProviderWebSocket>(
+          create: (context) => ProviderWebSocket(),
+          update: (context, notifier, previous) {
+            final providerActual = previous ?? ProviderWebSocket();
+            providerActual.actualizarProviderNotificacion(notifier);
+            return providerActual;
+          },
+        ),
       ],
       child: MaterialApp.router(
         scaffoldMessengerKey: GlobalContext.messengerKey,

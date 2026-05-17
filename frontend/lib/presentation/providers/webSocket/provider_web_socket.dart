@@ -1,12 +1,20 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lejos_de_casa_front/infrastructure/models/notificacion/notificacion_model.dart';
+
 import 'package:lejos_de_casa_front/main.dart';
+import 'package:lejos_de_casa_front/presentation/providers/notificacion/provider_notificacion.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ProviderWebSocket extends ChangeNotifier {
+  ProviderNotificacion? providerNotificacion;
   WebSocketChannel? channel;
   bool isConnect = false;
+
+  void actualizarProviderNotificacion(ProviderNotificacion providerNoti) {
+    providerNotificacion = providerNoti;
+  }
 
   Future<void> conectar(String curp) async {
     String urlWebSocket = 'ws://127.0.0.1:8000/ws/notificacion/$curp';
@@ -18,15 +26,29 @@ class ProviderWebSocket extends ChangeNotifier {
         mensajeRecibido(event);
         notifyListeners();
       });
-    } catch (e) {}
+    } catch (e) {
+      print('OCURRIO UN ERROR EN LA CONEXION DEL WEB SOCKET $e');
+      GlobalContext.messengerKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text(
+            'ERROR',
+            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
-  void mensajeRecibido(dynamic event) {
-    // final res = Empty.fromJson(event);
+  void mensajeRecibido(String event) {
+    Map<String, dynamic> eventoToJson = jsonDecode(event);
+    final res = Empty.fromJson(eventoToJson);
+    providerNotificacion!.agregarNotificacion(res.data.toEntity());
+
     GlobalContext.messengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(
-          'Nueva notificacion',
+          res.data.mensaje,
           style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
         ),
         backgroundColor: Colors.green.shade200,
@@ -34,9 +56,9 @@ class ProviderWebSocket extends ChangeNotifier {
     );
   }
 
-  void enviarNotificacion(data) {
-    channel!.sink.add(data);
-  }
+  // void enviarNotificacion(data) {
+  //   channel!.sink.add(data);
+  // }
 }
 
 // To parse this JSON data, do
@@ -45,14 +67,16 @@ class ProviderWebSocket extends ChangeNotifier {
 
 class Empty {
   String event;
-  Data data;
+  NotificacionModel data;
 
   Empty({required this.event, required this.data});
 
-  factory Empty.fromJson(Map<String, dynamic> json) =>
-      Empty(event: json["event"], data: Data.fromJson(json["data"]));
+  factory Empty.fromJson(Map<String, dynamic> json) => Empty(
+    event: json["event"],
+    data: NotificacionModel.fromJson(json["data"]),
+  );
 
-  Map<String, dynamic> toJson() => {"event": event, "data": data.toJson()};
+  // Map<String, dynamic> toJson() => {"event": event, "data": Notificacino.toJson()};
 }
 
 class Data {

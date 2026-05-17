@@ -23,6 +23,10 @@ class ProviderNotificacion extends ChangeNotifier {
     }
   }
 
+  void agregarNotificacion(NotificacionEnty noti) {
+    notificacionesActuales.add(noti);
+  }
+
   void _agregarNotificaciones(List notis) {
     for (NotificacionEnty noti in notis) {
       notificacionesActuales.add(noti);
