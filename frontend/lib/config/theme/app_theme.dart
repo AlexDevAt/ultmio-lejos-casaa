@@ -4,10 +4,11 @@ const listColors = <Color> [
   Colors.blue
 ];
 
+
 class AppTheme {
 
   ThemeData getTheme(){
-    return ThemeData(fontFamily:'Inter');
+    return ThemeData(fontFamily:'Inter',);
   }
 
 }

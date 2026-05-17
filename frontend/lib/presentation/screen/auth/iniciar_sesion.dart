@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lejos_de_casa_front/helpers/formatos/form_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/providers/auth/provider_auth.dart';
 import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
+import 'package:lejos_de_casa_front/presentation/providers/notificacion/provider_notificacion.dart';
 import 'package:lejos_de_casa_front/presentation/providers/reserva/provider_reserva.dart';
 import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
@@ -122,7 +123,8 @@ class _IniciarSesionState extends State<IniciarSesion> {
                                 _passCtrl.value.text,
                                 context.read<ProviderUsuarios>(),
                                 context.read<ProviderReserva>(),
-                                context.read<ProviderCasas>()
+                                context.read<ProviderCasas>(),
+                                context.read<ProviderNotificacion>()
                               );
                             }
                           })),

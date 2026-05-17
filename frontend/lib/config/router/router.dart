@@ -5,6 +5,7 @@ import 'package:lejos_de_casa_front/domain/entities/propietario.dart';
 import 'package:lejos_de_casa_front/presentation/providers/auth/provider_auth.dart';
 import 'package:lejos_de_casa_front/presentation/screen/casas/info_casa.dart';
 import 'package:lejos_de_casa_front/presentation/screen/home/home_screen.dart';
+import 'package:lejos_de_casa_front/presentation/screen/notificacion/notificaciones_screen.dart';
 import 'package:lejos_de_casa_front/presentation/screen/usuarios/propietario_info.dart';
 import 'package:lejos_de_casa_front/presentation/screen/usuarios/register_usuario.dart';
 import 'package:lejos_de_casa_front/presentation/screens.dart';
@@ -60,6 +61,11 @@ final appRouter = GoRouter(
           path: '/perfilUsuario',
           name: PerfilUsuario.name,
           builder: (context, state) => const PerfilUsuario(),
+        ),
+        GoRoute(
+          path: '/notificaciones',
+          name: NotificacionesScreen.name,
+          builder: (context, state) => const NotificacionesScreen(),
         ),
         GoRoute(
           path: '/reservas',

@@ -6,6 +6,7 @@ from routes import authRouter
 from routes import reservasRouter
 from routes import reseniaRouter
 from routes import webSocketPrueba
+from routes import notificacionRouter
 app = FastAPI()
 
 
@@ -17,6 +18,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+
+app.include_router(
+    notificacionRouter.router,
+    prefix="/notificacion",
+    tags=['notificacion']
+)
 
 app.include_router(
     usuarioRouter.router,
@@ -39,8 +47,8 @@ app.include_router(
 
 app.include_router(
     webSocketPrueba.router,
-    prefix="/wb",
-    tags=['wb']
+    prefix="/ws",
+    tags=['ws']
 )
 
 

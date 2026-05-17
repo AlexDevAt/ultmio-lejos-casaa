@@ -3,6 +3,7 @@ import 'package:lejos_de_casa_front/config/app_theme.dart';
 import 'package:lejos_de_casa_front/config/di.dart';
 import 'package:lejos_de_casa_front/config/router/router.dart';
 import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
+import 'package:lejos_de_casa_front/presentation/providers/notificacion/provider_notificacion.dart';
 import 'package:lejos_de_casa_front/presentation/providers/resenia/provider_resenia.dart';
 import 'package:lejos_de_casa_front/presentation/providers/reserva/provider_reserva.dart';
 import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ProviderReserva(Di.createReservaService()),
         ),
-        ChangeNotifierProvider(create: (context) => ProviderResenia(Di.createReseniaService()),)
+        ChangeNotifierProvider(create: (context) => ProviderResenia(Di.createReseniaService()),),
+        ChangeNotifierProvider(create: (context) => ProviderNotificacion(Di.createNotificacionService()),)
       ],
       child: MaterialApp.router(
         routerConfig: appRouter,

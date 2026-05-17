@@ -1,0 +1,13 @@
+import 'package:lejos_de_casa_front/domain/entities/notificacion.dart';
+import 'package:lejos_de_casa_front/domain/repositories/notificacion_repository.dart';
+
+class NotificacionService {
+  final NotificacionRepository repo;
+  NotificacionService(this.repo);
+
+  Future<List<NotificacionEnty>> obtenerNotificaciones() async {
+    final notis = await repo.obtenerNotificaciones();
+    if (notis.isEmpty) return [];
+    return notis;
+  }
+}

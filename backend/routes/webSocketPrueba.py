@@ -9,6 +9,8 @@ async def websocket_endpoint(webSocket: WebSocket,id : str):
     await manager.conncet(id,webSocket)
     try:
         while True:
-            data = await webSocket.receive_json()
+            data = await webSocket.receive_text()
+            await manager.enviarNotificacion(data,webSocket)
+            await manager.broadcast(f'El usario dice {data} ',)
     except WebSocketDisconnect:
-        manager.disconnect(id)
+        manager.disconnect(id,webSocket)

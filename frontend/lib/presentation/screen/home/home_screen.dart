@@ -4,6 +4,7 @@ import 'package:lejos_de_casa_front/domain/entities/usuario.dart';
 import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
 import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/barrra_busqueda.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/card_filtro.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/imagen_casa.dart';
 import 'package:provider/provider.dart';
 
@@ -192,46 +193,7 @@ class TipoDeCasasVerMas extends StatelessWidget {
   }
 }
 
-class CardFiltro extends StatelessWidget {
-  const CardFiltro({super.key, required this.textoSup, required this.textoinF});
-  final String textoSup;
-  final String textoinF;
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        height: 70,
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
-          border: Border.all(color: Colors.grey.shade600),
-        ),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                textoSup,
-                style: TextStyle(
-                  color: Color(0xFF49454F),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Text(
-                textoinF,
-                style: TextStyle(
-                  color: Color(0xFF49454F),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class CardCasa extends StatelessWidget {
   const CardCasa({super.key, required this.casa});

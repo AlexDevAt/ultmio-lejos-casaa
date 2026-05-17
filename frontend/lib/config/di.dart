@@ -1,20 +1,24 @@
 import 'package:lejos_de_casa_front/app/services/auth_service.dart';
 import 'package:lejos_de_casa_front/app/services/casa_service.dart';
+import 'package:lejos_de_casa_front/app/services/notificacion_service.dart';
 import 'package:lejos_de_casa_front/app/services/resenia_service.dart';
 import 'package:lejos_de_casa_front/app/services/reservas_service.dart';
 import 'package:lejos_de_casa_front/app/services/usuario_service.dart';
 import 'package:lejos_de_casa_front/config/dio_cliente.dart';
 import 'package:lejos_de_casa_front/domain/repositories/casa_repository.dart';
+import 'package:lejos_de_casa_front/domain/repositories/notificacion_repository.dart';
 import 'package:lejos_de_casa_front/domain/repositories/resenia_repository.dart';
 import 'package:lejos_de_casa_front/domain/repositories/reservas_repository.dart';
 import 'package:lejos_de_casa_front/domain/repositories/usuario_repository.dart';
 import 'package:lejos_de_casa_front/infrastructure/data/auth_data.dart';
 import 'package:lejos_de_casa_front/infrastructure/data/casa_data.dart';
+import 'package:lejos_de_casa_front/infrastructure/data/notificacion_data.dart';
 import 'package:lejos_de_casa_front/infrastructure/data/resenia_data.dart';
 import 'package:lejos_de_casa_front/infrastructure/data/reservas_data.dart';
 import 'package:lejos_de_casa_front/infrastructure/data/usuario_data.dart';
 import 'package:lejos_de_casa_front/infrastructure/repositories/auth/auth_repository_impl.dart';
 import 'package:lejos_de_casa_front/infrastructure/repositories/casa/casa_repository_impl.dart';
+import 'package:lejos_de_casa_front/infrastructure/repositories/notificacion/notificacion_repository_impl.dart';
 import 'package:lejos_de_casa_front/infrastructure/repositories/resenia/resenia_repository_impl.dart';
 import 'package:lejos_de_casa_front/infrastructure/repositories/reservas/reservas_repository_impl.dart';
 import 'package:lejos_de_casa_front/infrastructure/repositories/usuario/usuario_repository_impl.dart';
@@ -25,6 +29,15 @@ class Di {
     UsuarioData usuarioData = UsuarioData(dioClient);
     UsuarioRepository usuarioRepository = UsuarioRepositoryImpl(usuarioData);
     return UsuarioService(usuarioRepository);
+  }
+
+  static NotificacionService createNotificacionService() {
+    DioClient dioClient = DioClient();
+    NotificacionData notificacionData = NotificacionData(dioClient);
+    NotificacionRepository notificacionRepository = NotificacionRepositoryImpl(
+      notificacionData,
+    );
+    return NotificacionService(notificacionRepository);
   }
 
   static ReseniaService createReseniaService() {

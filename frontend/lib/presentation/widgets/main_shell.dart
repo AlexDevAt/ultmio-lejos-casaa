@@ -9,7 +9,7 @@ class MainShell extends StatelessWidget {
   int _obtenerIndiceAct(String screen) {
     if (screen.startsWith('/busquedaScreen')) return 1;
     if (screen.startsWith('/home')) return 2;
-    if (screen.startsWith('/reservas')) return 3;
+    if (screen.startsWith('/notificaciones')) return 3;
     if (screen.startsWith('/cuenta')) return 4;
     return 0;
   }
@@ -35,7 +35,7 @@ class MainShell extends StatelessWidget {
               context.go('/home');
               break;
             case 3:
-              context.go('/reservas');
+              context.go('/notificaciones');
               break;
             case 4:
               context.go('/cuenta');
