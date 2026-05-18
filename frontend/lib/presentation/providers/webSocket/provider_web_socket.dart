@@ -43,7 +43,7 @@ class ProviderWebSocket extends ChangeNotifier {
   void mensajeRecibido(String event) {
     Map<String, dynamic> eventoToJson = jsonDecode(event);
     final res = Empty.fromJson(eventoToJson);
-    providerNotificacion!.agregarNotificacion(res.data.toEntity());
+    providerNotificacion!.agregarNotificacion(res.data.toEntity() );
 
     GlobalContext.messengerKey.currentState?.showSnackBar(
       SnackBar(

@@ -9,6 +9,7 @@ import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usu
 import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/foto_perfil.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/icono_custom.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/mapa_ubi.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/resenia_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -146,7 +147,7 @@ class _viewInfo extends StatelessWidget {
           SizedBox(height: 30),
           _labelSeparador(texto: 'Mapa de la zona'),
           SizedBox(height: 20),
-          _MapaUbi(),
+          MapaUbi(mapaUrl: 'assets/images/mapa/mapa_ejemplo.png', size: MediaQuery.of(context).size,),
           SizedBox(height: 30),
           Center(child: PropietarioCasa(propietario: casa.propietario!)),
           SizedBox(height: 30),
@@ -449,19 +450,4 @@ class PropietarioCasa extends StatelessWidget {
   }
 }
 
-class _MapaUbi extends StatelessWidget {
-  const _MapaUbi({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return ClipRRect(
-      borderRadius: BorderRadiusGeometry.circular(8),
-      child: Image.asset(
-        height: size.height * .30,
-        fit: BoxFit.cover,
-        'assets/images/mapa/mapa_ejemplo.png',
-      ),
-    );
-  }
-}

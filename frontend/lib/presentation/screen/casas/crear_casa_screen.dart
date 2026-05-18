@@ -1,257 +1,402 @@
 import 'package:flutter/material.dart';
-import 'package:lejos_de_casa_front/domain/entities/casa.dart';
-import 'package:lejos_de_casa_front/domain/entities/propietario.dart';
-import 'package:lejos_de_casa_front/domain/entities/region.dart';
-import 'package:lejos_de_casa_front/domain/entities/usuario.dart';
-import 'package:lejos_de_casa_front/infrastructure/models/casa/casa_model.dart';
-import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
-import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
-import 'package:provider/provider.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/btn_form.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/card_opcion.dart';
+import 'package:lejos_de_casa_front/presentation/widgets/mapa_ubi.dart';
+
+final boxDecoration = BoxDecoration(
+  color: Colors.white,
+  borderRadius: BorderRadius.circular(20),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.grey.shade300.withValues(),
+      blurRadius: 2,
+      spreadRadius: 1,
+      offset: Offset(0, 1),
+    ),
+  ],
+);
 
 class CrearCasa extends StatelessWidget {
   const CrearCasa({super.key});
-  static String name = 'crear_casa_screen';
+  static String name = 'registrar_casa';
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 20),
-              Text('Registrar Casa', style: TextStyle(fontSize: 27)),
-              FormularioCasa(),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Registrar casa'),
+            Text(
+              'Completa la informacion de la casa',
+              style: TextStyle(fontSize: 15),
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Form(child: _CrearCasaView()),
         ),
       ),
     );
   }
 }
 
-class FormularioCasa extends StatefulWidget {
-  const FormularioCasa({super.key});
-
-  @override
-  State<FormularioCasa> createState() => _FormularioCasaState();
-}
-
-class _FormularioCasaState extends State<FormularioCasa> {
-  late final _formKey = GlobalKey<FormState>();
-  late final tituloController;
-  late final tipoController;
-  late final cupoController;
-  late final cuartosController;
-  late final calleController;
-  late final numInteriorController;
-  late final codigoPostalController;
-  late final estadoController;
-  late final municipioController;
-  late final precioController;
-  late final Usuario providerUsuarioActual;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    providerUsuarioActual = context.read<ProviderUsuarios>().usuarioActual!;
-    tituloController = TextEditingController();
-    tipoController = TextEditingController();
-    cupoController = TextEditingController();
-    cuartosController = TextEditingController();
-    calleController = TextEditingController();
-    numInteriorController = TextEditingController();
-    codigoPostalController = TextEditingController();
-    estadoController = TextEditingController();
-    municipioController = TextEditingController();
-    precioController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    tituloController.dispose();
-    tipoController.dispose();
-    cupoController.dispose();
-    cuartosController.dispose();
-    calleController.dispose();
-    numInteriorController.dispose();
-    codigoPostalController.dispose();
-    precioController.dispose();
-    super.dispose();
-  }
-
-  String? validarTexto(String? value, String campo) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Ingresa $campo';
-    }
-    return null;
-  }
-
-  String? validarEntero(String? value, String campo) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Ingresa $campo';
-    }
-    if (int.tryParse(value.trim()) == null) {
-      return '$campo debe ser numero';
-    }
-    return null;
-  }
-
-  String? validarDecimal(String? value, String campo) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Ingresa $campo';
-    }
-    if (double.tryParse(value.trim()) == null) {
-      return '$campo debe ser valido';
-    }
-    return null;
-  }
-
-  TipoCasa mapearTipoCasa(String tipo) {
-    final t = tipo.trim().toLowerCase();
-
-    if (t == 'una planta' || t == 'un piso' || t == 'unaplanta') {
-      return TipoCasa.unaPlanta;
-    }
-
-    if (t == 'dos plantas' || t == 'dos pisos' || t == 'dosplantas') {
-      return TipoCasa.dosPlantas;
-    }
-
-    return TipoCasa.otroTipo;
-  }
+class _CrearCasaView extends StatelessWidget {
+  const _CrearCasaView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final providerCasa = context.watch<ProviderCasas>();
-    return Form(
-      key: _formKey,
-      child: Column(
+    return Column(
+      children: [
+        SizedBox(height: 18),
+        CardFotoCasa(),
+        SizedBox(height: 15),
+        TipoDeInfo(tipo: 'Informacion general', func: () => ()),
+        SizedBox(height: 15),
+        CardInfoGeneral(),
+        SizedBox(height: 15),
+        TipoDeInfo(tipo: 'Ubicacion', func: () => ()),
+        SizedBox(height: 15),
+        CardUbicacion(),
+        SizedBox(height: 10),
+        BtnFormulario(text: 'Crear casa', func: () => (), width: 0, height: 0)
+
+      ],
+    );
+  }
+}
+
+class TipoDeInfo extends StatelessWidget {
+  const TipoDeInfo({super.key, required this.tipo, required this.func});
+
+  final String tipo;
+  final VoidCallback func;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          Icons.edit_document,
+          color: Colors.lightBlueAccent.shade200,
+          size: 22,
+        ),
+        SizedBox(width: 10),
+        Text(tipo, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+      ],
+    );
+  }
+}
+
+class CardUbicacion extends StatelessWidget {
+  const CardUbicacion({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: boxDecoration,
+      child: Row(
         children: [
-          _CampoTexto(
-            controller: tituloController,
-            campo: 'Titulo',
-            prefixIcon: Icons.home,
-            validacion: (value) => validarTexto(value, 'el titulo'),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CardOption(),
+                CardOption(),
+                CardOption(),
+                CardOption(),
+              ],
+            ),
           ),
-          _CampoTexto(
-            controller: tipoController,
-            campo: 'Tipo de casa',
-            prefixIcon: Icons.house,
-            validacion: (value) => validarTexto(value, 'el tipo'),
+          Expanded(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MapaUbi(
+                    mapaUrl: 'assets/images/mapa/image.png',
+                    size: MediaQuery.of(context).size,
+                  ),
+                ),
+              ],
+            ),
           ),
-          _CampoTexto(
-            controller: cupoController,
-            campo: 'Cupo',
-            prefixIcon: Icons.people,
-            keyboardType: TextInputType.number,
-            validacion: (value) => validarEntero(value, 'el cupo'),
-          ),
-          _CampoTexto(
-            controller: cuartosController,
-            campo: 'Cuartos',
-            prefixIcon: Icons.bed,
-            keyboardType: TextInputType.number,
-            validacion: (value) => validarEntero(value, 'los cuartos'),
-          ),
-          _CampoTexto(
-            controller: calleController,
-            campo: 'Calle',
-            prefixIcon: Icons.map,
-            validacion: (value) => validarTexto(value, 'la calle'),
-          ),
-          _CampoTexto(
-            controller: numInteriorController,
-            campo: 'Numero interior',
-            prefixIcon: Icons.numbers,
-            keyboardType: TextInputType.number,
-            validacion: (value) => validarEntero(value, 'el numero interior'),
-          ),
-          _CampoTexto(
-            controller: codigoPostalController,
-            campo: 'Codigo postal',
-            prefixIcon: Icons.location_on,
-            validacion: (value) => validarTexto(value, 'el codigo postal'),
-          ),
-          _CampoTexto(
-            controller: estadoController,
-            campo: 'Estado',
-            prefixIcon: Icons.location_on,
-            validacion: (value) => validarTexto(value, 'Estado '),
-          ),
-          _CampoTexto(
-            controller: municipioController,
-            campo: 'Municipio',
-            prefixIcon: Icons.location_on,
-            validacion: (value) => validarTexto(value, 'Municipio'),
-          ),
-          _CampoTexto(
-            controller: precioController,
-            campo: 'Precio',
-            prefixIcon: Icons.attach_money,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            validacion: (value) => validarDecimal(value, 'el precio'),
-          ),
-          const SizedBox(height: 12),
-          ElevatedButton(
-            onPressed: () {
-              if (!_formKey.currentState!.validate()) return;
-              final casa = Casa(
-                id: 0,
-                titulo: tituloController.text.trim(),
-                cupo: int.parse(cupoController.text.trim()),
-                tipo: tipoCasaFromString(tipoController.text),
-                imagen: 'img1.jpg',
-                cuartos: int.parse(cuartosController.text.trim()),
-                calle: calleController.text.trim(),
-                numInterior: int.parse(numInteriorController.text.trim()),
-                precio: double.parse(precioController.text.trim()),
-                idPropietario: providerUsuarioActual.curp,
-                idRegion:  codigoPostalController.text,
-              );
-              providerCasa.crearCasa(casa);
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('Casa registrada')));
-            },
-            child: const Text('Registrar'),
-          ),
-          const SizedBox(height: 20),
         ],
       ),
     );
   }
 }
 
-class _CampoTexto extends StatelessWidget {
-  const _CampoTexto({
-    required this.controller,
-    required this.campo,
-    required this.prefixIcon,
-    required this.validacion,
-    this.keyboardType,
-  });
-
-  final TextEditingController controller;
-  final String campo;
-  final IconData prefixIcon;
-  final FormFieldValidator<String> validacion;
-  final TextInputType? keyboardType;
+class CardOption extends StatelessWidget {
+  const CardOption({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(23)),
-          prefixIcon: Icon(prefixIcon),
-          labelText: campo,
+      padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Calle', style: TextStyle(fontWeight: FontWeight.w600)),
+          SizedBox(height: 10),
+          TextFormField(
+            decoration: InputDecoration(
+              hint: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: Text('ej. Av Central', style: TextStyle(fontSize: 14)),
+              ),
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(vertical: 6),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CardInfoGeneral extends StatelessWidget {
+  const CardInfoGeneral({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(10),
+      decoration: boxDecoration,
+      child: Column(
+        crossAxisAlignment: .start,
+        children: [
+          Text(
+            'Tipo de casa',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
+          SizedBox(height: 10),
+
+          DropdownButtonFormField<String>(
+            hint: Text(
+              'Selecciona tipo de casa',
+              style: TextStyle(fontSize: 10),
+            ),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(0),
+              border: OutlineInputBorder(
+                gapPadding: 12,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+
+            items: ['Una planta', 'Dos plantas', 'Otro tipo']
+                .map(
+                  (option) => DropdownMenuItem(
+                    value: option,
+                    child: Text(option, style: TextStyle(fontSize: 15)),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) => (),
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(child: InputQty(titleTipo: 'Cupo')),
+              SizedBox(width: 20),
+              Expanded(child: InputQty(titleTipo: 'Cuartos')),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class InputQty extends StatefulWidget {
+  const InputQty({super.key, required this.titleTipo});
+  final String titleTipo;
+
+  @override
+  State<InputQty> createState() => _InputQtyState();
+}
+
+class _InputQtyState extends State<InputQty> {
+  int _cantidad = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(widget.titleTipo, style: TextStyle(fontSize: 13)),
+        Container(
+          height: 40, // Altura del control
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15), // Bordes redondeados
+            border: Border.all(
+              color: const Color(0xFFE2E8F0), // Borde gris claro suave
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            children: [
+              // Botón de menos (-)
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    if (_cantidad > 0) {
+                      // Evita números negativos
+                      setState(() => _cantidad--);
+                    }
+                  },
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.remove,
+                      color: Color(0xFF64748B),
+                      size: 17,
+                    ),
+                  ),
+                ),
+              ),
+
+              // Número central
+              Expanded(
+                child: Center(
+                  child: Text(
+                    '$_cantidad',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF0F172A),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Botón de más (+)
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    // Evita números negativos
+                    setState(() => _cantidad++);
+                  },
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(15),
+                    bottomRight: Radius.circular(15),
+                  ),
+                  child: const Center(
+                    child: Icon(Icons.add, color: Color(0xFF0F172A), size: 17),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        validator: validacion,
+      ],
+    );
+  }
+}
+
+class CardFotoCasa extends StatelessWidget {
+  const CardFotoCasa({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: boxDecoration,
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 13),
+            child: _BoxImage(),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
+                  Text(
+                    'Foto de la casa',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 17, 34, 85),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    'Sube una fotografiía de la fachada principal',
+                    style: TextStyle(
+                      color: Colors.black45,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  _buttonDetalles(),
+                  // _buttonDetalles()
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BoxImage extends StatelessWidget {
+  const _BoxImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      width: 120,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(Icons.home_outlined, size: 50, color: Colors.black38),
+    );
+  }
+}
+
+class _buttonDetalles extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: TextButton.icon(
+        // label: Text('Ver mas', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+        onPressed: () => (),
+        style: TextButton.styleFrom(
+          minimumSize: Size(0, 0),
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(9),
+          ),
+          backgroundColor: Color(0xFF0b1636),
+        ),
+        label: Text(
+          'Subir imagen',
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }

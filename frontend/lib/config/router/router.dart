@@ -13,18 +13,18 @@ import 'package:lejos_de_casa_front/presentation/widgets/main_shell.dart';
 
 final providerAuthRouter = ProviderAuth(Di.createAuthService());
 final appRouter = GoRouter(
-  refreshListenable: providerAuthRouter,
-  redirect: (context, state) {
-    if (!providerAuthRouter.logueado) {
-      return '/auth';
-    }
-    if (state.matchedLocation == '/auth') {
-      return '/home';
-    } else {
-      return null;
-    }
-  },
-  initialLocation: '/home',
+  // refreshListenable: providerAuthRouter,
+  // redirect: (context, state) {
+  //   if (!providerAuthRouter.logueado) {
+  //     return '/auth';
+  //   }
+  //   if (state.matchedLocation == '/auth') {
+  //     return '/home';
+  //   } else {
+  //     return null;
+  //   }
+  // },
+  initialLocation: '/registrar_casa',
 
   // initialLocation: '/register',
   routes: [
@@ -33,6 +33,13 @@ final appRouter = GoRouter(
       name: IniciarSesion.name,
       builder: (context, state) => const IniciarSesion(),
     ),
+     GoRoute(
+      path: '/registrar_casa',
+      name: CrearCasa.name,
+      builder: (context, state) => const CrearCasa(),
+    ),
+    
+
     GoRoute(
       path: '/register',
       name: RegisterUsuario.name,
@@ -88,11 +95,7 @@ final appRouter = GoRouter(
           name: CuentaScreen.name,
           builder: (context, state) => const CuentaScreen(),
         ),
-        GoRoute(
-          path: '/crearCasa',
-          name: CrearCasa.name,
-          builder: (context, state) => const CrearCasa(),
-        ),
+       
       ],
     ),
   ],
