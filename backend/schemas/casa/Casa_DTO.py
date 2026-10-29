@@ -28,6 +28,10 @@ class CasaOutPropietario(BaseModel):
     precio: float
     id_region: str
     region : RegionoOUT
+    id_propietario: str
+
+
+
 
 
 class CasaOut(BaseModel):

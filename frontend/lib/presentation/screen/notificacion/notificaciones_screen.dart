@@ -128,7 +128,7 @@ class CardNotificacion extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _EspacioIcon(),
+            // _EspacioIcon(),
             SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -138,20 +138,13 @@ class CardNotificacion extends StatelessWidget {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: notification.nombreEmisor,
+                          text: 'El usuario ${notification.nombreEmisor}',
                           style: TextStyle(
                             fontSize: 19,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        TextSpan(
-                          text: ' acepto tu reserva',
-                          style: TextStyle(
-                            fontSize: 19,
-                            color: Colors.green.shade700,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                        
                       ],
                     ),
                   ),

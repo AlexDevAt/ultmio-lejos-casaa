@@ -5,7 +5,7 @@ from schemas.reservas.reservaDTO import ReservaOUT
 import datetime
 
 class UsuarioCreate(BaseModel):
-    curp: str = Field(pattern=r'^[A-Z]{4}[0-9]{6}[A-Z]{6}[0-9]{2}$')
+    curp: str = Field(pattern=r'^[A-Z]{4}[0-9]{6}[A-Z]{7}[0-9]{1}$')
     nombres:  str = Field(min_length=2, max_length=255)
     apellidos : str = Field(min_length=2, max_length=255)
     correo : EmailStr

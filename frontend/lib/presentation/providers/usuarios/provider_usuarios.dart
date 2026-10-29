@@ -31,9 +31,14 @@ class ProviderUsuarios extends ChangeNotifier {
   }
 
   Future<void> crearUsuario(Usuario usuario) async {
-    final Usuario user = await usuarioService.crearUsuario(usuario);
-    usuarios.add(user);
-    notifyListeners();
+    error = null;
+    try {
+      final Usuario user = await usuarioService.crearUsuario(usuario);
+      usuarios.add(user);
+      notifyListeners();
+    } catch (e) {
+      error = e.toString();
+    }
   }
 
   Future<void> borrarUsuario(String curp) async {
@@ -49,6 +54,8 @@ class ProviderUsuarios extends ChangeNotifier {
         curp,
         data,
       );
+
+      
 
       final indice = usuarios.indexWhere((u) => u.curp == curp);
       if (indice != -1) {

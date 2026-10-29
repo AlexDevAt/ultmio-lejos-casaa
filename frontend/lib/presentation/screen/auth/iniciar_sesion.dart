@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lejos_de_casa_front/helpers/formatos/form_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/providers/auth/provider_auth.dart';
 import 'package:lejos_de_casa_front/presentation/providers/casa/provider_casas.dart';
@@ -70,7 +71,7 @@ class _IniciarSesionState extends State<IniciarSesion> {
                     padding: const EdgeInsets.only(bottom: 40),
                     child: _LogoImagen(),
                   ),
-                
+
                   Center(
                     child: Title(
                       color: Colors.black,
@@ -116,20 +117,47 @@ class _IniciarSesionState extends State<IniciarSesion> {
                           height: MediaQuery.of(context).size.height * .06,
                           width: double.infinity,
                           text: 'Continuar',
-                          func: () => (setState(() {
-                            continuar = true;
-                            if (_formKey.currentState!.validate()) {              
-                              providerAuth.login(
-                                _correoCtrl.value.text,
-                                _passCtrl.value.text,
+                          func: () async {
+                            // <-- Marcamos la función como asíncrona
+                            setState(() {
+                              continuar = true;
+                            });
+
+                            if (_formKey.currentState!.validate()) {
+                              // 1. Obtenemos la referencia al provider sin escuchar cambios continuos
+                              final authService = context.read<ProviderAuth>();
+
+                              // 2. Esperamos activamente a que termine la petición HTTP
+                               authService.login(
+                                _correoCtrl.text.trim(),
+                                _passCtrl.text,
                                 context.read<ProviderUsuarios>(),
                                 context.read<ProviderReserva>(),
                                 context.read<ProviderCasas>(),
                                 context.read<ProviderNotificacion>(),
-                                context.read<ProviderWebSocket>()
+                                context.read<ProviderWebSocket>(),
                               );
+
+                              // 3. Una vez desbloqueado el hilo, verificamos si el Widget sigue vivo en el árbol
+                              if (!context.mounted) return;
+
+                              // 4. Ahora sí, el estado del provider ya cambió con la respuesta del servidor
+                              if (authService.error != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      authService.error!,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.red.shade400,
+                                  ),
+                                );
+                              } 
                             }
-                          })),
+                          }, //TODO HACERLO YO
                         ),
                       ],
                     ),
@@ -143,7 +171,7 @@ class _IniciarSesionState extends State<IniciarSesion> {
                     height: MediaQuery.of(context).size.height * .06,
                     width: double.infinity,
                     text: 'Registrarse',
-                    func: () => (),
+                    func: () => context.push('/register'),
                   ),
                   _TerminosCondiciones(),
                 ],

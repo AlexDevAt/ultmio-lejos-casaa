@@ -28,3 +28,4 @@ notificacionService = NotificacionService(repoNoti,usuarioService)
 casaService = CasaService(repoCasa)
 reservaService = ReservasService(repoReserva,notificacionService,casaService,webSocket)
 
+reservaService.obtenerReservasCasa(1)

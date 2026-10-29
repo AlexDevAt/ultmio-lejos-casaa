@@ -13,7 +13,7 @@ class ItemNavBar {
 }
 
 const menuNavBar = <ItemNavBar>[
-  ItemNavBar(title: 'Proximamente', link: '/', iconData: Icons.people_alt_outlined),
+  ItemNavBar(title: 'Proximamente', link: '/crear_casa', iconData: Icons.people_alt_outlined),
   ItemNavBar(title: 'Busqueda', link: '/busquedaScreen', iconData: Icons.search_outlined),
   ItemNavBar(title: 'Home', link: '/',iconData: Icons.home_outlined ),
   ItemNavBar(title:'Notificaciones', link: '/notificaciones', iconData: Icons.notifications_none),

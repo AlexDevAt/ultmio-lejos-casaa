@@ -13,6 +13,14 @@ class ReservaOUT(BaseModel):
     idCasa: int
     comprador:PropietarioCasaBasico | None = None
     
+class ReservaOUTCasa(BaseModel):
+    id_reserva: int
+    fecha_inicio: datetime
+    fecha_fin:datetime
+    estado:str
+    idComprador: str
+    comprador:PropietarioCasaBasico | None = None
+    
 class ReservaCrearOut(BaseModel):
     id_reserva:int
     fecha_inicio: datetime

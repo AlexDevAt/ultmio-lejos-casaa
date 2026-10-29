@@ -27,7 +27,10 @@ class MainShell extends StatelessWidget {
         unselectedItemColor: Colors.black,
         currentIndex: index,
         onTap: (value) {
+
           switch (value) {
+            case 0:
+              context.push('/registrar_casa');
             case 1:
               context.go('/busquedaScreen');
               break;

@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:lejos_de_casa_front/app/services/casa_service.dart';
 import 'package:lejos_de_casa_front/domain/entities/casa.dart';
@@ -15,6 +17,13 @@ class ProviderCasas extends ChangeNotifier {
   List<Casa> casas = [];
   List<Casa> casasHome1 = [];
   List<Casa> casasHome2 = [];
+  List<Casa> propiedades = [];
+
+  void cargarPropiedades(List data) {
+    for (var casa in data) {
+      propiedades.add(casa);
+    }
+  }
 
   void _cargarCasas(List data) {
     for (var casa in data) {
@@ -90,8 +99,20 @@ class ProviderCasas extends ChangeNotifier {
   }
 
   Future<void> crearCasa(Casa casa) async {
-    final Casa casaNew = await casaService.crearCasas(casa);
-    casas.add(casaNew);
+    error = null;
+    try {
+      final Casa casaNew = await casaService.crearCasas(casa);
+      casas.add(casaNew);
+      casasHome2.add(casaNew);
+      casasHome2.removeLast();
+      propiedades.add(casaNew);
+    } catch (e) {
+      error = e.toString();
+      notifyListeners();
+    }
     notifyListeners();
   }
 }
+
+
+//TODO IMPLEMENTAR PILA EN CASAS HOME

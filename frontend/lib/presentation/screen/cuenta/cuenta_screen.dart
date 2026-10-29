@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lejos_de_casa_front/domain/entities/usuario.dart';
 import 'package:lejos_de_casa_front/helpers/menu_perfil/menu_perfil.dart';
+import 'package:lejos_de_casa_front/presentation/providers/usuarios/provider_usuarios.dart';
 import 'package:lejos_de_casa_front/presentation/widgets/card_icon_label_ListTile.dart';
+import 'package:provider/provider.dart';
 
 class CuentaScreen extends StatelessWidget {
   const CuentaScreen({super.key});
@@ -60,6 +63,7 @@ class CuentaScreen extends StatelessWidget {
 class _BoxMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Usuario usuarioActual = context.read<ProviderUsuarios>().usuarioActual!;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
@@ -77,6 +81,14 @@ class _BoxMenu extends StatelessWidget {
                 subtitle: opt.subtitle,
               ),
             ),
+            if(usuarioActual.rol == Roles.vendedor)...[
+              CardIconListTitleCustom(
+                url: '/propiedades',
+                title: 'Tus propiedades',
+                icon: Icon(Icons.home_outlined),
+                subtitle: 'Administra tus propiedades',
+              )
+            ]
           ],
         ),
       ),

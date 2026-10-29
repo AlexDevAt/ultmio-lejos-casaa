@@ -38,7 +38,7 @@ class ReservasData {
       final data = res.data;       
       return ReservaModel.fromJson(data);
     } on DioException catch (e) {
-      String mensajeError = 'Error al reserv ar';
+      String mensajeError = 'Error al reservar';
     //   if (e.response != null) {
     //   // Extraemos el detalle que configuraste en FastAPI: {"detail": "..."}
     //   mensajeError = e.response?.data['detail'] ?? "Error en el servidor (${e.response?.statusCode})";

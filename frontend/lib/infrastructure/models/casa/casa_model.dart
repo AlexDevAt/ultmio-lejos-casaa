@@ -49,7 +49,7 @@ class CasaModel {
         ? PropietarioModel.fromJson(json["propietario"])
         : null,
     idPropietario: json['id_propietario'],
-    idRegion: json['id_region'],
+    idRegion: json['idRegion'] ?? json['id_region'],
   );
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -61,61 +61,37 @@ class CasaModel {
     "calle": calle,
     "num_interior": numInterior,
     "precio": precio,
-    "idRegion": '',
-    "propietario": propietario!.toJson(),
-    'id_propietario': propietario!.curp,
+    "idRegion": idRegion,
+    'id_propietario': idPropietario,
   };
 
   Casa toEntity() => Casa(
     id: id,
     titulo: titulo,
     cupo: cupo,
-    tipo: tipoCasaFromString(tipo),
+    tipo: tipo,
     imagen: imagen,
     cuartos: cuartos,
     calle: calle,
     numInterior: numInterior,
     precio: precio,
-    region: region!.toEntity(),
-    propietario: propietario!.toEntity(),
+    region: region?.toEntity(),
+    propietario: propietario?.toEntity(),
     idRegion: idRegion,
     idPropietario: idPropietario,
   );
-}
 
-TipoCasa tipoCasaFromString(String tipo) {
-  switch (tipo.toLowerCase()) {
-    case 'unaplanta':
-    case 'una_planta':
-    case 'Una planta':
-      return TipoCasa.unaPlanta;
-    case 'dosplantas':
-    case 'dos_plantas':
-    case 'dos plantas':
-      return TipoCasa.dosPlantas;
-    default:
-      return TipoCasa.otroTipo;
-  }
-}
-
-String tipoCasaToString(TipoCasa tipo) {
-  switch (tipo) {
-    case TipoCasa.unaPlanta:
-      return 'unaPlanta';
-    case TipoCasa.dosPlantas:
-      return 'dosPlantas';
-    case TipoCasa.otroTipo:
-      return 'otroTipo';
-  }
-}
-
-String tipoCasaToApi(TipoCasa tipo) {
-  switch (tipo) {
-    case TipoCasa.unaPlanta:
-      return 'Una planta';
-    case TipoCasa.dosPlantas:
-      return 'Dos plantas';
-    case TipoCasa.otroTipo:
-      return 'Otro tipo';
-  }
+  static Map<String, dynamic> toJsonFromEntity(Casa casa) => {
+    "id": casa.id,
+    "titulo": casa.titulo,
+    "cupo": casa.cupo,
+    "tipo": casa.tipo,
+    "imagen": casa.imagen,
+    "cuartos": casa.cuartos,
+    "calle": casa.calle,
+    "num_interior": casa.numInterior,
+    "precio": casa.precio,
+    "idRegion": casa.idRegion,
+    'id_propietario': casa.propietario!.curp,
+  };
 }

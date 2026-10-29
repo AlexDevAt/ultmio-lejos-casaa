@@ -7,7 +7,7 @@ class Casa {
   final int id;
   final String titulo;
   final int cupo;
-  final TipoCasa tipo;
+  final String tipo;
   final String imagen;
   final int cuartos;
   final String calle;

@@ -11,9 +11,13 @@ class AuthData {
     try {
       final data = <String, dynamic>{'correo': email, 'password': pass};
       final res = await dio.post(ApiConfigAuth.iniciarSesion(), data: data);
+      print(res.data);
+      if (res.data == null) {
+        throw ('Error al iniciar sesion');
+      }
       return res.data['token'];
     } on DioException catch (e) {
-      throw Exception(e.response?.data['detail'] ?? 'Error al iniciar sesion');
+      throw ('Error al iniciar sesion');
     }
   }
 }

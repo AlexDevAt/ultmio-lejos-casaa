@@ -17,7 +17,7 @@ class ProviderWebSocket extends ChangeNotifier {
   }
 
   Future<void> conectar(String curp) async {
-    String urlWebSocket = 'ws://127.0.0.1:8000/ws/notificacion/$curp';
+    String urlWebSocket = 'ws://172.20.10.3:8000/ws/notificacion/$curp';
 
     try {
       channel = WebSocketChannel.connect(Uri.parse(urlWebSocket));

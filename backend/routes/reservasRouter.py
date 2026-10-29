@@ -14,6 +14,16 @@ def obtenerReservasUsuario(curp: str):
         raise HTTPException(
             detail=str(e)
         )
+
+@router.get("/casas/{id}",response_model=list[ReservaOUTCasa],status_code=200)
+def obtenerReservasCasa(id: int):
+    try:
+        return reservaService.obtenerReservasCasa(id)
+    except Exception as e:
+        raise HTTPException(
+            detail=str(e)
+        )
+    
         
 @router.post("/crear",response_model=ReservaCrearOut,status_code=201)
 async def crearReserva(body : ReservaCrear):

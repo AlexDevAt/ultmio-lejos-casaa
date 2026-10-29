@@ -11,6 +11,7 @@ class ProviderAuth extends ChangeNotifier {
   bool logueado = false;
   AuthService authService;
   ProviderAuth(this.authService);
+  String? error;
 
   Future<void> login(
     String correo,
@@ -21,18 +22,23 @@ class ProviderAuth extends ChangeNotifier {
     ProviderNotificacion providerNotificacion,
     ProviderWebSocket providerWebSocket,
   ) async {
-    token = await authService.login(correo.trim(), password);
-    logueado = true;
-    await usuariosProvider.cargarUsuarioActual(token!);
-    providerReserva.inicializarReservas(
-      usuariosProvider.usuarioActual!.reservas!,
-    );
-    await providerCasa.iniciarCasasHome();
-    await providerNotificacion.obtenerNotificaciones(
-      usuariosProvider.usuarioActual!.curp,
-    );
-    await providerWebSocket.conectar(usuariosProvider.usuarioActual!.curp,);
+    error = null;
+    try {
+      token = await authService.login(correo.trim(), password);
+      logueado = true;
+      await usuariosProvider.cargarUsuarioActual(token!);
+      providerReserva.inicializarReservas(
+        usuariosProvider.usuarioActual!.reservas!,
+      );
+      await providerCasa.iniciarCasasHome();
+      await providerNotificacion.obtenerNotificaciones(
+        usuariosProvider.usuarioActual!.curp,
+      );
+      await providerWebSocket.conectar(usuariosProvider.usuarioActual!.curp);
 
-    notifyListeners();
+    } catch (e) {
+      error = e.toString();
+    }
+      notifyListeners();
   }
 }

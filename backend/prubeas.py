@@ -70,9 +70,10 @@ from schemas.resenia.reseniaDTO import ReseniaOut
 # correc = HashPass.verificarHash('alexis',passf)
 # print(correc)
 
-# router = APIRouter()
-# repo = ReservarioRepository()
-# service = ReservasService(repo)
+router = APIRouter()
+repo = ReservarioRepository()
+service = ReservasService(repo)
+service.obtenerReservasCasa(1)
 # newReserva = ReservaCrear(
 #     estado='Activo',
 #     id_reserva=0,
@@ -93,8 +94,8 @@ from schemas.resenia.reseniaDTO import ReseniaOut
 # re = service.obtenerResenias(1)
 
 
-from repository.notificacion_repository import NotificacionRepository
-from services.notificacion.notificacionService import NotificacionService
-repo = NotificacionRepository()
-service = NotificacionService(repo)
-service.obtenerNotificacionesNoLeidas()
+# from repository.notificacion_repository import NotificacionRepository
+# from services.notificacion.notificacionService import NotificacionService
+# repo = NotificacionRepository()
+# service = NotificacionService(repo)
+# service.obtenerNotificacionesNoLeidas()

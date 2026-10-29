@@ -40,6 +40,27 @@ class ReservarioRepository:
         conx.close()
         return reservas
     
+    
+    def obtenerReservasCasa(self,casa):
+        conx : mysql.connector.MySQLConnection = self.conectarDB()
+        cursor = conx.cursor(dictionary=True)
+        sql ='''
+            SELECT r.id AS id_reserva,r.fecha_inicio,r.fecha_fin,r.estado AS estado_reserva,
+            co.curp AS comprador_curp,
+            co.nombres AS comprador_nombre,
+            co.apellidos AS comprador_apellidos,
+            co.fecha_registro AS comprador_registro
+            FROM reservas AS r 
+            JOIN Usuarios as co
+            ON r.id_comprador = co.curp
+            WHERE r.id_casa = %s;
+        '''
+        cursor.execute(sql,(casa,))
+        reservas = cursor.fetchall()
+        cursor.close
+        conx.close()
+        return reservas
+    
     def crearReserva(self,reserva:Reserva):
        conx : mysql.connector.MySQLConnection = self.conectarDB()
        cursor = conx.cursor(dictionary=True)

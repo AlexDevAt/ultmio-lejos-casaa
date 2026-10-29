@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lejos_de_casa_front/domain/entities/reserva.dart';
 import 'package:lejos_de_casa_front/helpers/formatos/format_date.dart';
 import 'package:lejos_de_casa_front/presentation/providers/reserva/provider_reserva.dart';
@@ -65,7 +66,6 @@ class _ReservaView extends StatelessWidget {
 }
 
 class _BuscarReservas extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -220,12 +220,7 @@ class _PreviewReserva extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Row(
-                            children: [
-                              Expanded(child: _buttonDetalles())
-                            ],
-                          )
-                          
+                          Row(children: [Expanded(child: _buttonDetalles(reserva: reserva,))]),
                         ],
                       ),
                     ),
@@ -241,13 +236,16 @@ class _PreviewReserva extends StatelessWidget {
 }
 
 class _buttonDetalles extends StatelessWidget {
+  final Reserva reserva;
+
+  const _buttonDetalles({super.key, required this.reserva});
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: TextButton.icon(
         // label: Text('Ver mas', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
-        onPressed: () => (),
+        onPressed: () => context.push('/detalleReserva', extra: reserva),
         style: TextButton.styleFrom(
           minimumSize: Size(0, 0),
 
@@ -264,7 +262,6 @@ class _buttonDetalles extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-
       ),
     );
   }

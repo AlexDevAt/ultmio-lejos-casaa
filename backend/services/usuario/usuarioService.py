@@ -110,8 +110,11 @@ class UsuarioService:
                     precio=float(casa['precio']),
                     id_region=casa['id_region'],
                     region=region,
+                    id_propietario=casa['id_propietario']
                 )
+                print(casaOut.__dict__)
                 casas.append(casaOut)
+            
 
         return UsuarioOut(
             curp=usuario['curp'],

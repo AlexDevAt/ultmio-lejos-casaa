@@ -359,6 +359,7 @@ class RepoCasa:
             c.num_interior,
             c.precio,
             c.id_region,
+            c.id_propietario,
             r.codigo_postal,
             r.estado,
             r.municipio

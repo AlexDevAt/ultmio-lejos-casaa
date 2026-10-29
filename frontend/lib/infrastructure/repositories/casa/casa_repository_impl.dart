@@ -28,7 +28,7 @@ class CasaRepositoryImpl implements CasaRepository {
     final model = CasaModel(
       id: casa.id,
       cupo: casa.cupo,
-      tipo: tipoCasaToApi(casa.tipo),
+      tipo: casa.tipo,
       imagen: casa.imagen,
       cuartos: casa.cuartos,
       calle: casa.calle,
@@ -40,7 +40,7 @@ class CasaRepositoryImpl implements CasaRepository {
     );
 
     final res = await dataSource.crearCasa(model.toJson());
-    return model.toEntity();
+    return res.toEntity();
   }
 
   @override

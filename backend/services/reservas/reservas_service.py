@@ -3,7 +3,7 @@ from repository.reservas_repository import ReservarioRepository
 from schemas.casa.Casa_DTO import CasaOut
 from schemas.usuario.usuarioBase import PropietarioCasaBasico
 from schemas.region.regionDTO import RegionoOUT
-from schemas.reservas.reservaDTO import ReservaOUT, ReservaCrearOut
+from schemas.reservas.reservaDTO import ReservaOUT, ReservaCrearOut,ReservaOUTCasa
 from datetime import datetime
 class ReservasService:
     def __init__(self, repo, notificacionService, casaService, webSocketService):
@@ -47,6 +47,29 @@ class ReservasService:
         )
         
         return reservaDTO
+    
+    def obtenerReservasCasa(self, id):
+        reservasData = self.repo.obtenerReservasCasa(id)
+        if reservasData is None:
+            return None
+        reservasMapeadas = []
+        for data in reservasData:
+            compradorA=PropietarioCasaBasico(
+                    apellidos=data['comprador_apellidos'],
+                    nombres=data['comprador_nombre'],
+                    curp=data['comprador_curp'],
+                    fecha_registro=data['comprador_registro']
+                )
+            reserva = ReservaOUTCasa(
+                idComprador=data['comprador_curp'],
+                estado=data['estado_reserva'],
+                id_reserva=data['id_reserva'],
+                fecha_fin=data['fecha_fin'],
+                fecha_inicio=data['fecha_inicio'],
+                comprador=compradorA
+            )
+            reservasMapeadas.append(reserva)
+        return reservasMapeadas
     
     def obtenerReservas(self, id, obtenerPropietario: bool = True):
         reservasData = self.repo.obtenerReservas(id)

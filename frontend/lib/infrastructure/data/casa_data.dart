@@ -13,7 +13,7 @@ class CasaData {
       return CasaModel.fromJson(res.data);
     } on DioException catch (e) {
       throw Exception(
-        e.response?.data['detail'] ?? 'Error al actualizar el usuario',
+        e.response?.data['detail'] ?? 'Error al crear al usuario',
       );
     }
   }

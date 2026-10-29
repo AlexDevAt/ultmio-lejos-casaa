@@ -10,8 +10,8 @@ class DataBaseConexion:
             host = 'localhost',
             port = '3306',
             user = 'root',
-            password = 'Alexismau123.',
-            database = 'lejos_de_casa_nueva'
+            password = 'root',
+            database = 'lejos_de_casa'
         )
         except:
             print("ERROR EN LA BASE DE DATOS ")
